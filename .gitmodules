@@ -1,0 +1,3 @@
+[submodule "src/3rdParty/Mathpp"]
+	path = src/3rdParty/Mathpp
+	url = https://github.com/Vazquinhos/Mathpp
