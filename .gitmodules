@@ -4,3 +4,6 @@
 [submodule "src/3rdParty/stb"]
 	path = src/3rdParty/stb
 	url = https://github.com/nothings/stb
+[submodule "src/3rdParty/cereal"]
+	path = src/3rdParty/cereal
+	url = https://github.com/USCiLab/cereal.git
