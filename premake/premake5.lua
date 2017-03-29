@@ -30,6 +30,7 @@ project "Core"
     kind "StaticLib"
     files { "../src/Engine/Core/**.h", "../src/Engine/Core/**.cpp", "../src/Engine/Core/**.inl" }
 	includedirs { "../src/Engine/Core" }
+	includedirs { "../src/3rdParty/Mathpp/Mathpp/",  "../src/3rdParty/cereal/include/" }
 
 project "Render"
     kind "StaticLib"
