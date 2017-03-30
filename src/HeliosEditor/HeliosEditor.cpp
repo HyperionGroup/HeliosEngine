@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     std::ofstream file("out.json");
     std::ifstream filein("in.json");
 
-    cereal::XMLOutputArchive archive(file);
+    cereal::JSONOutputArchive archive(file);
     archive(cereal::make_nvp("sampler", lSampler));
 
     cereal::JSONInputArchive archivein(filein);

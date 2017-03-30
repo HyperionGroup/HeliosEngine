@@ -11,12 +11,7 @@ namespace render
 {
     class CSampler
     {
-        public:
-            CSampler();
-            virtual ~CSampler();
-
-            SERIALIZABLE
-
+        SERIALIZABLE
         private:
             Filter                     mFilter;
             AddressMode                mAddressMode;
@@ -26,34 +21,33 @@ namespace render
             Float4                     mBorderColor;
             float                      mMipLODBias;
             uint32                     mMaxAnisotropy;
+        public:
+            CSampler();
+            virtual ~CSampler();
     };
 
-    template <class Archive> void CSampler::save(Archive & ar) const
+    SERIALIZABLE_SAVE_DECLARATION(CSampler)
     {
-        ar(cereal::make_nvp("Filter", EnumString< Filter >::ToStr(mFilter)));
-        ar(cereal::make_nvp("AddressMode", EnumString< AddressMode >::ToStr(mAddressMode)));
-        ar(cereal::make_nvp("ComparisonFunc", EnumString< ComparisonFunc >::ToStr(mComparisonFunc)));
-        ar(cereal::make_nvp("MinLOD", mMinLOD));
-        ar(cereal::make_nvp("MaxLOD", mMaxLOD));
-        ar(cereal::make_nvp("BorderColor", mBorderColor));
-        ar(cereal::make_nvp("MipLODBias", mMipLODBias));
-        ar(cereal::make_nvp("MaxAnisotropy", mMaxAnisotropy));
+        TO_ARCHIVE_ENUM(Filter);
+        TO_ARCHIVE_ENUM(AddressMode);
+        TO_ARCHIVE_ENUM(ComparisonFunc);
+        TO_ARCHIVE(MinLOD);
+        TO_ARCHIVE(MaxLOD);
+        TO_ARCHIVE(BorderColor);
+        TO_ARCHIVE(MipLODBias);
+        TO_ARCHIVE(MaxAnisotropy);
     }
 
-    template <class Archive> void CSampler::load(Archive & ar)
+    SERIALIZABLE_LOAD_DECLARATION(CSampler)
     {
-        std::string lFilterStr, lAddressModeStr, lComparisonStr;
-        ar(cereal::make_nvp("Filter", lFilterStr));
-        ar(cereal::make_nvp("AddressMode", lAddressModeStr));
-        ar(cereal::make_nvp("ComparisonFunc", lComparisonStr));
-        EnumString< Filter >::ToEnum(mFilter, lFilterStr);
-        EnumString< ComparisonFunc >::ToEnum(mComparisonFunc, lComparisonStr);
-        EnumString< AddressMode >::ToEnum(mAddressMode, lAddressModeStr);
-        ar(cereal::make_nvp("MinLOD", mMinLOD));
-        ar(cereal::make_nvp("MaxLOD", mMaxLOD));
-        ar(cereal::make_nvp("BorderColor", mBorderColor));
-        ar(cereal::make_nvp("MipLODBias", mMipLODBias));
-        ar(cereal::make_nvp("MaxAnisotropy", mMaxAnisotropy));
+        FROM_ARCHIVE_ENUM(Filter);
+        FROM_ARCHIVE_ENUM(AddressMode);
+        FROM_ARCHIVE_ENUM(ComparisonFunc);
+        FROM_ARCHIVE(MinLOD);
+        FROM_ARCHIVE(MaxLOD);
+        FROM_ARCHIVE(BorderColor);
+        FROM_ARCHIVE(MipLODBias);
+        FROM_ARCHIVE(MaxAnisotropy);
     }
 }
 
