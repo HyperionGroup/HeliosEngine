@@ -1,3 +1,5 @@
 vs2015/
 /.vs
 /obj
+bin/
+lib/
