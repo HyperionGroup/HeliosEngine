@@ -1,5 +1,6 @@
 #include <Mathpp.h>
 #include "Textures/Sampler.h"
+#include "Assets/TextureAsset.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,5 +18,12 @@ int main(int argc, char *argv[])
 
     cereal::JSONInputArchive archivein(filein);
     archivein(cereal::make_nvp("sampler", lSampler));
+
+    io::CTextureAsset lTexture("opiece.jpg");
+    lTexture.Load();
+    archive(cereal::make_nvp("texture_asset", lTexture));
+
+
+
     return 0;
 }

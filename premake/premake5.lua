@@ -8,10 +8,13 @@ workspace "Helios"
    filter "configurations:Debug"
       defines { "DEBUG" }
 	  rtti ("off")
+	  characterset ("MBCS")
 	  symbols "on"
 
    filter "configurations:Release"
       defines { "NO_DEBUG" }
+	  characterset ("MBCS")
+	  rtti ("off")
       optimize "On"
 	
 	targetdir "../bin/%{cfg.buildcfg}"
@@ -20,10 +23,10 @@ project "HeliosEditor"
 	kind "ConsoleApp"
 	flags { "ExtraWarnings" }
 	files { "../src/HeliosEditor/*.cpp" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/IO"  }
 	includedirs { "../src/3rdParty/Mathpp/Mathpp/", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
-	links {"Mathpp", "Render" }
+	links {"Mathpp", "Render", "IO", "Core"}
 
 group "Engine"
 project "Core"
@@ -36,6 +39,12 @@ project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
 	includedirs { "../src/Engine/Core", "../src/Engine/Render" }
+	includedirs { "../src/3rdParty/Mathpp/Mathpp/", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	
+project "IO"
+    kind "StaticLib"
+    files { "../src/Engine/IO/**.h", "../src/Engine/IO/**.cpp", "../src/Engine/IO/**.inl" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/Render"  }
 	includedirs { "../src/3rdParty/Mathpp/Mathpp/", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 
 group "3rdParty"

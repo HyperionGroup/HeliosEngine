@@ -1,5 +1,5 @@
-#ifndef _RENDER_SAMPLER_
-#define _RENDER_SAMPLER_
+#ifndef _RENDER_TEXTURE_
+#define _RENDER_TEXTURE_
 
 #pragma once
 
@@ -11,10 +11,9 @@ namespace render
     {
         SERIALIZABLE
         private:
-            CSamplerPtr mSampler;
-            uint32      mHeight;
-            uint32      mWidht;
-            uint8*      mData;
+            CSamplerPtr         mSampler;
+            render::PixelDesc   mColorFormat;
+            uint8*              mData;
         public:
             CTexture();
             virtual ~CTexture();
@@ -22,6 +21,11 @@ namespace render
 
     SERIALIZABLE_SAVE_DECLARATION(CTexture)
     {
+        TO_ARCHIVE_SPTR(Sampler);
+        TO_ARCHIVE(Height);
+        TO_ARCHIVE(Width);
+        TO_ARCHIVE_ENUM(ColorFormat);
+        TO_ARCHIVE_BINARY("Data", mData, )
     }
 
     SERIALIZABLE_LOAD_DECLARATION(CTexture)

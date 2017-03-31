@@ -7,6 +7,7 @@
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/cereal.hpp>
+#include <cereal/types/base_class.hpp>
 
 #define SERIALIZABLE \
 public: \
@@ -22,8 +23,10 @@ template <class Archive> void class_name::load(Archive & ar)
 #define TO_ARCHIVE( name ) ar (cereal::make_nvp(#name, m##name) );
 #define FROM_ARCHIVE( name ) ar (cereal::make_nvp(#name, m##name) );
 
-#define TO_ARCHIVE_SPTR( name ) ar (cereal::make_nvp(#name, m##name) );
-#define FROM_ARCHIVE_SPTR( name ) ar (cereal::make_nvp(#name, m##name) );
+#define TO_ARCHIVE_BINARY( name, bin, size ) ar.saveBinaryValue(bin, size, name);
+
+#define TO_ARCHIVE_SPTR( name ) ar (cereal::make_nvp(#name, m##name.get()) );
+#define FROM_ARCHIVE_SPTR( name ) ar (cereal::make_nvp(#name, m##name.get() ) );
 
 #define FROM_ARCHIVE_ENUM_VARIABLE( enum_type, enum_name ) \
 {\
