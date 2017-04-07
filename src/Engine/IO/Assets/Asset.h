@@ -9,25 +9,28 @@
 
 namespace io
 {
-    class CAsset : public std::string
+    class CAsset
     {
         SERIALIZABLE
-        private:
+        protected:
+            std::string mID;
         public:
             CAsset( const std::string& _fileName );
             virtual ~CAsset();
             virtual bool Load() { return false;  }
     };
 
+#pragma region Serialization
     SERIALIZABLE_SAVE_DECLARATION(CAsset)
     {
-        ar(cereal::make_nvp("id", c_str()));
+        TO_ARCHIVE(ID);
     }
 
     SERIALIZABLE_LOAD_DECLARATION(CAsset)
     {
 
     }
+#pragma endregion Serialization
 }
 
 #endif

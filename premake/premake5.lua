@@ -1,3 +1,6 @@
+require "qt" 
+local qt = premake.extensions.qt
+
 workspace "Helios"
    configurations { "Debug", "Release" }
    platforms { "x64" }
@@ -5,11 +8,13 @@ workspace "Helios"
    language "C++"
    debugdir "\$(OutDir)"
    
+   
    filter "configurations:Debug"
       defines { "DEBUG" }
 	  rtti ("off")
 	  characterset ("MBCS")
 	  symbols "on"
+	  qtsuffix "d"
 
    filter "configurations:Release"
       defines { "NO_DEBUG" }
@@ -19,14 +24,22 @@ workspace "Helios"
 	
 	targetdir "../bin/Helios/%{cfg.buildcfg}"
 	
+	
 project "HeliosEditor"
 	kind "ConsoleApp"
 	flags { "ExtraWarnings" }
-	files { "../src/HeliosEditor/*.cpp" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/IO"  }
-	includedirs { "../src/3rdParty/Mathpp/Mathpp/", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/IO",  "../src/Engine/User" }
+	includedirs { "../src/3rdParty/Mathpp/Mathpp/", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/", "../src/3rdParty/glad/include/" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
-	links {"Mathpp", "Render", "IO", "Core"}
+	libdirs { "$(DXSDK_DIR)lib/x86/" }
+	links { "d3d11", "d3dcompiler", "Mathpp", "Render", "IO", "Core", "User"}
+	qt.enable()
+	qtpath "C:/Qt/Qt5.6.0/5.6/msvc2015_64"
+	qtmodules { "core", "gui", "widgets", "opengl" }
+	qtprefix "Qt5"
+	configuration { "Debug" }
+		qtsuffix "d"
 
 group "Engine"
 project "Core"
@@ -44,8 +57,20 @@ project "Render"
 project "IO"
     kind "StaticLib"
     files { "../src/Engine/IO/**.h", "../src/Engine/IO/**.cpp", "../src/Engine/IO/**.inl" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/IO"  }
+	includedirs { "../src/3rdParty/Mathpp/Mathpp/", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	
+project "User"
+    kind "StaticLib"
+    files { "../src/Engine/User/**.h", "../src/Engine/User/**.cpp", "../src/Engine/User/**.inl" }
 	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/Render"  }
 	includedirs { "../src/3rdParty/Mathpp/Mathpp/", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	qt.enable()
+	qtpath "C:/Qt/Qt5.6.0/5.6/msvc2015_64"
+	qtmodules { "core", "gui", "widgets", "opengl" }
+	qtprefix "Qt5"
+	configuration { "Debug" }
+		qtsuffix "d"
 
 group "3rdParty"
 project "Mathpp"
@@ -53,6 +78,11 @@ project "Mathpp"
     files { "../src/3rdParty/Mathpp/**.h", "../src/3rdParty/Mathpp/**.cpp", "../src/3rdParty/Mathpp/**.inl" }
 	includedirs { "../src/3rdParty/Mathpp/Mathpp" }
 	excludes {"../src/3rdParty/Mathpp/main.cpp"}
+	
+project "glad"
+    kind "StaticLib"
+    files { "../src/3rdParty/glad/**.h", "../src/3rdParty/glad/**.cpp", "../src/3rdParty/glad/**.inl" }
+	includedirs { "../src/3rdParty/glad" }
 
 local CPPSHARP_DIR = "../lib/CppSharp/Release_x32/"
 	

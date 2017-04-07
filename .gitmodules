@@ -7,3 +7,6 @@
 [submodule "src/3rdParty/cereal"]
 	path = src/3rdParty/cereal
 	url = https://github.com/USCiLab/cereal.git
+[submodule "src/3rdParty/imgui"]
+	path = src/3rdParty/imgui
+	url = https://github.com/ocornut/imgui.git
