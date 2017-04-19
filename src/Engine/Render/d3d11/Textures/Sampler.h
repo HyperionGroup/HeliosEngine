@@ -5,7 +5,6 @@
 
 #include "Render.h"
 #include "Serializable.h"
-#include <Mathpp.h>
 
 namespace render
 {

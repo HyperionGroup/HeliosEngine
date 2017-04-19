@@ -10,13 +10,11 @@ namespace io
 {
     CTextureAsset::CTextureAsset( const std::string& _fileName )
         : CAsset(_fileName)
-        , mHeight(0)
-        , mWidth(0)
     {
     }
 
     CTextureAsset::~CTextureAsset()
-    {
+    { 
 
     }
 

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "Core.h"
 
 class Timer
 {

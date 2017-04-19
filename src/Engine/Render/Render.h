@@ -1,9 +1,7 @@
 #pragma once
 
-#include "EnumToString.h"
-#include <Mathpp.h>
-#include <memory>
 #include "Serializable.h"
+#include "Core.h"
 
 #pragma warning( disable  : 4005 )  
 
@@ -11,43 +9,7 @@
 #define RENDER_API ogl
 
 #else
-#define RENDER_API d3d11
-
-#include <d3d11_1.h>
-#include <dxgi.h>
-#include <d3dcompiler.h>
-
-#define D3D_ERROR_CASE(HR_ERROR) case HR_ERROR: lMsg = #HR_ERROR; break;
-#define CHECK_PRINT_HR(HR) \
-std::string lMsg; \
-if( FAILED( HR ) ) \
-{ \
-  switch (HR) \
-  { \
-    D3D_ERROR_CASE(D3D11_ERROR_FILE_NOT_FOUND) \
-    D3D_ERROR_CASE(D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS) \
-    D3D_ERROR_CASE(D3D11_ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS) \
-    D3D_ERROR_CASE(D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD) \
-    D3D_ERROR_CASE(DXGI_ERROR_INVALID_CALL) \
-    D3D_ERROR_CASE(DXGI_ERROR_WAS_STILL_DRAWING) \
-    D3D_ERROR_CASE(E_FAIL) \
-    D3D_ERROR_CASE(E_INVALIDARG) \
-    D3D_ERROR_CASE(E_OUTOFMEMORY) \
-    D3D_ERROR_CASE(E_NOTIMPL) \
-    D3D_ERROR_CASE(S_FALSE) \
-  default: \
-    break; \
-  }\
-    LOG_ERROR_APPLICATION("Error calling render function %s", lMsg.c_str()) \
-}
-
-#define CHECKED_RELEASE(d3d11handle) \
-if( d3d11handle)\
-{\
-    d3d11handle->Release();\
-    d3d11handle = nullptr;\
-}
-
+#include "d3d11/D3DRender.h"
 #endif
 
 namespace render

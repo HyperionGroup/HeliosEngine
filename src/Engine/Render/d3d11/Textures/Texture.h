@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Render.h"
+#include "Core.h"
 
 namespace render
 {

@@ -1,6 +1,14 @@
 #ifndef _H_SERIALIZABLE_H_
 #define _H_SERIALIZABLE_H_
 
+#ifdef max
+#undef max
+#endif
+
+#ifdef min
+#undef min
+#endif
+
 #include <fstream>
 #include <cereal/archives/xml.hpp>
 #include <cereal/archives/json.hpp>

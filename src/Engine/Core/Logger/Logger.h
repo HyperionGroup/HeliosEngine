@@ -3,7 +3,7 @@
 #define __H_LOGGER__
 
 #include "Singleton.h"
-#include <Types.h>
+#include "Core.h"
 
 #include <vector>
 #include <string>

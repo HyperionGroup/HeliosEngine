@@ -7,7 +7,7 @@ namespace render
         , mAddressMode( WrapMode )
         , mComparisonFunc( NeverFunc )
         , mMinLOD( 0.0f )
-        , mMaxLOD( Mathf::MaxFlt )
+        , mMaxLOD( FLT_MAX )
         , mBorderColor(1.0f)
         , mMipLODBias(0.0f)
         , mMaxAnisotropy(1)

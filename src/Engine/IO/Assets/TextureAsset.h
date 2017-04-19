@@ -5,7 +5,7 @@
 
 #include "Asset.h"
 #include "Serializable.h"
-#include <string>
+#include "Core.h"
 
 namespace io
 {
