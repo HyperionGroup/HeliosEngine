@@ -7,3 +7,6 @@
 [submodule "src/3rdParty/imgui"]
 	path = src/3rdParty/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "src/3rdParty/im3d"]
+	path = src/3rdParty/im3d
+	url = https://github.com/Vazquinhos/im3d.git
