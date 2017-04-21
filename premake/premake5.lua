@@ -22,10 +22,10 @@ workspace "Helios"
 	
 	
 project "HeliosEditor"
-	kind "ConsoleApp"
+	kind "WindowedApp"
 	flags { "ExtraWarnings" }
 	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/IO",  "../src/Engine/User" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/IO",  "../src/Engine/User" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
 	libdirs { "$(DXSDK_DIR)lib/x86/" }

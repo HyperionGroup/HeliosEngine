@@ -1,37 +1,9 @@
+#if 0
 #pragma once
 #ifndef im3d_example_h
 #define im3d_example_h
 
 #include <im3d.h>
-
-// Compiler
-#if defined(__GNUC__)
-	#define IM3D_COMPILER_GNU
-#elif defined(_MSC_VER)
-	#define IM3D_COMPILER_MSVC
-#else
-	#error im3d: Compiler not defined
-#endif
-
-// Platform 
-#if defined(_WIN32) || defined(_WIN64)
- // Windows
-	#define IM3D_PLATFORM_WIN
-	
-	#define NOMINMAX 1
-	#define WIN32_LEAN_AND_MEAN 1
-	#define VC_EXTRALEAN 1
-	#include <Windows.h>
-
-	#define winAssert(e) IM3D_VERIFY_MSG(e, Im3d::GetPlatformErrorString(GetLastError()))
-	
-	namespace Im3d {
-		const char* GetPlatformErrorString(DWORD _err);
-	}
-	
-#else
-	#error im3d: Platform not defined
-#endif
 
 #define IM3D_DX11
 // Graphics API
@@ -204,3 +176,5 @@ extern void Im3d_Update();
 extern void Im3d_Draw(const Im3d::DrawList& _drawList);
 
 #endif // im3d_example_h
+
+#endif

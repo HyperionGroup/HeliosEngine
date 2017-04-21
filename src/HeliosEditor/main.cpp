@@ -1,17 +1,60 @@
-#include "im3d_example.h"
+#include <imgui.h>
+#include <im3d.h>
+
+#include "Window.h"
+#include "Device.h"
 
 int main(int, char**)
 {
-	Im3d::Example example;
-	if (!example.init(-1, -1, "Im3d Example")) {
+#if defined(HELIOSPLATFORM_WIN)
+    // force the current working directory to the exe location
+    TCHAR buf[MAX_PATH] = {};
+    DWORD buflen;
+    winAssert(buflen = GetModuleFileName(0, buf, MAX_PATH));
+    char* pathend = strrchr(buf, (int)'\\');
+    *(++pathend) = '\0';
+    winAssert(SetCurrentDirectory(buf));
+    fprintf(stdout, "Set current directory: '%s'\n", buf);
+#endif
+    user::CWindow& lWindow = user::CWindow::GetInstance();
+    if( !lWindow.Create() )
 		return 1;
-	}
 
+    render::CDevice lDevice = render::CDevice::GetInstance();
+    lDevice.Initialize(lWindow.winID());
+    float lBackColor[4] = {1.0f, 0.25f ,0.25f , 0.25f };
+
+    Im3d::Context& ctx = Im3d::GetContext();
+    Im3d::AppData& ad = Im3d::GetAppData();
+
+    while (lWindow.Update())
+    {
+        ImGui::Begin("Im3d Demo", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+
+        ImGui::SetNextTreeNodeOpen(true, ImGuiSetCond_Once);
+        if (ImGui::TreeNode("About")) {
+            ImGui::Text("Welcome to the Im3d demo!");
+            ImGui::Spacing();
+            ImGui::Text("WASD   = forward/left/backward/right");
+            ImGui::Text("QE     = down/up");
+            ImGui::Text("RMouse = camera orientation");
+            ImGui::Text("LShift = move faster");
+            ImGui::Spacing();
+
+            ImGui::TreePop();
+        }
+
+        ImGui::End();
+
+        lDevice.ImmediateContext()->ClearRenderTargetView(lDevice.BackBuffer(), lBackColor);
+        Im3d::Draw();
+        ImGui::Render();
+        lDevice.Present();
+    }
+
+#if 0
 	while (example.update()) {
-		Im3d::RandSeed(0);
-
-		Im3d::Context& ctx = Im3d::GetContext();
-		Im3d::AppData& ad  = Im3d::GetAppData();
+		
 
 		ImGui::Begin("Im3d Demo", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -238,7 +281,7 @@ int main(int, char**)
 				case Shape_Quad: 
 				case Shape_QuadFilled: {
 					static Im3d::Vec2 quadSize(1.0f);
-					ImGui::SliderVec2("Size", quadSize, 0.0f, 10.0f);
+					ImGui::SliderFloat2("Size", quadSize, 0.0f, 10.0f);
 					if (currentShape == Shape_Quad) {
 						Im3d::DrawQuad(Im3d::Vec3(0.0f), Im3d::Vec3(0.0f, 0.0f, 1.0f), quadSize);
 					} else {
@@ -440,6 +483,7 @@ int main(int, char**)
 		example.draw();
 	}
 	example.shutdown();
-	
+#endif
+    lWindow.ShutDown();
 	return 0;
 }

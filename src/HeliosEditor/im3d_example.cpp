@@ -1,4 +1,5 @@
-#include "im3d_example.h"
+#if 0
+#include "HELIOSexample.h"
 
 #include "teapot.h"
 
@@ -9,7 +10,7 @@
 
 using namespace Im3d;
 
-#ifdef IM3D_COMPILER_MSVC
+#ifdef HELIOSCOMPILER_MSVC
 	#pragma warning(disable: 4996) // vsnprintf
 
 	#pragma warning(disable: 4311) // typecast
@@ -30,7 +31,7 @@ static const char* StripPath(const char* _path)
 }
 
 /******************************************************************************/
-#if defined(IM3D_PLATFORM_WIN)
+#if defined(HELIOSPLATFORM_WIN)
 	static LARGE_INTEGER g_SysTimerFreq;
 
 	const char* Im3d::GetPlatformErrorString(DWORD _err)
@@ -38,7 +39,7 @@ static const char* StripPath(const char* _path)
 		const int kErrMsgMax = 1024;
 		static char buf[kErrMsgMax];
 		buf[0] = '\0';
-		IM3D_VERIFY(
+		HELIOSVERIFY(
 			FormatMessage(
 				FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
 				nullptr, 
@@ -64,7 +65,7 @@ static const char* StripPath(const char* _path)
 				im3d->m_width = w;
 				im3d->m_height = h;
 			}
-			#if defined(IM3D_DX11)
+			#if defined(HELIOSDX11)
 			 // DX requires that we reset the backbuffer when the window resizes
 				if (g_Example->m_d3dRenderTarget) {
 					g_Example->m_d3dRenderTarget->Release();
@@ -148,7 +149,7 @@ static const char* StripPath(const char* _path)
 			}
 			return 0;
 		case WM_PAINT:
-			//IM3D_ASSERT(false); // should be suppressed by calling ValidateRect()
+			//HELIOSASSERT(false); // should be suppressed by calling ValidateRect()
 			break;
 		case WM_CLOSE:
 			PostQuitMessage(0);
@@ -204,7 +205,7 @@ static const char* StripPath(const char* _path)
 			GetModuleHandle(0), 
 			nullptr
 			);
-		IM3D_ASSERT(g_Example->m_hwnd);
+		HELIOSASSERT(g_Example->m_hwnd);
 		ShowWindow(g_Example->m_hwnd, SW_SHOW);
 		return true;
 	}
@@ -216,7 +217,7 @@ static const char* StripPath(const char* _path)
 		}
 	}
 	
-	#if defined(IM3D_OPENGL)
+	#if defined(HELIOSOPENGL)
 		#include "GL/wglew.h"
 		static PFNWGLCHOOSEPIXELFORMATARBPROC    wglChoosePixelFormat    = 0;
 		static PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribs = 0;
@@ -302,7 +303,7 @@ static const char* StripPath(const char* _path)
 			}
 			glewExperimental = GL_TRUE;
 			GLenum err = glewInit();
-			IM3D_ASSERT(err == GLEW_OK);
+			HELIOSASSERT(err == GLEW_OK);
 			glGetError(); // clear any errors caused by glewInit()
 
 			winAssert(wglSwapIntervalEXT(0)); // example uses FPS as a rough perf measure, hence disable vsync
@@ -319,7 +320,7 @@ static const char* StripPath(const char* _path)
 				GLint maxUniformBlockSize; 
 				glAssert(glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &maxUniformBlockSize));
 				if (maxUniformBlockSize < (64 * 1024)) {
-					IM3D_ASSERT(false);
+					HELIOSASSERT(false);
 					fprintf(stderr, "GL_MAX_UNIFORM_BLOCK_SIZE is less than 64kb (%dkb)", maxUniformBlockSize / 1024);
 					return false;
 				}
@@ -335,7 +336,7 @@ static const char* StripPath(const char* _path)
 			winAssert(ReleaseDC(g_Example->m_hwnd, g_Example->m_hdc) != 0);
 		}
 		
-	#elif defined(IM3D_DX11)
+	#elif defined(HELIOSDX11)
 		#include <d3dcompiler.h>	
 
 		static bool InitDx11()
@@ -429,7 +430,7 @@ static bool LoadShader(const char* _path, const char* _defines, Vector<char>& _o
 			Append("#define ", _out_);
 			AppendLine(_defines, _out_);
 			_defines = strchr(_defines, 0);
-			IM3D_ASSERT(_defines);
+			HELIOSASSERT(_defines);
 			++_defines;
 		}
 	}
@@ -440,9 +441,9 @@ static bool LoadShader(const char* _path, const char* _defines, Vector<char>& _o
 		fprintf(stderr, "Error opening '%s'\n", _path);
 		return false;
 	}
-	IM3D_VERIFY(fseek(fin, 0, SEEK_END) == 0); // not portable but should work almost everywhere
+	(fseek(fin, 0, SEEK_END) == 0); // not portable but should work almost everywhere
 	long fsize = ftell(fin);
-	IM3D_VERIFY(fseek(fin, 0, SEEK_SET) == 0);
+	HELIOSVERIFY(fseek(fin, 0, SEEK_SET) == 0);
 	
 	int srcbeg = _out_.size();
 	_out_.resize(srcbeg + fsize, '\0');
@@ -457,11 +458,11 @@ static bool LoadShader(const char* _path, const char* _defines, Vector<char>& _o
 	return true;
 }
 
-#if defined(IM3D_OPENGL)
+#if defined(HELIOSOPENGL)
 	GLuint Im3d::LoadCompileShader(GLenum _stage, const char* _path, const char* _defines)
 	{
 		Vector<char> src;
-		AppendLine("#version " IM3D_STRINGIFY(IM3D_OPENGL_VSHADER), src);
+		AppendLine("#version " HELIOSSTRINGIFY(HELIOSOPENGL_VSHADER), src);
 		if (!LoadShader(_path, _defines, src)) {
 			return 0;
 		}
@@ -494,7 +495,7 @@ static bool LoadShader(const char* _path, const char* _defines, Vector<char>& _o
 	
 	bool Im3d::LinkShaderProgram(GLuint _handle)
 	{
-		IM3D_ASSERT(_handle != 0);
+		HELIOSASSERT(_handle != 0);
 	
 		glAssert(glLinkProgram(_handle));
 		GLint linkStatus = GL_FALSE;
@@ -615,7 +616,7 @@ static bool LoadShader(const char* _path, const char* _defines, Vector<char>& _o
 		return ret ? ret : "";
 	}
 
-#elif defined(IM3D_DX11)
+#elif defined(HELIOSDX11)
 	ID3DBlob* Im3d::LoadCompileShader(const char* _target, const char* _path, const char* _defines)
 	{
 		Vector<char> src;
@@ -753,9 +754,9 @@ static bool LoadShader(const char* _path, const char* _defines, Vector<char>& _o
 		ID3D11DeviceContext* ctx = g_Example->m_d3dDeviceCtx;
 
 		if (s_vsBlob == 0) {
-			s_vsBlob = LoadCompileShader("vs_" IM3D_DX11_VSHADER, "model.hlsl", "VERTEX_SHADER\0");
+			s_vsBlob = LoadCompileShader("vs_" HELIOSDX11_VSHADER, "model.hlsl", "VERTEX_SHADER\0");
 			dxAssert(d3d->CreateVertexShader((DWORD*)s_vsBlob->GetBufferPointer(), s_vsBlob->GetBufferSize(), nullptr, &s_vs));
-			s_psBlob = LoadCompileShader("ps_" IM3D_DX11_VSHADER, "model.hlsl", "PIXEL_SHADER\0");
+			s_psBlob = LoadCompileShader("ps_" HELIOSDX11_VSHADER, "model.hlsl", "PIXEL_SHADER\0");
 			dxAssert(d3d->CreatePixelShader((DWORD*)s_psBlob->GetBufferPointer(), s_psBlob->GetBufferSize(), nullptr, &s_ps));
 
 			s_vb = CreateVertexBuffer(sizeof(s_teapotVertices), D3D11_USAGE_IMMUTABLE, s_teapotVertices);
@@ -848,7 +849,7 @@ Color Im3d::RandColor(float _min, float _max)
 }
 
 /******************************************************************************/
-#if defined(IM3D_OPENGL)
+#if defined(HELIOSOPENGL)
 	static GLuint g_ImGuiVertexArray;
 	static GLuint g_ImGuiVertexBuffer;
 	static GLuint g_ImGuiIndexBuffer;
@@ -884,7 +885,7 @@ Color Im3d::RandColor(float _min, float _max)
 		glAssert(glUseProgram(g_ImGuiShader));
 	
 		bool transpose = false;
-		#ifdef IM3D_MATRIX_ROW_MAJOR
+		#ifdef HELIOSMATRIX_ROW_MAJOR
 			transpose = true;
 		#endif
 		glAssert(glUniformMatrix4fv(glGetUniformLocation(g_ImGuiShader, "uProjMatrix"), 1, transpose, (const GLfloat*)ortho));
@@ -976,7 +977,7 @@ Color Im3d::RandColor(float _min, float _max)
 		glAssert(glDeleteTextures(1, &g_ImGuiFontTexture));
 	}
 
-#elif defined(IM3D_DX11)
+#elif defined(HELIOSDX11)
 	static ID3D11InputLayout*        g_ImGuiInputLayout;
 	static ID3DBlob*                 g_ImGuiVertexShaderBlob;
 	static ID3D11VertexShader*       g_ImGuiVertexShader;
@@ -1168,7 +1169,7 @@ Color Im3d::RandColor(float _min, float _max)
 
 #endif
 
-#if defined(IM3D_PLATFORM_WIN)
+#if defined(HELIOSPLATFORM_WIN)
 	static void ImGui_Update()
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -1209,7 +1210,7 @@ bool Example::init(int _width, int _height, const char* _title)
 	g_Example = this;
 	memset(g_Example, 0, sizeof(Example));
 
-	#if defined(IM3D_PLATFORM_WIN)
+	#if defined(HELIOSPLATFORM_WIN)
 	 // force the current working directory to the exe location
 		TCHAR buf[MAX_PATH] = {};
 		DWORD buflen;
@@ -1229,11 +1230,11 @@ bool Example::init(int _width, int _height, const char* _title)
 	if (!InitWindow(m_width, m_height, m_title)) {
 		goto Example_init_fail;
 	}
-	#if defined(IM3D_OPENGL) 
-		if (!InitOpenGL(IM3D_OPENGL_VMAJ, IM3D_OPENGL_VMIN)) {
+	#if defined(HELIOSOPENGL) 
+		if (!InitOpenGL(HELIOSOPENGL_VMAJ, HELIOSOPENGL_VMIN)) {
 			goto Example_init_fail;
 		}
-	#elif defined(IM3D_DX11)
+	#elif defined(HELIOSDX11)
 		if (!InitDx11()) {
 			goto Example_init_fail;
 		}
@@ -1242,7 +1243,7 @@ bool Example::init(int _width, int _height, const char* _title)
 	if (!ImGui_Init()) {
 		goto Example_init_fail;
 	}	
-	if (!Im3d_Init()) {	
+	if (!HELIOSInit()) {	
 		goto Example_init_fail;
 	}
 
@@ -1261,11 +1262,11 @@ Example_init_fail:
 void Example::shutdown()
 {
 	ImGui_Shutdown();
-	Im3d_Shutdown();
+	HELIOSShutdown();
 
-	#if defined(IM3D_OPENGL) 
+	#if defined(HELIOSOPENGL) 
 		ShutdownOpenGL();
-	#elif defined(IM3D_DX11)
+	#elif defined(HELIOSDX11)
 		ShutdownDx11();
 	#endif
 	
@@ -1275,7 +1276,7 @@ void Example::shutdown()
 bool Example::update()
 {
 	bool ret = true;
-	#if defined(IM3D_PLATFORM_WIN)
+	#if defined(HELIOSPLATFORM_WIN)
 		g_Example->m_prevTime = g_Example->m_currTime;
 		winAssert(QueryPerformanceCounter(&m_currTime));
 		double microseconds = (double)((g_Example->m_currTime.QuadPart - g_Example->m_prevTime.QuadPart) * 1000000ll / g_SysTimerFreq.QuadPart);
@@ -1298,7 +1299,7 @@ bool Example::update()
 	float kCamRotationMul = 10.0f;
 	m_camWorld = LookAt(m_camPos, m_camPos - m_camDir);
 	m_camView = Inverse(m_camWorld);
-	#if defined(IM3D_PLATFORM_WIN)
+	#if defined(HELIOSPLATFORM_WIN)
 		Vec2 cursorPos = getWindowRelativeCursor();
 		if (hasFocus()) {
 			if (!ImGui::GetIO().WantCaptureKeyboard) {
@@ -1389,7 +1390,7 @@ bool Example::update()
 		ImGui::Text("Points:    %u ", Im3d::GetContext().getPrimitiveCount(Im3d::DrawPrimitive_Points));
 	ImGui::End();
 
-	Im3d_Update();
+	HELIOSUpdate();
 	
 	return ret;
 }
@@ -1401,25 +1402,25 @@ void Example::draw()
 	Im3d::Draw();
 	ImGui::Render();
 
-	#if defined(IM3D_PLATFORM_WIN)
+	#if defined(HELIOSPLATFORM_WIN)
 		winAssert(ValidateRect(m_hwnd, 0)); // suppress WM_PAINT
 		
-		#if defined(IM3D_OPENGL)
+		#if defined(HELIOSOPENGL)
 			winAssert(SwapBuffers(m_hdc));
-		#elif defined(IM3D_DX11)
+		#elif defined(HELIOSDX11)
 			m_dxgiSwapChain->Present(0, 0);
 		#endif
 	#endif
 	
  // reset state & clear backbuffer for next frame
-	#if defined(IM3D_OPENGL)
+	#if defined(HELIOSOPENGL)
 		glAssert(glBindVertexArray(0));
 		glAssert(glUseProgram(0));
 		glAssert(glViewport(0, 0, m_width, m_height));
 		glAssert(glClearColor(kClearColor.x, kClearColor.y, kClearColor.z, kClearColor.w));
 		glAssert(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	
-	#elif defined (IM3D_DX11)
+	#elif defined (HELIOSDX11)
 		m_d3dDeviceCtx->ClearRenderTargetView(m_d3dRenderTarget, kClearColor);
 		m_d3dDeviceCtx->ClearDepthStencilView(m_d3dDepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0xff); 
 	#endif
@@ -1427,17 +1428,19 @@ void Example::draw()
 
 bool Example::hasFocus() const
 {
-	#if defined(IM3D_PLATFORM_WIN)
+	#if defined(HELIOSPLATFORM_WIN)
 		return m_hwnd == GetFocus();
 	#endif
 }
 
 Vec2 Example::getWindowRelativeCursor() const
 {
-	#if defined(IM3D_PLATFORM_WIN)
+	#if defined(HELIOSPLATFORM_WIN)
 		POINT p = {};
 		winAssert(GetCursorPos(&p));
 		winAssert(ScreenToClient(m_hwnd, &p));
 		return Vec2((float)p.x, (float)p.y);
 	#endif
 }
+
+#endif

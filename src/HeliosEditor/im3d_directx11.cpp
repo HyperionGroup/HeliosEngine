@@ -2,7 +2,10 @@
 	This is a standard 'modern' example which implements point/line expansion via a geometry shader.
 	See examples/OpenGL31 for a reference which doesn't require geometry shaders.
 */
-#include "im3d_example.h"
+#if 0
+
+
+#include "HELIOSexample.h"
 
 struct D3DShader
 {
@@ -44,7 +47,7 @@ using namespace Im3d;
 // passing the eye view-projection matrix. A more efficient scheme would be to render to both eyes
 // inside the draw callback to avoid uploading the vertex data twice.
 // Note that there is no guarantee that the data in _drawList will exist after this function exits.
-void Im3d_Draw(const Im3d::DrawList& _drawList)
+void HELIOSDraw(const Im3d::DrawList& _drawList)
 {
 	AppData& ad = GetAppData();
 
@@ -104,7 +107,7 @@ void Im3d_Draw(const Im3d::DrawList& _drawList)
 			ctx->PSSetShader(g_Im3dShaderTriangles.m_ps, nullptr, 0);
 			break;
 		default:
-			IM3D_ASSERT(false);
+			HELIOSASSERT(false);
 			return;
 	};
 
@@ -123,7 +126,7 @@ void Im3d_Draw(const Im3d::DrawList& _drawList)
 // At the top of each frame, the application must fill the Im3d::AppData struct and then call Im3d::NewFrame().
 // The example below shows how to do this, in particular how to generate the 'cursor ray' from a mouse position
 // which is necessary for interacting with gizmos.
-void Im3d_Update()
+void HELIOSUpdate()
 {
 	AppData& ad = GetAppData();
 
@@ -183,55 +186,55 @@ void Im3d_Update()
 
 // Resource init/shutdown will be app specific. In general you'll need one shader for each of the 3
 // draw primitive types (points, lines, triangles), plus some number of vertex buffers.
-bool Im3d_Init()
+bool HELIOSInit()
 {
 	ID3D11Device* d3d = g_Example->m_d3dDevice;
 	{ // points shader
-		g_Im3dShaderPoints.m_vsBlob = LoadCompileShader("vs_" IM3D_DX11_VSHADER, "im3d.hlsl", "VERTEX_SHADER\0POINTS\0");
+		g_Im3dShaderPoints.m_vsBlob = LoadCompileShader("vs_" HELIOSDX11_VSHADER, "im3d.hlsl", "VERTEX_SHADER\0POINTS\0");
 		if (!g_Im3dShaderPoints.m_vsBlob) {
 			return false;
 		}
 		dxAssert(d3d->CreateVertexShader((DWORD*)g_Im3dShaderPoints.m_vsBlob->GetBufferPointer(), g_Im3dShaderPoints.m_vsBlob->GetBufferSize(), nullptr, &g_Im3dShaderPoints.m_vs));
 	
-		g_Im3dShaderPoints.m_gsBlob = LoadCompileShader("gs_" IM3D_DX11_VSHADER, "im3d.hlsl", "GEOMETRY_SHADER\0POINTS\0");
+		g_Im3dShaderPoints.m_gsBlob = LoadCompileShader("gs_" HELIOSDX11_VSHADER, "im3d.hlsl", "GEOMETRY_SHADER\0POINTS\0");
 		if (!g_Im3dShaderPoints.m_gsBlob) {
 			return false;
 		}
 		dxAssert(d3d->CreateGeometryShader((DWORD*)g_Im3dShaderPoints.m_gsBlob->GetBufferPointer(), g_Im3dShaderPoints.m_gsBlob->GetBufferSize(), nullptr, &g_Im3dShaderPoints.m_gs));
 
-		g_Im3dShaderPoints.m_psBlob = LoadCompileShader("ps_" IM3D_DX11_VSHADER, "im3d.hlsl", "PIXEL_SHADER\0POINTS\0");
+		g_Im3dShaderPoints.m_psBlob = LoadCompileShader("ps_" HELIOSDX11_VSHADER, "im3d.hlsl", "PIXEL_SHADER\0POINTS\0");
 		if (!g_Im3dShaderPoints.m_psBlob) {
 			return false;
 		}
 		dxAssert(d3d->CreatePixelShader((DWORD*)g_Im3dShaderPoints.m_psBlob->GetBufferPointer(), g_Im3dShaderPoints.m_psBlob->GetBufferSize(), nullptr, &g_Im3dShaderPoints.m_ps));
 	}
 	{ // lines shader
-		g_Im3dShaderLines.m_vsBlob = LoadCompileShader("vs_" IM3D_DX11_VSHADER, "im3d.hlsl", "VERTEX_SHADER\0LINES\0");
+		g_Im3dShaderLines.m_vsBlob = LoadCompileShader("vs_" HELIOSDX11_VSHADER, "im3d.hlsl", "VERTEX_SHADER\0LINES\0");
 		if (!g_Im3dShaderLines.m_vsBlob) {
 			return false;
 		}
 		dxAssert(d3d->CreateVertexShader((DWORD*)g_Im3dShaderLines.m_vsBlob->GetBufferPointer(), g_Im3dShaderLines.m_vsBlob->GetBufferSize(), nullptr, &g_Im3dShaderLines.m_vs));
 		
-		g_Im3dShaderLines.m_gsBlob = LoadCompileShader("gs_" IM3D_DX11_VSHADER, "im3d.hlsl", "GEOMETRY_SHADER\0LINES\0");
+		g_Im3dShaderLines.m_gsBlob = LoadCompileShader("gs_" HELIOSDX11_VSHADER, "im3d.hlsl", "GEOMETRY_SHADER\0LINES\0");
 		if (!g_Im3dShaderLines.m_gsBlob) {
 			return false;
 		}
 		dxAssert(d3d->CreateGeometryShader((DWORD*)g_Im3dShaderLines.m_gsBlob->GetBufferPointer(), g_Im3dShaderLines.m_gsBlob->GetBufferSize(), nullptr, &g_Im3dShaderLines.m_gs));
 		
-		g_Im3dShaderLines.m_psBlob = LoadCompileShader("ps_" IM3D_DX11_VSHADER, "im3d.hlsl", "PIXEL_SHADER\0LINES\0");
+		g_Im3dShaderLines.m_psBlob = LoadCompileShader("ps_" HELIOSDX11_VSHADER, "im3d.hlsl", "PIXEL_SHADER\0LINES\0");
 		if (!g_Im3dShaderLines.m_psBlob) {
 			return false;
 		}
 		dxAssert(d3d->CreatePixelShader((DWORD*)g_Im3dShaderLines.m_psBlob->GetBufferPointer(), g_Im3dShaderLines.m_psBlob->GetBufferSize(), nullptr, &g_Im3dShaderLines.m_ps));
 	}
 	{ // triangles shader
-		g_Im3dShaderTriangles.m_vsBlob = LoadCompileShader("vs_" IM3D_DX11_VSHADER, "im3d.hlsl", "VERTEX_SHADER\0TRIANGLES\0");
+		g_Im3dShaderTriangles.m_vsBlob = LoadCompileShader("vs_" HELIOSDX11_VSHADER, "im3d.hlsl", "VERTEX_SHADER\0TRIANGLES\0");
 		if (!g_Im3dShaderTriangles.m_vsBlob) {
 			return false;
 		}
 		dxAssert(d3d->CreateVertexShader((DWORD*)g_Im3dShaderTriangles.m_vsBlob->GetBufferPointer(), g_Im3dShaderTriangles.m_vsBlob->GetBufferSize(), nullptr, &g_Im3dShaderTriangles.m_vs));
 	
-		g_Im3dShaderTriangles.m_psBlob = LoadCompileShader("ps_" IM3D_DX11_VSHADER, "im3d.hlsl", "PIXEL_SHADER\0TRIANGLES\0");
+		g_Im3dShaderTriangles.m_psBlob = LoadCompileShader("ps_" HELIOSDX11_VSHADER, "im3d.hlsl", "PIXEL_SHADER\0TRIANGLES\0");
 		if (!g_Im3dShaderTriangles.m_psBlob) {
 			return false;
 		}
@@ -271,12 +274,12 @@ bool Im3d_Init()
 	
 	g_Im3dConstantBuffer = CreateConstantBuffer(sizeof(Mat4) + sizeof(Vec4), D3D11_USAGE_DYNAMIC);
 	
-	GetAppData().drawCallback = &Im3d_Draw;
+	GetAppData().drawCallback = &HELIOSDraw;
 
 	return true;
 }
 
-void Im3d_Shutdown()
+void HELIOSShutdown()
 {
 	g_Im3dShaderPoints.Release();
 	g_Im3dShaderLines.Release();
@@ -289,3 +292,5 @@ void Im3d_Shutdown()
 	if (g_Im3dConstantBuffer)     g_Im3dConstantBuffer->Release();
 	if (g_Im3dVertexBuffer)       g_Im3dVertexBuffer->Release();
 }
+
+#endif
