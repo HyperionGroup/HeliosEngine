@@ -1,0 +1,79 @@
+#include "TechniquePoolManager.h"
+#include "XML/XML.h"
+#include "Logger/Logger.h"
+
+CTechniquePoolManager::CTechniquePoolManager()
+{
+}
+
+CTechniquePoolManager::~CTechniquePoolManager()
+{
+
+}
+
+bool CTechniquePoolManager::Load(const std::string& aFilename)
+{
+    m_Filename = aFilename;
+    bool lOk = false;
+    CXMLDocument lDocument;
+    EXMLParseError l_Error = lDocument.LoadFile(m_Filename.c_str());
+    if (base::xml::SucceedLoad(l_Error))
+    {
+        CXMLElement * lChild = lDocument.FirstChildElement("technique_pools");
+        if (lChild)
+        {
+            for (lChild = lChild->FirstChildElement(); lChild; lChild = lChild->NextSiblingElement())
+            {
+                std::string lName = lChild->Name();
+                if (lName == "default_pool")
+                {
+                    for (CXMLElement* lChildDefault = lChild->FirstChildElement(); lChildDefault; lChildDefault = lChildDefault->NextSiblingElement())
+                    {
+                        CTechnique* lTechnique = new CTechnique();
+						std::string l_TechniqueName=lChildDefault->GetAttribute<std::string>("name", "");
+						if(l_TechniqueName.empty())
+							l_TechniqueName=lChildDefault->GetAttribute<std::string>("vertex_type", "");
+						if(!Add(l_TechniqueName, lTechnique))
+                        {
+                            LOG_ERROR_APPLICATION("[CTechniquePoolManager]Error adding a default pool");
+                            base::utils::CheckedDelete(lTechnique);
+                        }
+                    }
+                }
+                else if ( "pool" )
+                {
+                    CTechniquePool* lPool = new CTechniquePool(lChild);
+                    if(!mPools.Add(lPool->GetName(), lPool))
+                    {
+                        LOG_ERROR_APPLICATION("[CTechniquePoolManager]Adding pool %s", lPool->GetName().c_str());
+                        base::utils::CheckedDelete(lPool);
+                    }
+                }
+            }
+        }
+        lOk = true;
+    }
+    return lOk;
+}
+
+bool CTechniquePoolManager::Apply(const std::string& aPoolName)
+{
+    bool lOk = true;
+    CTechniquePool* lPool = mPools(aPoolName);
+    if (!lPool)
+    {
+        LOG_ERROR_APPLICATION("Trying to apply a invalid pool with name %s", aPoolName.c_str());
+        lOk = false;
+    }
+    else
+    {
+        TMapResources::iterator lItb = m_ResourcesMap.begin(), lIte = m_ResourcesMap.end();
+        for (; lItb != lIte; ++lItb)
+        {
+            const std::string & lVertexType = lItb->first;
+            lItb->second.m_Value->SetEffect((*lPool)(lVertexType));
+        }
+    }
+    return lOk;
+}
+

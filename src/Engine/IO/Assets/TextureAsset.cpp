@@ -8,8 +8,8 @@
 
 namespace io
 {
-    CTextureAsset::CTextureAsset( const std::string& _fileName )
-        : CAsset(_fileName)
+    CTextureAsset::CTextureAsset()
+        : CAsset()
     {
     }
 
@@ -20,8 +20,8 @@ namespace io
 
     bool CTextureAsset::Load()
     {
-        unsigned char* data = stbi_load(mID.c_str(), &mWidth, &mHeight, &mNumComponents, 4);
-        LOG_ERROR_APPLICATION_IF(data == nullptr, "Unable to load texture %s", mID.c_str());
+        unsigned char* data = stbi_load(mFilename.c_str(), &mWidth, &mHeight, &mNumComponents, 4);
+        LOG_ERROR_APPLICATION_IF(data == nullptr, "Unable to load texture %s", mFilename.c_str());
         stbi_image_free(data);
         return false;
     }

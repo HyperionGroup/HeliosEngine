@@ -88,6 +88,43 @@ namespace render
             LOG_ERROR_APPLICATION("The device doesn't support the minimum feature level required to run this sample (DX %d.%2 )", majorLevel, minorLevel );
         }
 
+        // Query the current feature level:
+        switch (featureLevel)
+        {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+        {
+            mVSFeatureLevel = "vs_5_0";
+            mPSFeatureLevel = "ps_5_0";
+        }
+        break;
+        case D3D_FEATURE_LEVEL_10_1:
+        {
+            mVSFeatureLevel = "vs_4_1";
+            mPSFeatureLevel = "ps_4_1";
+        }
+        break;
+        case D3D_FEATURE_LEVEL_10_0:
+        {
+            mVSFeatureLevel = "vs_4_0";
+            mPSFeatureLevel = "ps_4_0";
+        }
+        break;
+        case D3D_FEATURE_LEVEL_9_3:
+        {
+            mVSFeatureLevel = "vs_4_0_level_9_3";
+            mPSFeatureLevel = "ps_4_0_level_9_3";
+        }
+        break;
+        case D3D_FEATURE_LEVEL_9_2:
+        case D3D_FEATURE_LEVEL_9_1:
+        {
+            mVSFeatureLevel = "vs_4_0_level_9_1";
+            mPSFeatureLevel = "ps_4_0_level_9_1";
+        }
+        break;
+        } // switch( featureLevel )
+
         AfterReset();
     }
 

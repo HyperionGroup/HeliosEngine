@@ -5,28 +5,29 @@
 
 #include "Asset.h"
 #include "Serializable.h"
-#include "Core.h"
+#include "IO.h"
 
 namespace io
 {
     class CTextureAsset : public CAsset
     {
         SERIALIZABLE
-        private:
-            int32              mHeight;
-            int32              mWidth;
-            int32              mNumComponents;
-        public:
-            CTextureAsset( const std::string& _fileName );
-            virtual ~CTextureAsset();
-            virtual bool Load();
+    private:
+        int32              mHeight;
+        int32              mWidth;
+        int32              mNumComponents;
+        std::string        mFilename;
+    public:
+        CTextureAsset();
+        virtual ~CTextureAsset();
+        virtual bool Load();
     };
 
 #pragma region Serialization
     SERIALIZABLE_SAVE_DECLARATION(CTextureAsset)
     {
         CAsset::save(ar);
-        ar(mHeight);
+        TO_ARCHIVE(Filename);
     }
 
     SERIALIZABLE_LOAD_DECLARATION(CTextureAsset)

@@ -41,13 +41,13 @@ project "Core"
 project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	
 project "IO"
     kind "StaticLib"
     files { "../src/Engine/IO/**.h", "../src/Engine/IO/**.cpp", "../src/Engine/IO/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/IO"  }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/IO", "../src/Engine/Render/d3d11"  }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	
 project "User"

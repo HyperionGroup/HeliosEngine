@@ -1,0 +1,23 @@
+#ifndef __TECHNIQUE_HH__
+#define __TECHNIQUE_HH__
+
+#include "Utils\Defines.h"
+#include <string>
+#include "Render\RenderManager\RenderApi.h"
+
+class CEffect;
+
+class CTechnique
+{
+public:
+    CTechnique();
+    virtual ~CTechnique();
+    void     SetEffect(CEffect* aEffect);
+    CEffect* GetEffect() const;
+    void     Bind(ID3D11DeviceContext* aContext);
+private:
+    DISALLOW_COPY_AND_ASSIGN(CTechnique);
+    CEffect* mEffect;
+};
+
+#endif

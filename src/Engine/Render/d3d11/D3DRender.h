@@ -48,6 +48,7 @@ COM_SMARTPTR(ID3D11BlendState)
 COM_SMARTPTR(ID3D11RasterizerState)
 COM_SMARTPTR(ID3D11DepthStencilState)
 COM_SMARTPTR(ID3D11SamplerState)
+COM_SMARTPTR(ID3D11Buffer)
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "D3D9.lib")
@@ -86,5 +87,7 @@ inline void DXCall(HRESULT hr)
     }
 
 #undef D3D_ERROR_CASE
+#else
+    HELIOSUNUSED(hr);
 #endif
 }

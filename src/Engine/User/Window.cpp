@@ -176,7 +176,7 @@ namespace user
             GetModuleHandle(0),
             nullptr
         );
-        HELIOSASSERT(hwnd, "Null handle for window");
+        HELIOSASSERT_MSG(hwnd, "Null handle for window");
         ShowWindow(hwnd, SW_SHOW);
         return hwnd != nullptr;
     }

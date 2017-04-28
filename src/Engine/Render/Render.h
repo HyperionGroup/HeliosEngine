@@ -3,19 +3,35 @@
 #include "Serializable.h"
 #include "Core.h"
 
-#pragma warning( disable  : 4005 )  
-
 #ifdef OGL_RENDERER
 #define RENDER_API ogl
 
 #else
+#define RENDER_API d3d11
 #include "d3d11/D3DRender.h"
 #endif
 
 namespace render
 {
-    class CSampler;
-    typedef std::shared_ptr< CSampler > CSamplerPtr;
+    DECLARE_SPTR(CSampler);
+    DECLARE_SPTR(CDevice);
+    DECLARE_SPTR(CShader);
+    DECLARE_SPTR(CShaderStage);
+
+    enum VertexFlags
+    {
+        Position = 0x0001,
+        Normal = 0x0002,
+        Tangent = 0x0004,
+        Binormal = 0x0008,
+        Uv = 0x0010,
+        Uv2 = 0x0020,
+        Color = 0x0040,
+        Position4 = 0x0080,
+        Bump = Normal | Tangent | Binormal,
+        Weight = 0x0100,
+        Indices = 0x0200,
+    };
 
     enum Filter
     {
@@ -67,11 +83,12 @@ namespace render
 
     uint16 BytesPerPixel(PixelDesc _pixelDesc);
 
-    enum ShaderStage
+    enum ShaderStageType
     {
         VertexStage   = 0,
         FragmentStage,
         GeometryStage,
+        StagesCount
     };
 
     enum BlendEquation
@@ -99,10 +116,17 @@ namespace render
         OneMinusConstantAlpha,
         SrcAlphaSaturate,
     };
+
+    enum PrimitiveTopology
+    {
+        LineList = 2,
+        TriangleList = 4,
+        TriangleStrip = 5
+    };
 }
 
 //---------------------------------------------------------------------------------------------------------
-Begin_Enum_String(render::ShaderStage)
+Begin_Enum_String(render::ShaderStageType)
 {
     Enum_String_Id(render::VertexStage, "VertexStage");
     Enum_String_Id(render::FragmentStage, "FragmentStage");
@@ -178,5 +202,21 @@ Begin_Enum_String(render::PixelDesc)
     Enum_String_Id(render::RG16F, "RG16F");
     Enum_String_Id(render::RGB16F, "RGB16F");
     Enum_String_Id(render::RGBA16F, "RGBA16F");
+}
+End_Enum_String;
+
+Begin_Enum_String(render::VertexFlags)
+{
+    Enum_String_Id(render::Position, "Position");
+    Enum_String_Id(render::Normal, "Normal");
+    Enum_String_Id(render::Tangent, "Tangent");
+    Enum_String_Id(render::Binormal, "Binormal");
+    Enum_String_Id(render::Uv, "Uv");
+    Enum_String_Id(render::Uv2, "Uv2");
+    Enum_String_Id(render::Color, "Color");
+    Enum_String_Id(render::Position4, "Position4");
+    Enum_String_Id(render::Bump, "Bump");
+    Enum_String_Id(render::Weight, "Weight");
+    Enum_String_Id(render::Indices, "Indices");
 }
 End_Enum_String;

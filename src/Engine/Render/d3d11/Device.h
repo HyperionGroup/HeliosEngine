@@ -26,15 +26,15 @@ namespace render
         void Present();
 
         // Getters
-        ID3D11Device*				Device() const { return device.GetInterfacePtr(); };
-        ID3D11DeviceContext*		ImmediateContext() const { return immediateContext.GetInterfacePtr(); };
-        IDXGISwapChain*				SwapChain() const { return swapChain.GetInterfacePtr(); };
-        ID3D11RenderTargetView*		BackBuffer() const { return bbRTView.GetInterfacePtr(); };
-        ID3D11Texture2D*            BackBufferTexture() const { return bbTexture; };
-        ID3D11DepthStencilView*		AutoDepthStencilView() const { return autoDSView; };
-        ID3D11ShaderResourceView*   AutoDepthStencilSRView() const { return autoDSSRView; };
-        D3D_FEATURE_LEVEL			FeatureLevel() const { return featureLevel; };
-        D3D_FEATURE_LEVEL			MinFeatureLevel() const { return minFeatureLevel; };
+        inline ID3D11Device*              Device() const { return device.GetInterfacePtr(); };
+        inline ID3D11DeviceContext*       ImmediateContext() const { return immediateContext.GetInterfacePtr(); };
+        inline IDXGISwapChain*            SwapChain() const { return swapChain.GetInterfacePtr(); };
+        inline ID3D11RenderTargetView*    BackBuffer() const { return bbRTView.GetInterfacePtr(); };
+        inline ID3D11Texture2D*           BackBufferTexture() const { return bbTexture; };
+        inline ID3D11DepthStencilView*    AutoDepthStencilView() const { return autoDSView; };
+        inline ID3D11ShaderResourceView*  AutoDepthStencilSRView() const { return autoDSSRView; };
+        inline D3D_FEATURE_LEVEL          FeatureLevel() const { return featureLevel; };
+        inline D3D_FEATURE_LEVEL          MinFeatureLevel() const { return minFeatureLevel; };
 
         DXGI_FORMAT		BackBufferFormat() const { return backBufferFormat; };
         UINT			BackBufferWidth() const { return backBufferWidth; };
@@ -47,6 +47,10 @@ namespace render
         bool			FullScreen() const { return fullScreen; };
         bool			VSYNCEnabled() const { return vsync; };
         UINT            NumVSYNCIntervals() const { return numVSYNCIntervals; };
+
+        const char*     GetVertexStageFeatureLevel() const { return mVSFeatureLevel; }
+        const char*     GetPixelStageFeatureLevel() const { return mPSFeatureLevel; }
+        const char*     GetGeometryStageFeatureLevel() const { return mGSFeatureLevel; }
 
 
         // Setters
@@ -97,6 +101,10 @@ namespace render
 
         D3D_FEATURE_LEVEL			featureLevel;
         D3D_FEATURE_LEVEL           minFeatureLevel;
+
+        const char* mVSFeatureLevel;
+        const char* mPSFeatureLevel;
+        const char* mGSFeatureLevel;
     };
 
 }

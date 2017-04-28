@@ -12,18 +12,15 @@ namespace io
     class CAsset
     {
         SERIALIZABLE
-        protected:
-            std::string mID;
         public:
-            CAsset( const std::string& _fileName );
+            CAsset();
             virtual ~CAsset();
-            virtual bool Load() { return false;  }
+            virtual bool Load() = 0;
     };
 
 #pragma region Serialization
     SERIALIZABLE_SAVE_DECLARATION(CAsset)
     {
-        TO_ARCHIVE(ID);
     }
 
     SERIALIZABLE_LOAD_DECLARATION(CAsset)

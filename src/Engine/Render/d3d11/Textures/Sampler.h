@@ -32,7 +32,7 @@ namespace render
         TO_ARCHIVE_ENUM(ComparisonFunc);
         TO_ARCHIVE(MinLOD);
         TO_ARCHIVE(MaxLOD);
-        TO_ARCHIVE(BorderColor);
+        //TO_ARCHIVE(BorderColor);
         TO_ARCHIVE(MipLODBias);
         TO_ARCHIVE(MaxAnisotropy);
     }
@@ -44,7 +44,7 @@ namespace render
         FROM_ARCHIVE_ENUM(ComparisonFunc);
         FROM_ARCHIVE(MinLOD);
         FROM_ARCHIVE(MaxLOD);
-        FROM_ARCHIVE(BorderColor);
+        //FROM_ARCHIVE(BorderColor);
         FROM_ARCHIVE(MipLODBias);
         FROM_ARCHIVE(MaxAnisotropy);
     }

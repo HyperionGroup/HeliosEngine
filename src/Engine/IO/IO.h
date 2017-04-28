@@ -1,7 +1,6 @@
 #pragma once
 
-#include "EnumToString.h"
-#include <memory>
+#include "Core.h"
 
 namespace io
 {

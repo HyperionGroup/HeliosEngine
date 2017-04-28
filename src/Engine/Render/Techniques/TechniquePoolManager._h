@@ -1,0 +1,29 @@
+#ifndef _H_TECHNIQUE_POOL_MNGR__
+#define _H_TECHNIQUE_POOL_MNGR__
+
+#include "TechniquePool.h"
+#include "Technique.h"
+#include "Utils/TemplatedMapVector.h"
+XML_FORWARD_DECLARATION
+
+class CTechniquePoolManager : public base::utils::CTemplatedMapVector<CTechnique>
+{
+public:
+    CTechniquePoolManager();
+    virtual ~CTechniquePoolManager();
+    bool Load(const std::string& aFilename);
+    bool Reload();
+    bool Apply(const std::string& aPoolName);
+private:
+    class CTechniquePool : public core::CStringArrayMap<CShaderPtr>, public core::CName
+    {
+    public:
+        CTechniquePool();
+        virtual ~CTechniquePool();
+    };
+    std::string m_Filename;
+    typedef base::utils::CTemplatedMapVector<CTechniquePool> TMapPools;
+    TMapPools mPools;
+};
+
+#endif

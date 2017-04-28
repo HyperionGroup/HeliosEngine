@@ -3,6 +3,10 @@
 
 #include "Window.h"
 #include "Device.h"
+#include "Textures\Sampler.h"
+#include "Buffers\Buffer.h"
+#include "Geometry\Vertex.h"
+#include "Assets\ShaderAsset.h"
 
 int main(int, char**)
 {
@@ -20,6 +24,14 @@ int main(int, char**)
     if( !lWindow.Create() )
 		return 1;
 
+    render::CVertex lVertex(render::Position, render::Uv);
+
+    render::CMeshVertex lver2;
+    std::ifstream filein("quad.shd");
+    cereal::XMLInputArchive archive(filein);
+    io::CShaderAsset lShaderAsset;
+    archive( cereal::make_nvp("shader", lShaderAsset) );
+    
     render::CDevice lDevice = render::CDevice::GetInstance();
     lDevice.Initialize(lWindow.winID());
     float lBackColor[4] = {1.0f, 0.25f ,0.25f , 0.25f };
@@ -29,26 +41,9 @@ int main(int, char**)
 
     while (lWindow.Update())
     {
-        ImGui::Begin("Im3d Demo", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-
-        ImGui::SetNextTreeNodeOpen(true, ImGuiSetCond_Once);
-        if (ImGui::TreeNode("About")) {
-            ImGui::Text("Welcome to the Im3d demo!");
-            ImGui::Spacing();
-            ImGui::Text("WASD   = forward/left/backward/right");
-            ImGui::Text("QE     = down/up");
-            ImGui::Text("RMouse = camera orientation");
-            ImGui::Text("LShift = move faster");
-            ImGui::Spacing();
-
-            ImGui::TreePop();
-        }
-
-        ImGui::End();
-
         lDevice.ImmediateContext()->ClearRenderTargetView(lDevice.BackBuffer(), lBackColor);
-        Im3d::Draw();
-        ImGui::Render();
+        /*Im3d::Draw();
+        ImGui::Render();*/
         lDevice.Present();
     }
 

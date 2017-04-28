@@ -2,7 +2,10 @@
 
 #include "EnumToString.h"
 #include "Logger/Logger.h"
+#include "Containers.h"
+#include "Name.h"
 #include <string>
+#include <stddef.h>
 #include <im3d.h>
 #include <im3d_math.h>
 
@@ -31,7 +34,7 @@ typedef Im3d::Vec4 Float4;
 
 #define winAssert(e) HELIOSVERIFY_MSG(e, Im3d::GetPlatformErrorString(GetLastError()))
 
-#define HELIOSUNUSED(x) do { (void)sizeof(x); } while(0)
+#define HELIOSUNUSED(x) hr;
 #ifdef HELIOSCOMPILER_MSVC
 #define HELIOSBREAK() __debugbreak()
 #else
@@ -88,3 +91,9 @@ typedef intptr_t intptr;
 typedef uintptr_t uintptr;
 typedef wchar_t wchar;
 typedef uint32_t bool32;
+
+#define DECLARE_SPTR( class_name ) \
+class class_name; \
+typedef std::shared_ptr< class_name > class_name##Ptr;
+
+#pragma warning( disable  : 4005 )  
