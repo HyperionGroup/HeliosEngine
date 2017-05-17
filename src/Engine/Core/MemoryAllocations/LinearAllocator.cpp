@@ -1,3 +1,5 @@
+#include "Core.h"
+
 #include "LinearAllocator.h"
 
 LinearAllocator::LinearAllocator(size_t size, void* start) 
@@ -11,11 +13,11 @@ LinearAllocator::~LinearAllocator()
 	_current_pos   = nullptr;
 }
 
-void* LinearAllocator::allocate(size_t size, u8 alignment)
+void* LinearAllocator::allocate(size_t size, uint8 alignment)
 {
 	ASSERT(size != 0);
 
-	u8 adjustment =  pointer_math::alignForwardAdjustment(_current_pos, alignment);
+	uint8 adjustment =  pointer_math::alignForwardAdjustment(_current_pos, alignment);
 
 	if(_used_memory + adjustment + size > _size)
 		return nullptr;

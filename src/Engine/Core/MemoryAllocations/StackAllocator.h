@@ -13,7 +13,7 @@ public:
 	StackAllocator(size_t size, void* start);
 	~StackAllocator();
 
-	void* allocate(size_t size, u8 alignment) override;
+	void* allocate(size_t size, uint8 alignment) override;
 		
 	void deallocate(void* p) override;
 
@@ -26,7 +26,7 @@ private:
 		#if _DEBUG
 		void* prev_address;
 		#endif
-		u8 adjustment;
+		uint8 adjustment;
 	};
 
 	#if _DEBUG

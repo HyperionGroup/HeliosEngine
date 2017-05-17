@@ -13,7 +13,7 @@ public:
 	FreeListAllocator(size_t size, void* start);
 	~FreeListAllocator();
 
-	void* allocate(size_t size, u8 alignment) override;
+	void* allocate(size_t size, uint8 alignment) override;
 		
 	void deallocate(void* p) override;
 
@@ -22,7 +22,7 @@ private:
 	struct AllocationHeader
 	{
 		size_t size;
-		u8     adjustment;
+		uint8     adjustment;
 	};
 
 	struct FreeBlock

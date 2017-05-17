@@ -1,13 +1,6 @@
-//=================================================================================================
-//
-//	MJP's DX11 Sample Framework
-//  http://mynameismjp.wordpress.com/
-//
-//  All code and content licensed under Microsoft Public License (Ms-PL)
-//
-//=================================================================================================
-
+#include "Render.h"
 #include "States.h"
+#include "Device.h"
 
 namespace render
 {
@@ -20,6 +13,58 @@ namespace render
         DXCall(device->CreateBlendState(&ColorWriteDisabledDesc(), &noColor));
         DXCall(device->CreateBlendState(&AlphaToCoverageDesc(), &alphaToCoverage));
         DXCall(device->CreateBlendState(&OpacityBlendDesc(), &opacityBlend));
+        DXCall(device->CreateBlendState(&Im3dBlendDesc(), &im3dBlend));
+    }
+
+    void BlendStates::ShutDown()
+    {
+    }
+
+    void BlendStates::Apply(ID3D11DeviceContext* _context, BlendState _state, float* _blendFactor)
+    {
+        if (_state != mState)
+        {
+            switch (_state)
+            {
+            case BlendState::BlendDisabled:
+                _context->OMSetBlendState(blendDisabled, _blendFactor, 0xFFFFFFFF);
+            case BlendState::AdditiveBlend:
+                _context->OMSetBlendState(additiveBlend, _blendFactor, 0xFFFFFFFF);
+            case BlendState::AlphaBlend:
+                _context->OMSetBlendState(alphaBlend, _blendFactor, 0xFFFFFFFF);
+            case BlendState::PreMultipliedAlphaBlend:
+                _context->OMSetBlendState(pmAlphaBlend, _blendFactor, 0xFFFFFFFF);
+            case BlendState::NoColorBlend:
+                _context->OMSetBlendState(noColor, _blendFactor, 0xFFFFFFFF);
+            case BlendState::AlphaToCoverageBlend:
+                _context->OMSetBlendState(opacityBlend, _blendFactor, 0xFFFFFFFF);
+            case BlendState::Im3dBlend:
+                _context->OMSetBlendState(im3dBlend, _blendFactor, 0xFFFFFFFF);
+            default:
+                HELIOSASSERT(false);
+                break;
+            }
+        }
+    }
+
+    D3D11_BLEND_DESC BlendStates::Im3dBlendDesc()
+    {
+        D3D11_BLEND_DESC blendDesc;
+        blendDesc.AlphaToCoverageEnable = false;
+        blendDesc.IndependentBlendEnable = false;
+        for (UINT i = 0; i < 8; ++i)
+        {
+            blendDesc.RenderTarget[i].BlendEnable = true;
+            blendDesc.RenderTarget[i].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+            blendDesc.RenderTarget[i].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+            blendDesc.RenderTarget[i].BlendOp = D3D11_BLEND_OP_ADD;
+            blendDesc.RenderTarget[i].SrcBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+            blendDesc.RenderTarget[i].DestBlendAlpha = D3D11_BLEND_ZERO;
+            blendDesc.RenderTarget[i].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+            blendDesc.RenderTarget[i].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+        }
+
+        return blendDesc;
     }
 
     D3D11_BLEND_DESC BlendStates::BlendDisabledDesc()
@@ -176,6 +221,40 @@ namespace render
         DXCall(device->CreateRasterizerState(&WireframeDesc(), &wireframe));
     }
 
+    void RasterizerStates::ShutDown()
+    {
+
+    }
+
+    void RasterizerStates::Apply(ID3D11DeviceContext* _context, RasterizerState _state )
+    {
+        if (_state != mState)
+        {
+            switch (_state)
+            {
+            case RasterizerState::NoCull:
+                _context->RSSetState(noCull);
+            case RasterizerState::CullFrontFaces:
+                _context->RSSetState(cullFrontFaces);
+            case RasterizerState::CullBackFacesScissor:
+                _context->RSSetState(cullBackFacesScissor);
+            case RasterizerState::CullBackFaces:
+                _context->RSSetState(cullBackFaces);
+            case RasterizerState::CullFrontFacesScissor:
+                _context->RSSetState(cullFrontFacesScissor);
+            case RasterizerState::NoCullNoMs:
+                _context->RSSetState(noCullNoMS);
+            case RasterizerState::NoCullScissor:
+                _context->RSSetState(noCullScissor);
+            case RasterizerState::WireFrame:
+                _context->RSSetState(wireframe);
+            default:
+                HELIOSASSERT(false);
+                break;
+            }
+        }
+    }
+
     D3D11_RASTERIZER_DESC RasterizerStates::NoCullDesc()
     {
         D3D11_RASTERIZER_DESC rastDesc;
@@ -329,6 +408,38 @@ namespace render
         DXCall(device->CreateDepthStencilState(&ReverseDepthWriteEnabledDesc(), &revDepthWriteEnabled));
         DXCall(device->CreateDepthStencilState(&DepthStencilWriteEnabledDesc(), &depthStencilWriteEnabled));
         DXCall(device->CreateDepthStencilState(&StencilEnabledDesc(), &stencilEnabled));
+    }
+
+    void DepthStencilStates::ShutDown()
+    {
+
+    }
+
+    void DepthStencilStates::Apply(ID3D11DeviceContext* _context, DepthStencilState _state)
+    {
+        if (_state != mState)
+        {
+            switch (_state)
+            {
+            case DepthStencilState::DepthDisabled:
+                _context->OMSetDepthStencilState(depthDisabled, 0);
+            case DepthStencilState::DepthEnabled:
+                _context->OMSetDepthStencilState(depthEnabled, 0);
+            case DepthStencilState::ReverseDepthEnabled:
+                _context->OMSetDepthStencilState(revDepthEnabled, 0);
+            case DepthStencilState::DepthWriteEnabled:
+                _context->OMSetDepthStencilState(depthWriteEnabled, 0);
+            case DepthStencilState::ReverseDepthWriteEnabled:
+                _context->OMSetDepthStencilState(revDepthWriteEnabled, 0);
+            case DepthStencilState::DepthStencilWriteEnabled:
+                _context->OMSetDepthStencilState(depthStencilWriteEnabled, 0);
+            case DepthStencilState::StencilEnabled:
+                _context->OMSetDepthStencilState(stencilEnabled, 0);
+            default:
+                HELIOSASSERT(false);
+                break;
+            }
+        }
     }
 
     D3D11_DEPTH_STENCIL_DESC DepthStencilStates::DepthDisabledDesc()

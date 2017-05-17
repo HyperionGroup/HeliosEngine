@@ -7,7 +7,7 @@ workspace "Helios"
    
    
    filter "configurations:Debug"
-      defines { "DEBUG" }
+      defines { "DEBUG", "DX_LOG_CALLS" }
 	  rtti ("off")
 	  characterset ("MBCS")
 	  symbols "on"
@@ -30,6 +30,8 @@ project "HeliosEditor"
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
 	libdirs { "$(DXSDK_DIR)lib/x86/" }
 	links { "d3d11", "d3dcompiler", "Render", "IO", "Core", "User", "imgui"}
+	pchheader "HeliosEditor.h"
+	pchsource "../src/HeliosEditor/main.cpp"
 	
 group "Engine"
 project "Core"
@@ -37,24 +39,33 @@ project "Core"
     files { "../src/Engine/Core/**.h", "../src/Engine/Core/**.cpp", "../src/Engine/Core/**.inl" }
 	includedirs { "../src/Engine/Core" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	pchheader "Core.h"
+	pchsource "../src/Engine/Core/Core.cpp"
 
 project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
 	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	pchheader "Render.h"
+	pchsource "../src/Engine/Render/Render.cpp"
+	buildoptions { "-Zm150" }
 	
 project "IO"
     kind "StaticLib"
     files { "../src/Engine/IO/**.h", "../src/Engine/IO/**.cpp", "../src/Engine/IO/**.inl" }
 	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/IO", "../src/Engine/Render/d3d11"  }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	pchheader "IO.h"
+	pchsource "../src/Engine/IO/IO.cpp"
 	
 project "User"
     kind "StaticLib"
     files { "../src/Engine/User/**.h", "../src/Engine/User/**.cpp", "../src/Engine/User/**.inl" }
 	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/Render"  }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	pchheader "User.h"
+	pchsource "../src/Engine/User/User.cpp"
 
 group "3rdParty"
 project "imgui"

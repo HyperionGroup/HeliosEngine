@@ -1,12 +1,11 @@
-#include <imgui.h>
-#include <im3d.h>
+#include "HeliosEditor.h"
 
 #include "Window.h"
 #include "Device.h"
-#include "Textures\Sampler.h"
 #include "Buffers\Buffer.h"
 #include "Geometry\Vertex.h"
 #include "Assets\ShaderAsset.h"
+#include "Im3DDraw.h"
 
 int main(int, char**)
 {
@@ -17,35 +16,35 @@ int main(int, char**)
     winAssert(buflen = GetModuleFileName(0, buf, MAX_PATH));
     char* pathend = strrchr(buf, (int)'\\');
     *(++pathend) = '\0';
-    winAssert(SetCurrentDirectory(buf));
+    std::string strbuff = buf;
+    strbuff.erase(strbuff.find("helios\\") + 7);
+    strbuff += "data\\";
+    winAssert(SetCurrentDirectory(strbuff.c_str() ));
     fprintf(stdout, "Set current directory: '%s'\n", buf);
 #endif
+
     user::CWindow& lWindow = user::CWindow::GetInstance();
     if( !lWindow.Create() )
 		return 1;
 
-    render::CVertex lVertex(render::Position, render::Uv);
-
-    render::CMeshVertex lver2;
-    std::ifstream filein("quad.shd");
-    cereal::XMLInputArchive archive(filein);
-    io::CShaderAsset lShaderAsset;
-    archive( cereal::make_nvp("shader", lShaderAsset) );
-    
-    render::CDevice lDevice = render::CDevice::GetInstance();
+    render::CDevice& lDevice = render::CDevice::GetInstance();
     lDevice.Initialize(lWindow.winID());
     float lBackColor[4] = {1.0f, 0.25f ,0.25f , 0.25f };
 
     Im3d::Context& ctx = Im3d::GetContext();
     Im3d::AppData& ad = Im3d::GetAppData();
 
+    render::Im3d_Draw::Initialize();
+
     while (lWindow.Update())
     {
         lDevice.ImmediateContext()->ClearRenderTargetView(lDevice.BackBuffer(), lBackColor);
-        /*Im3d::Draw();
-        ImGui::Render();*/
+        Im3d::Draw();
+        //ImGui::Render();
         lDevice.Present();
     }
+
+    render::Im3d_Draw::ShutDown();
 
 #if 0
 	while (example.update()) {

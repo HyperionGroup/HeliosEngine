@@ -20,80 +20,83 @@ namespace render
             ZeroMemory(&Data, sizeof(T));
         }
 
-        virtual void Bind(CDevicePtr _device)
+        virtual void Bind(ID3D11DeviceContextPtr _device)
         {
             HELIOSUNUSED(_device);
             assert("This method must not be called!");
         }
 
-        void Initialize(CDevicePtr _device)
+        void Initialize(ID3D11DevicePtr _device)
         {
+            HELIOSASSERT(!mInitialized);
+
             D3D11_BUFFER_DESC desc;
-            desc.Usage = D3D11_USAGE_DYNAMIC;
+            desc.Usage = mUsage;
             desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
             desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
             desc.MiscFlags = 0;
             desc.ByteWidth = static_cast<UINT>(sizeof(T) + (16 - (sizeof(T) % 16)));
-            DXCall(_device->Device()->CreateBuffer(&desc, NULL, &mBuffer));
+            DXCall(_device->CreateBuffer(&desc, NULL, &mBuffer));
             mInitialized = true;
         }
 
-        void ApplyChanges(CDevicePtr _device)
+        void Apply(ID3D11DeviceContextPtr _device)
         {
             HELIOSASSERT(mInitialized);
             D3D11_MAPPED_SUBRESOURCE mappedResource;
-            DXCall(_device->ImmediateContext()->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
+            DXCall(_device->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
             CopyMemory(mappedResource.pData, &Data, sizeof(T));
-            _device->ImmediateContext()->Unmap(mBuffer, 0);
+            _device->Unmap(mBuffer, 0);
         }
 
-        void BindVS(CDevicePtr _device, UINT slot) const
+        void BindVS(ID3D11DeviceContextPtr _device, UINT slot) const
         {
             HELIOSASSERT(mInitialized);
             ID3D11Buffer* bufferArray[1];
             bufferArray[0] = mBuffer;
-            _device->ImmediateContext()->VSSetConstantBuffers(slot, 1, bufferArray);
+            _device->VSSetConstantBuffers(slot, 1, bufferArray);
         }
 
-        void BindPS(CDevicePtr _device, UINT slot) const
+        void BindPS(ID3D11DeviceContextPtr _device, UINT slot) const
         {
             HELIOSASSERT(mInitialized);
             ID3D11Buffer* bufferArray[1];
             bufferArray[0] = mBuffer;
-            _device->ImmediateContext()->PSSetConstantBuffers(slot, 1, bufferArray);
+            _device->PSSetConstantBuffers(slot, 1, bufferArray);
         }
 
-        void BindGS(CDevicePtr _device, UINT slot) const
+        void BindGS(ID3D11DeviceContextPtr _device, UINT slot) const
         {
             HELIOSASSERT(mInitialized);
             ID3D11Buffer* bufferArray[1];
             bufferArray[0] = mBuffer;
-            _device->ImmediateContext()->GSSetConstantBuffers(slot, 1, bufferArray);
+            _device->GSSetConstantBuffers(slot, 1, bufferArray);
         }
 
-        void BindHS(CDevicePtr _device, UINT slot) const
+        void BindHS(ID3D11DeviceContextPtr _device, UINT slot) const
         {
             HELIOSASSERT(mInitialized);
             ID3D11Buffer* bufferArray[1];
             bufferArray[0] = mBuffer;
-            _device->ImmediateContext()->HSSetConstantBuffers(slot, 1, bufferArray);
+            _device->HSSetConstantBuffers(slot, 1, bufferArray);
         }
 
-        void BindDS(CDevicePtr _device, UINT slot) const
+        void BindDS(ID3D11DeviceContext* _device, UINT slot) const
         {
             HELIOSASSERT(mInitialized);
             ID3D11Buffer* bufferArray[1];
             bufferArray[0] = mBuffer;
-            _device->ImmediateContext()->DSSetConstantBuffers(slot, 1, bufferArray);
+            _device->DSSetConstantBuffers(slot, 1, bufferArray);
         }
 
-        void BindCS(CDevicePtr _device, UINT slot) const
+        void BindCS(ID3D11DeviceContextPtr _device, UINT slot) const
         {
             HELIOSASSERT(mInitialized);
             ID3D11Buffer* bufferArray[1];
             bufferArray[0] = buffer;
-            _device->ImmediateContext()->CSSetConstantBuffers(slot, 1, bufferArray);
+            _device->CSSetConstantBuffers(slot, 1, bufferArray);
         }
     };
+}
 
 #endif

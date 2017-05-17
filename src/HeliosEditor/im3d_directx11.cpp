@@ -2,6 +2,9 @@
 	This is a standard 'modern' example which implements point/line expansion via a geometry shader.
 	See examples/OpenGL31 for a reference which doesn't require geometry shaders.
 */
+
+#include "HeliosEditor.h"
+
 #if 0
 
 

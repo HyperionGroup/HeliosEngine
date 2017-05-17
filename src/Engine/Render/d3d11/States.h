@@ -9,35 +9,21 @@
 
 #pragma once
 
-#include "Render.h"
+struct ID3D11BlendState;
 
 namespace render
 {
 
 class BlendStates
 {
-
 protected:
-
-    ID3D11BlendStatePtr blendDisabled;
-    ID3D11BlendStatePtr additiveBlend;
-    ID3D11BlendStatePtr alphaBlend;
-    ID3D11BlendStatePtr pmAlphaBlend;
-    ID3D11BlendStatePtr noColor;
-    ID3D11BlendStatePtr alphaToCoverage;
-    ID3D11BlendStatePtr opacityBlend;
-
-public:
-
+    BlendStates() = default;
+    virtual ~BlendStates() = default;
     void Initialize(ID3D11Device* device);
+    void ShutDown();
+    void Apply(ID3D11DeviceContext* _context, BlendState _state, float* _blendFactor = nullptr);
 
-    ID3D11BlendState* BlendDisabled () { return blendDisabled; };
-    ID3D11BlendState* AdditiveBlend () { return additiveBlend; };
-    ID3D11BlendState* AlphaBlend () { return alphaBlend; };
-    ID3D11BlendState* PreMultipliedAlphaBlend () { return pmAlphaBlend; };
-    ID3D11BlendState* ColorWriteDisabled () { return noColor; };
-    ID3D11BlendState* AlphaToCoverage () { return alphaToCoverage; };
-    ID3D11BlendState* OpacityBlend() { return opacityBlend; };
+    friend CDevice;
 
     static D3D11_BLEND_DESC BlendDisabledDesc();
     static D3D11_BLEND_DESC AdditiveBlendDesc();
@@ -46,11 +32,31 @@ public:
     static D3D11_BLEND_DESC ColorWriteDisabledDesc();
     static D3D11_BLEND_DESC AlphaToCoverageDesc();
     static D3D11_BLEND_DESC OpacityBlendDesc();
+    static D3D11_BLEND_DESC Im3dBlendDesc();
+
+    ID3D11BlendStatePtr blendDisabled;
+    ID3D11BlendStatePtr additiveBlend;
+    ID3D11BlendStatePtr alphaBlend;
+    ID3D11BlendStatePtr pmAlphaBlend;
+    ID3D11BlendStatePtr noColor;
+    ID3D11BlendStatePtr alphaToCoverage;
+    ID3D11BlendStatePtr opacityBlend;
+    ID3D11BlendStatePtr im3dBlend;
+
+    BlendState mState;
 };
 
 
 class RasterizerStates
 {
+protected:
+    RasterizerStates() = default;
+    virtual ~RasterizerStates() = default;
+    void Initialize(ID3D11Device* device);
+    void ShutDown();
+    void Apply(ID3D11DeviceContext* _context, RasterizerState _state);
+
+    friend CDevice;
 
 protected:
 
@@ -62,10 +68,6 @@ protected:
     ID3D11RasterizerStatePtr noCullNoMS;
     ID3D11RasterizerStatePtr noCullScissor;
     ID3D11RasterizerStatePtr wireframe;
-
-public:
-
-    void Initialize(ID3D11Device* device);
 
     ID3D11RasterizerState* NoCull() { return noCull; };
     ID3D11RasterizerState* BackFaceCull() { return cullBackFaces; };
@@ -84,11 +86,22 @@ public:
     static D3D11_RASTERIZER_DESC NoCullNoMSDesc();
     static D3D11_RASTERIZER_DESC NoCullScissorDesc();
     static D3D11_RASTERIZER_DESC WireframeDesc();
+
+    RasterizerState mState;
 };
 
 
 class DepthStencilStates
 {
+protected:
+    DepthStencilStates() = default;
+    virtual ~DepthStencilStates() = default;
+    void Initialize(ID3D11Device* device);
+    void ShutDown();
+    void Apply(ID3D11DeviceContext* _context, DepthStencilState _state);
+
+    friend CDevice;
+
     ID3D11DepthStencilStatePtr depthDisabled;
     ID3D11DepthStencilStatePtr depthEnabled;
     ID3D11DepthStencilStatePtr revDepthEnabled;
@@ -96,10 +109,6 @@ class DepthStencilStates
     ID3D11DepthStencilStatePtr revDepthWriteEnabled;
     ID3D11DepthStencilStatePtr depthStencilWriteEnabled;
     ID3D11DepthStencilStatePtr stencilEnabled;
-
-public:
-
-    void Initialize(ID3D11Device* device);
 
     ID3D11DepthStencilState* DepthDisabled() { return depthDisabled; };
     ID3D11DepthStencilState* DepthEnabled() { return depthEnabled; };
@@ -116,6 +125,8 @@ public:
     static D3D11_DEPTH_STENCIL_DESC ReverseDepthWriteEnabledDesc();
     static D3D11_DEPTH_STENCIL_DESC DepthStencilWriteEnabledDesc();
     static D3D11_DEPTH_STENCIL_DESC StencilEnabledDesc();
+    
+    DepthStencilState mState;
 };
 
 

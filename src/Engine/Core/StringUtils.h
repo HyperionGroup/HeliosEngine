@@ -2,12 +2,6 @@
 #ifndef __H_STRING_UTILS__
 #define __H_STRING_UTILS__
 
-#include <string>
-#include <vector>
-#include <Windows.h>
-#include <sstream>
-#include <stdio.h>
-
 namespace core
 {
     void FormatString(std::string& output, const char* format, ...);

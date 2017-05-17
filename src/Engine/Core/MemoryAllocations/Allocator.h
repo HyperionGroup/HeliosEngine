@@ -7,22 +7,20 @@
 
 #include "Debug.h"
 
-#include "Types.h"
-
 #include <new>
 
 namespace pointer_math
 {
-	void*       alignForward(void* address, u8 alignment);
-	const void* alignForward(const void* address, u8 alignment);
+	void*       alignForward(void* address, uint8 alignment);
+	const void* alignForward(const void* address, uint8 alignment);
 
-	void*       alignBackward(void* address, u8 alignment);
-	const void* alignBackward(const void* address, u8 alignment);
+	void*       alignBackward(void* address, uint8 alignment);
+	const void* alignBackward(const void* address, uint8 alignment);
 
-	u8          alignForwardAdjustment(const void* address, u8 alignment);
-	u8          alignForwardAdjustmentWithHeader(const void* address, u8 alignment, u8 headerSize);
+	uint8          alignForwardAdjustment(const void* address, uint8 alignment);
+	uint8          alignForwardAdjustmentWithHeader(const void* address, uint8 alignment, uint8 headerSize);
 
-	u8          alignBackwardAdjustment(const void* address, u8 alignment);
+	uint8          alignBackwardAdjustment(const void* address, uint8 alignment);
 
 	void*       add(void* p, size_t x);
 	const void* add(const void* p, size_t x);
@@ -51,7 +49,7 @@ public:
 		_size   = 0;
 	}
 
-	virtual void* allocate(size_t size, u8 alignment = 4) = 0;
+	virtual void* allocate(size_t size, uint8 alignment = 4) = 0;
 
 	virtual void deallocate(void* p) = 0;
 
@@ -105,7 +103,7 @@ namespace allocator
 	{
 		ASSERT(length != 0);
 
-		u8 headerSize = sizeof(size_t)/sizeof(T);
+		uint8 headerSize = sizeof(size_t)/sizeof(T);
 
 		if(sizeof(size_t)%sizeof(T) > 0)
 			headerSize += 1;
@@ -131,7 +129,7 @@ namespace allocator
 			array[i].~T();
 
 		//Calculate how much extra memory was allocated to store the length before the array
-		u8 headerSize = sizeof(size_t)/sizeof(T);
+		uint8 headerSize = sizeof(size_t)/sizeof(T);
 
 		if(sizeof(size_t)%sizeof(T) > 0)
 			headerSize += 1;
@@ -144,29 +142,29 @@ namespace allocator
 
 namespace pointer_math
 {
-	inline void* alignForward(void* address, u8 alignment)
+	inline void* alignForward(void* address, uint8 alignment)
 	{
 		return (void*)( ( reinterpret_cast<uptr>(address) + static_cast<uptr>(alignment-1) ) & static_cast<uptr>(~(alignment-1)) );
 	}
 
-	inline const void* alignForward(const void* address, u8 alignment)
+	inline const void* alignForward(const void* address, uint8 alignment)
 	{
 		return (void*)( ( reinterpret_cast<uptr>(address) + static_cast<uptr>(alignment-1) ) & static_cast<uptr>(~(alignment-1)) );
 	}
 
-	inline void* alignBackward(void* address, u8 alignment)
+	inline void* alignBackward(void* address, uint8 alignment)
 	{
 		return (void*)( reinterpret_cast<uptr>(address) & static_cast<uptr>(~(alignment-1)) );
 	}
 
-	inline const void* alignBackward(const void* address, u8 alignment)
+	inline const void* alignBackward(const void* address, uint8 alignment)
 	{
 		return (void*)( reinterpret_cast<uptr>(address) & static_cast<uptr>(~(alignment-1)) );
 	}
 
-	inline u8 alignForwardAdjustment(const void* address, u8 alignment)
+	inline uint8 alignForwardAdjustment(const void* address, uint8 alignment)
 	{
-		u8 adjustment =  alignment - ( reinterpret_cast<uptr>(address) & static_cast<uptr>(alignment-1) );
+		uint8 adjustment =  alignment - ( reinterpret_cast<uptr>(address) & static_cast<uptr>(alignment-1) );
 	
 		if(adjustment == alignment)
 			return 0; //already aligned
@@ -174,11 +172,11 @@ namespace pointer_math
 		return adjustment;
 	}
 
-	inline u8 alignForwardAdjustmentWithHeader(const void* address, u8 alignment, u8 headerSize)
+	inline uint8 alignForwardAdjustmentWithHeader(const void* address, uint8 alignment, uint8 headerSize)
 	{
-		u8 adjustment =  alignForwardAdjustment(address, alignment);
+		uint8 adjustment =  alignForwardAdjustment(address, alignment);
 
-		u8 neededSpace = headerSize;
+		uint8 neededSpace = headerSize;
 
 		if(adjustment < neededSpace)
 		{
@@ -194,9 +192,9 @@ namespace pointer_math
 		return adjustment;
 	}
 
-	inline u8 alignBackwardAdjustment(const void* address, u8 alignment)
+	inline uint8 alignBackwardAdjustment(const void* address, uint8 alignment)
 	{
-		u8 adjustment =  reinterpret_cast<uptr>(address) & static_cast<uptr>(alignment-1);
+		uint8 adjustment =  reinterpret_cast<uptr>(address) & static_cast<uptr>(alignment-1);
 	
 		if(adjustment == alignment)
 			return 0; //already aligned

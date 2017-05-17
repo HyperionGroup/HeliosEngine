@@ -1,9 +1,7 @@
+#include "Core.h"
+
 #include "Logger.h"
 #include "StringUtils.h"
-#include "EnumToString.h"
-
-#include <iostream>
-#include <windows.h> // WinApi header
 
 Begin_Enum_String(core::CLogger::ELogLevel)
 {

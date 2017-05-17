@@ -6,6 +6,7 @@
 //  All code and content licensed under Microsoft Public License (Ms-PL)
 //
 //=================================================================================================
+#include "Render.h"
 
 #include "Device.h"
 
@@ -203,14 +204,11 @@ namespace render
         immediateContext->OMSetRenderTargets(1, &(bbRTView.GetInterfacePtr()), autoDSView);
 
         // Setup the viewport
-        D3D11_VIEWPORT vp;
-        vp.Width = static_cast<float>(backBufferWidth);
-        vp.Height = static_cast<float>(backBufferHeight);
-        vp.MinDepth = 0.0f;
-        vp.MaxDepth = 1.0f;
-        vp.TopLeftX = 0;
-        vp.TopLeftY = 0;
-        immediateContext->RSSetViewports(1, &vp);
+        ResetViewport();
+
+        mBlendState.Initialize(Device());
+        float blendFactor[4] = { 1, 1, 1, 1 };
+        SetBlendState(BlendState::BlendDisabled, blendFactor);
     }
 
     void CDevice::CheckForSuitableOutput()
@@ -315,4 +313,42 @@ namespace render
         DXCall(swapChain->Present(interval, 0));
     }
 
+    void CDevice::SetBlendState(BlendState _state, float* _blendFactor /*= nullptr*/)
+    {
+        mBlendState.Apply(ImmediateContext(), _state, _blendFactor);
+    }
+
+    void CDevice::SetRasterizerState(RasterizerState _state)
+    {
+        mRasterizerState.Apply(ImmediateContext(), _state);
+    }
+
+    void CDevice::SetDepthStencilState(DepthStencilState _state)
+    {
+        mDepthStencilState.Apply(ImmediateContext(), _state);
+    }
+
+    void CDevice::SetViewport(float _topLeftX, float _topLeftY, float _w, float _h)
+    {
+        D3D11_VIEWPORT vp;
+        vp.Width = _w;
+        vp.Height = _h;
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = _topLeftX;
+        vp.TopLeftY = _topLeftY;
+        immediateContext->RSSetViewports(1, &vp);
+    }
+
+    void CDevice::ResetViewport()
+    {
+        D3D11_VIEWPORT vp;
+        vp.Width = static_cast<float>(backBufferWidth);
+        vp.Height = static_cast<float>(backBufferHeight);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        immediateContext->RSSetViewports(1, &vp);
+    }
 }

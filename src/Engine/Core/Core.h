@@ -3,15 +3,17 @@
 #include "EnumToString.h"
 #include "Logger/Logger.h"
 #include "Containers.h"
-#include "Name.h"
-#include <string>
-#include <stddef.h>
+#include "Serializable.h"
+
 #include <im3d.h>
 #include <im3d_math.h>
 
 typedef Im3d::Vec2 Float2;
 typedef Im3d::Vec3 Float3;
 typedef Im3d::Vec4 Float4;
+typedef Im3d::Mat4 Float4x4;
+typedef Im3d::Mat3 Float3x3;
+typedef Im3d::Color CColor;
 
 // Compiler
 #if defined(__GNUC__)
@@ -31,10 +33,17 @@ typedef Im3d::Vec4 Float4;
 #define WIN32_LEAN_AND_MEAN 1
 #define VC_EXTRALEAN 1
 #include <Windows.h>
+#include <sstream>
+#include <stdio.h>
+#include <string>
+#include <stddef.h>
+#include <iostream>
+#include <sys\stat.h>
+#include <memory>
 
 #define winAssert(e) HELIOSVERIFY_MSG(e, Im3d::GetPlatformErrorString(GetLastError()))
 
-#define HELIOSUNUSED(x) hr;
+#define HELIOSUNUSED(x) x;
 #ifdef HELIOSCOMPILER_MSVC
 #define HELIOSBREAK() __debugbreak()
 #else
@@ -64,6 +73,9 @@ typedef Im3d::Vec4 Float4;
 #define HELIOSSTRINGIFY_(_t) #_t
 #define HELIOSSTRINGIFY(_t) HELIOSSTRINGIFY_(_t)
 
+//#define CHECKED_DELETE(ptr) if( ptr ) { delete ptr; ptr = nullptr; }
+//#define CHECKED_DELETE_ARRAY(arrayPtr) if( arrayPtr ) { delete[] arrayPtr; arrayPtr = nullptr; }
+
 namespace Im3d {
     const char* GetPlatformErrorString(DWORD _err);
 }
@@ -71,10 +83,6 @@ namespace Im3d {
 #else
 #error Platform not defined
 #endif
-
-#define ASSERT(expr)       { if(!expr ) { }
-
-#pragma once
 
 // Standard int typedefs
 #include <stdint.h>
@@ -87,8 +95,8 @@ typedef uint16_t uint16;
 typedef uint32_t uint32;
 typedef uint64_t uint64;
 
-typedef intptr_t intptr;
-typedef uintptr_t uintptr;
+typedef intptr_t iptr;
+typedef uintptr_t uptr;
 typedef wchar_t wchar;
 typedef uint32_t bool32;
 

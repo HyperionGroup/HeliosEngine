@@ -23,9 +23,9 @@ namespace render
             free(mRawData);
         }
 
-        virtual void Bind(CDevicePtr _device);
+        virtual void Bind(ID3D11DeviceContextPtr _device);
 
-        void Initialize(CDevicePtr _device)
+        void Initialize(ID3D11DevicePtr _device)
         {
             HELIOSASSERT(mRawData);
 
@@ -40,7 +40,7 @@ namespace render
             ZeroMemory(&lSubresourceData, sizeof(lSubresourceData));
             lSubresourceData.pSysMem = mRawData;
 
-            DXCall(_device->Device()->CreateBuffer(&lIB, &lSubresourceData, &mBuffer));
+            DXCall(_device->CreateBuffer(&lIB, &lSubresourceData, &mBuffer));
 
             mInitialized = true;
         }
@@ -53,17 +53,17 @@ namespace render
     };
 
     template <>
-    void CIndexBuffer<uint16>::Bind(CDevicePtr _device)
+    void CIndexBuffer<uint16>::Bind(ID3D11DeviceContextPtr _device)
     {
         HELIOSASSERT(mInitialized);
-        _device->ImmediateContext()->IASetIndexBuffer(mBuffer, DXGI_FORMAT_R16_UINT, 0);
+        _device->IASetIndexBuffer(mBuffer, DXGI_FORMAT_R16_UINT, 0);
     }
 
     template <>
-    void CIndexBuffer<uint32>::Bind(CDevicePtr _device)
+    void CIndexBuffer<uint32>::Bind(ID3D11DeviceContextPtr _device)
     {
         HELIOSASSERT(mInitialized);
-        _device->ImmediateContext()->IASetIndexBuffer(mBuffer, DXGI_FORMAT_R32_UINT, 0);
+        _device->IASetIndexBuffer(mBuffer, DXGI_FORMAT_R32_UINT, 0);
     }
 }
 

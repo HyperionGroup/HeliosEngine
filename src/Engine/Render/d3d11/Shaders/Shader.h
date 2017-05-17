@@ -1,7 +1,4 @@
-#ifndef __Shader_HH__
-#define __Shader_HH__
-
-#include "Render.h"
+#pragma once
 
 namespace render
 {
@@ -11,11 +8,11 @@ namespace render
         CShader();
         virtual ~CShader();
         void SetStage(ShaderStageType _stage, CShaderStagePtr _shaderstage);
-        void Bind(CDevicePtr _device);
+        void Bind(ID3D11DeviceContextPtr _device);
+        void Unbind(ID3D11DeviceContextPtr _device);
+
     private:
         std::vector< CShaderStagePtr > mShaders;
         uint32 mFlags;
     };
 }
-
-#endif

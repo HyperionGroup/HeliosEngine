@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Serializable.h"
 #include "Core.h"
 
 #ifdef OGL_RENDERER
@@ -13,10 +12,50 @@
 
 namespace render
 {
-    DECLARE_SPTR(CSampler);
     DECLARE_SPTR(CDevice);
     DECLARE_SPTR(CShader);
     DECLARE_SPTR(CShaderStage);
+
+    enum class BlendState
+    {
+        BlendDisabled = 0,
+        AdditiveBlend,
+        AlphaBlend,
+        PreMultipliedAlphaBlend,
+        NoColorBlend,
+        AlphaToCoverageBlend,
+        Opacity,
+        Im3dBlend,
+
+        MAX
+    };
+
+    enum class RasterizerState
+    {
+        NoCull = 0,
+        CullBackFaces,
+        CullBackFacesScissor,
+        CullFrontFaces,
+        CullFrontFacesScissor,
+        NoCullNoMs,
+        NoCullScissor,
+        WireFrame,
+        
+        MAX
+    };
+
+    enum class DepthStencilState
+    {
+        DepthDisabled = 0,
+        DepthEnabled,
+        ReverseDepthEnabled,
+        DepthWriteEnabled,
+        ReverseDepthWriteEnabled,
+        DepthStencilWriteEnabled,
+        StencilEnabled,
+
+        MAX
+    };
 
     enum VertexFlags
     {
@@ -33,41 +72,14 @@ namespace render
         Indices = 0x0200,
     };
 
-    enum Filter
-    {
-        PointFilter = 0,
-        LinearFilter,
-        AnisotropicFilter
-    };
-
-    enum AddressMode
-    {
-        WrapMode = 0,
-        MirrorMode,
-        ClampMode,
-        BorderMode,
-        MirrorOnceMode
-    };
-
-    enum ComparisonFunc
-    {
-        NeverFunc = 0,
-        LessFunc,
-        EqualFunc,
-        LessEqualFunc,
-        NotEqualFunc,
-        GreaterEqualFunc,
-        AlwaysFunc,
-    };
-
-    enum TextureType
+    enum class TextureType
     {
         OneDimension = 1,
         TwoDimensions,
         ThreeDimensions,
     };
 
-    enum PixelDesc
+    enum class PixelDesc
     {
         Unknown = 0,
         R32F,
@@ -83,41 +95,15 @@ namespace render
 
     uint16 BytesPerPixel(PixelDesc _pixelDesc);
 
-    enum ShaderStageType
+    enum class ShaderStageType
     {
         VertexStage   = 0,
-        FragmentStage,
+        PixelStage,
         GeometryStage,
-        StagesCount
+        MAX
     };
 
-    enum BlendEquation
-    {
-        BlendAdd,
-        BlendSubtract,
-        BlendReverseSubtract
-    };
-
-    enum BlendFunc
-    {
-        Zero = 0,
-        One,
-        SrcColor,
-        DstColor,
-        SrcAlpha,
-        DstAlpha,
-        ConstantAlpha,
-        ConstantColor,
-        OneMinusSrcColor,
-        OneMinusDstColor,
-        OneMinusSrcAlpha,
-        OneMinusDstAlpha,
-        OneMinusConstantColor,
-        OneMinusConstantAlpha,
-        SrcAlphaSaturate,
-    };
-
-    enum PrimitiveTopology
+    enum class PrimitiveTopology
     {
         LineList = 2,
         TriangleList = 4,
@@ -128,95 +114,45 @@ namespace render
 //---------------------------------------------------------------------------------------------------------
 Begin_Enum_String(render::ShaderStageType)
 {
-    Enum_String_Id(render::VertexStage, "VertexStage");
-    Enum_String_Id(render::FragmentStage, "FragmentStage");
-    Enum_String_Id(render::GeometryStage, "GeometryStage");
-}
-End_Enum_String;
-
-Begin_Enum_String(render::Filter)
-{
-    Enum_String_Id(render::PointFilter, "Point");
-    Enum_String_Id(render::LinearFilter, "Linear");
-    Enum_String_Id(render::AnisotropicFilter, "Anisotropic");
-}
-End_Enum_String;
-
-Begin_Enum_String(render::AddressMode)
-{
-    Enum_String_Id(render::WrapMode, "Wrap");
-    Enum_String_Id(render::MirrorMode, "Mirror");
-    Enum_String_Id(render::ClampMode, "Clamp");
-    Enum_String_Id(render::BorderMode, "Border");
-    Enum_String_Id(render::MirrorOnceMode, "MirrorOnce");
-}
-End_Enum_String;
-
-Begin_Enum_String(render::ComparisonFunc)
-{
-    Enum_String_Id(render::NeverFunc, "Never");
-    Enum_String_Id(render::LessFunc, "Less");
-    Enum_String_Id(render::EqualFunc, "Equal");
-    Enum_String_Id(render::LessEqualFunc, "LessEqual");
-    Enum_String_Id(render::NotEqualFunc, "NotEqual");
-    Enum_String_Id(render::GreaterEqualFunc, "GreaterEqual");
-    Enum_String_Id(render::AlwaysFunc, "Always");
+    Enum_String_Id(render::ShaderStageType::VertexStage, "vs");
+    Enum_String_Id(render::ShaderStageType::PixelStage, "ps");
+    Enum_String_Id(render::ShaderStageType::GeometryStage, "gs");
 }
 End_Enum_String;
 
 Begin_Enum_String(render::TextureType)
 {
-    Enum_String_Id(render::OneDimension, "1D");
-    Enum_String_Id(render::TwoDimensions, "2D");
-    Enum_String_Id(render::ThreeDimensions, "3D");
-}
-End_Enum_String;
-
-Begin_Enum_String(render::BlendFunc)
-{
-    Enum_String_Id(render::Zero, "Zero");
-    Enum_String_Id(render::One, "One");
-    Enum_String_Id(render::SrcColor, "SrcColor");
-    Enum_String_Id(render::DstColor, "DstColor");
-    Enum_String_Id(render::SrcAlpha, "SrcAlpha");
-    Enum_String_Id(render::DstAlpha, "DstAlpha");
-    Enum_String_Id(render::ConstantAlpha, "ConstantAlpha");
-    Enum_String_Id(render::ConstantColor, "ConstantColor");
-    Enum_String_Id(render::OneMinusSrcColor, "OneMinusSrcColor");
-    Enum_String_Id(render::OneMinusDstColor, "OneMinusDstColor");
-    Enum_String_Id(render::OneMinusSrcAlpha, "OneMinusSrcAlpha");
-    Enum_String_Id(render::OneMinusDstAlpha, "OneMinusDstAlpha");
-    Enum_String_Id(render::OneMinusConstantColor, "OneMinusConstantColor");
-    Enum_String_Id(render::OneMinusConstantAlpha, "OneMinusConstantAlpha");
-    Enum_String_Id(render::SrcAlphaSaturate, "SrcAlphaSaturate");
+    Enum_String_Id(render::TextureType::OneDimension, "1D");
+    Enum_String_Id(render::TextureType::TwoDimensions, "2D");
+    Enum_String_Id(render::TextureType::ThreeDimensions, "3D");
 }
 End_Enum_String;
 
 Begin_Enum_String(render::PixelDesc)
 {
-    Enum_String_Id(render::R32F, "R32F");
-    Enum_String_Id(render::RG32F, "RG32F");
-    Enum_String_Id(render::RGB32F, "RGB32F");
-    Enum_String_Id(render::RGBA32F, "RGBA32F");
-    Enum_String_Id(render::R16F, "R16F");
-    Enum_String_Id(render::RG16F, "RG16F");
-    Enum_String_Id(render::RGB16F, "RGB16F");
-    Enum_String_Id(render::RGBA16F, "RGBA16F");
+    Enum_String_Id(render::PixelDesc::R32F, "r32f");
+    Enum_String_Id(render::PixelDesc::RG32F, "rg32f");
+    Enum_String_Id(render::PixelDesc::RGB32F, "rgb32f");
+    Enum_String_Id(render::PixelDesc::RGBA32F, "rgba32f");
+    Enum_String_Id(render::PixelDesc::R16F, "r16f");
+    Enum_String_Id(render::PixelDesc::RG16F, "rg16f");
+    Enum_String_Id(render::PixelDesc::RGB16F, "rgb16f");
+    Enum_String_Id(render::PixelDesc::RGBA16F, "rgba16f");
 }
 End_Enum_String;
 
 Begin_Enum_String(render::VertexFlags)
 {
-    Enum_String_Id(render::Position, "Position");
-    Enum_String_Id(render::Normal, "Normal");
-    Enum_String_Id(render::Tangent, "Tangent");
-    Enum_String_Id(render::Binormal, "Binormal");
-    Enum_String_Id(render::Uv, "Uv");
-    Enum_String_Id(render::Uv2, "Uv2");
-    Enum_String_Id(render::Color, "Color");
-    Enum_String_Id(render::Position4, "Position4");
-    Enum_String_Id(render::Bump, "Bump");
-    Enum_String_Id(render::Weight, "Weight");
-    Enum_String_Id(render::Indices, "Indices");
+    Enum_String_Id(render::VertexFlags::Position, "position");
+    Enum_String_Id(render::VertexFlags::Normal, "normal");
+    Enum_String_Id(render::VertexFlags::Tangent, "tangent");
+    Enum_String_Id(render::VertexFlags::Binormal, "binormal");
+    Enum_String_Id(render::VertexFlags::Uv, "uv");
+    Enum_String_Id(render::VertexFlags::Uv2, "uv2");
+    Enum_String_Id(render::VertexFlags::Color, "color");
+    Enum_String_Id(render::VertexFlags::Position4, "position4");
+    Enum_String_Id(render::VertexFlags::Bump, "bump");
+    Enum_String_Id(render::VertexFlags::Weight, "weight");
+    Enum_String_Id(render::VertexFlags::Indices, "indices");
 }
 End_Enum_String;

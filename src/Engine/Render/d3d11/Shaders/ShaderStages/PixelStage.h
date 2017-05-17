@@ -1,5 +1,4 @@
-#ifndef H_PIXEL_SHADER
-#define H_PIXEL_SHADER
+#pragma once
 
 #include "ShaderStage.h"
 
@@ -8,10 +7,12 @@ namespace render
     class CPixelStage : public CShaderStage
     {
     public:
-        CPixelStage(const std::string& aShaderCode);
-        virtual ~CPixelStage();
-        virtual bool Load(CDevicePtr _device);
-        virtual void Bind(CDevicePtr _device);
+        CPixelStage() = default;
+        virtual ~CPixelStage() = default;
+        virtual void Initialize(ID3D11DevicePtr _device, const std::string& aShaderCode);
+        virtual void ShutDown();
+        virtual void Bind(ID3D11DeviceContextPtr _device);
+        virtual void Unbind(ID3D11DeviceContextPtr _device);
 
     protected:
         virtual const char* GetShaderModel();
@@ -19,5 +20,3 @@ namespace render
         ID3D11PixelShader *m_PixelShader;
     };
 }
-
-#endif //H_PIXEL_SHADER

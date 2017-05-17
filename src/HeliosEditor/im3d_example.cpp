@@ -1,3 +1,5 @@
+#include "HeliosEditor.h"
+
 #if 0
 #include "HELIOSexample.h"
 

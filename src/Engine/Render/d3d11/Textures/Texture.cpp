@@ -1,12 +1,12 @@
+#include "Render.h"
+
 #include "Texture.h"
-#include "Sampler.h"
 
 namespace render
 {
     CTexture::CTexture()
-        : mSampler(std::make_shared<CSampler>())
-        , mData(nullptr)
-        , mColorFormat(render::RGBA32F)
+        : mData(nullptr)
+        , mColorFormat(render::PixelDesc::RGBA32F)
     {
 
     }
@@ -14,5 +14,18 @@ namespace render
     CTexture::~CTexture()
     {
 
+    }
+
+    SERIALIZABLE_SAVE_DECLARATION(CTexture)
+    {
+        TO_ARCHIVE_SPTR(Sampler);
+        TO_ARCHIVE(Height);
+        TO_ARCHIVE(Width);
+        TO_ARCHIVE_ENUM(ColorFormat);
+        TO_ARCHIVE_BINARY("Data", mData, )
+    }
+
+    SERIALIZABLE_LOAD_DECLARATION(CTexture)
+    {
     }
 }

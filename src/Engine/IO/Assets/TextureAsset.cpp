@@ -1,7 +1,6 @@
-#include "TextureAsset.h"
-#include "Logger/Logger.h"
+#include "IO.h"
 
-#include <cereal/types/base_class.hpp>
+#include "TextureAsset.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -25,4 +24,17 @@ namespace io
         stbi_image_free(data);
         return false;
     }
+
+#pragma region Serialization
+    SERIALIZABLE_SAVE_DECLARATION(CTextureAsset)
+    {
+        CAsset::save(ar);
+        TO_ARCHIVE(Filename);
+    }
+
+    SERIALIZABLE_LOAD_DECLARATION(CTextureAsset)
+    {
+
+    }
+#pragma endregion Serialization
 }

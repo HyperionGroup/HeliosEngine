@@ -1,5 +1,4 @@
-#ifndef H_GEOMETRY_SHADER
-#define H_GEOMETRY_SHADER
+#pragma once
 
 #include "ShaderStage.h"
 
@@ -8,13 +7,14 @@ namespace render
     class CGeometryStage : public CShaderStage
     {
     public:
-        CGeometryStage(const std::string& aShaderCode);
-        virtual ~CGeometryStage();
-        virtual void Bind(CDevicePtr _device) {};
+        CGeometryStage() = default;
+        virtual ~CGeometryStage() = default;
+        virtual void Initialize(ID3D11DevicePtr _device, const std::string& aShaderCode);
+        virtual void ShutDown();
+        virtual void Bind(ID3D11DeviceContextPtr _device);
+        virtual void Unbind(ID3D11DeviceContextPtr _device);
 
     protected:
         virtual const char* GetShaderModel();
     };
 }
-
-#endif //H_GEOMETRY_SHADER

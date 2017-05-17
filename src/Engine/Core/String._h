@@ -1,0 +1,60 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <Windows.h>
+#include <sstream>
+#include <stdio.h>
+
+namespace core
+{
+    /*
+    class CStr : public std::string
+    {
+    public:
+        CStr() : std::string() {}
+        CStr(const std::string&  _string) : std::string(_string) {}
+        CStr( const char* _string ) : std::string( _string ) {}
+        virtual ~CStr() {}
+        template <typename... Args>
+        inline std::string Format(Args &&...args)
+        {
+            return format_helper(this, 1, std::forward<Args>(args)...);
+        }
+
+        std::vector<std::string> Split(const std::string delimiter)
+        {
+            std::vector<std::string> elements;
+            std::string s = *this;
+            size_t pos = 0;
+            std::string token;
+            while ((pos = s.find(delimiter)) != std::string::npos)
+            {
+                token = s.substr(0, pos);
+                s.erase(0, pos + delimiter.length());
+                elements.push_back(token);
+            }
+            return elements;
+        }
+    private:
+        inline std::string format_helper(
+            const std::string &string_to_update,
+            const size_t) {
+            return string_to_update;
+        }
+
+        template <typename T, typename... Args>
+        inline std::string format_helper(
+            const std::string &string_to_update,
+            const size_t index_to_replace,
+            T &&val,
+            Args &&...args) {
+            std::regex pattern{ "%" + std::to_string(index_to_replace) };
+            std::string replacement_string{ (std::ostringstream{} << val).str() };
+            return format_helper(
+                std::regex_replace(string_to_update, pattern, replacement_string),
+                index_to_replace + 1,
+                std::forward<Args>(args)...);
+        }
+    };*/
+}

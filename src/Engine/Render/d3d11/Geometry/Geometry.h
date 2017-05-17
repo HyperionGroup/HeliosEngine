@@ -2,7 +2,6 @@
 #define _RENDERABLE_VERTEXS_HH_
 
 #pragma once
-#include "Render.h"
 
 namespace render
 {

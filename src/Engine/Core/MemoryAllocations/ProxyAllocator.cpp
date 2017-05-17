@@ -1,3 +1,5 @@
+#include "Core.h"
+
 #include "ProxyAllocator.h"
 
 ProxyAllocator::ProxyAllocator(Allocator& allocator)
@@ -11,7 +13,7 @@ ProxyAllocator::~ProxyAllocator()
 
 }
 
-void* ProxyAllocator::allocate(size_t size, u8 alignment)
+void* ProxyAllocator::allocate(size_t size, uint8 alignment)
 {
 	ASSERT(size != 0);
 	_num_allocations++;

@@ -1,34 +1,34 @@
+#include "Render.h"
 #include "PixelStage.h"
 #include "Device.h"
 
 namespace render
 {
-    CPixelStage::CPixelStage(const std::string& aShaderCode)
-        : CShaderStage(aShaderCode, ShaderStageType::FragmentStage )
-        , m_PixelShader(nullptr)
+    void CPixelStage::Initialize(ID3D11DevicePtr _device, const std::string& aShaderCode)
     {
+        m_EntryPoint = "mainPS";
+        m_Type = ShaderStageType::PixelStage;
+        CShaderStage::Initialize(_device, aShaderCode);
+        DXCall(_device->CreatePixelShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_PixelShader));
     }
 
-    CPixelStage::~CPixelStage()
+    void CPixelStage::ShutDown()
     {
-        m_PixelShader->Release();
-    }
-
-    bool CPixelStage::Load(CDevicePtr _device)
-    {
-        bool lOk = CShaderStage::Load(_device);
-        if (lOk)
+        if (mInitialized)
         {
-            HRESULT lHR = _device->Device()->CreatePixelShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_PixelShader);
-            lOk = SUCCEEDED(lHR);
-            DXCall(lHR);
+            m_PixelShader->Release();
+            m_PixelShader = nullptr;
         }
-        return lOk;
     }
 
-    void CPixelStage::Bind(CDevicePtr _device)
+    void CPixelStage::Bind(ID3D11DeviceContextPtr _device)
     {
-        _device->ImmediateContext()->PSSetShader(m_PixelShader, NULL, 0);
+        _device->PSSetShader(m_PixelShader, nullptr, 0);
+    }
+
+    void CPixelStage::Unbind(ID3D11DeviceContextPtr _device)
+    {
+        _device->PSSetShader(nullptr, nullptr, 0);
     }
 
     const char* CPixelStage::GetShaderModel()

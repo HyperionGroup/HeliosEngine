@@ -1,3 +1,5 @@
+#include "Core.h"
+
 #include "StackAllocator.h"
 
 StackAllocator::StackAllocator(size_t size, void* start) 
@@ -19,11 +21,11 @@ StackAllocator::~StackAllocator()
 	_current_pos   = nullptr;
 }
 
-void* StackAllocator::allocate(size_t size, u8 alignment)
+void* StackAllocator::allocate(size_t size, uint8 alignment)
 {
 	ASSERT(size != 0);
 
-	u8 adjustment = pointer_math::alignForwardAdjustmentWithHeader(_current_pos, alignment, sizeof(AllocationHeader));
+	uint8 adjustment = pointer_math::alignForwardAdjustmentWithHeader(_current_pos, alignment, sizeof(AllocationHeader));
 
 	if(_used_memory + adjustment + size > _size)
 		return nullptr;
@@ -51,7 +53,7 @@ void* StackAllocator::allocate(size_t size, u8 alignment)
 
 void StackAllocator::deallocate(void* p)
 {
-	ASSERT( p == _prev_position );
+	HELIOSASSERT( p == _prev_position );
 
 	//Access the AllocationHeader in the bytes before p
 	AllocationHeader* header = (AllocationHeader*)(pointer_math::subtract(p, sizeof(AllocationHeader)));

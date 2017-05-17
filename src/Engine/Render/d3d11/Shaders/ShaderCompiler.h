@@ -1,11 +1,9 @@
 #ifndef __ShaderCompiler_HH__
 #define __ShaderCompiler_HH__
 
-#include "Render.h"
-#include "Shader.h"
-
 namespace render
 {
+    class CShader;
     class CShaderCompiler : public core::CSingleton< CShaderCompiler >
     {
     public:

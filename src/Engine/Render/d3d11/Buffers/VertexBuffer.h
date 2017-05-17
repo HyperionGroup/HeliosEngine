@@ -10,50 +10,49 @@ namespace render
     class CVertexBuffer : public CBuffer
     {
     public:
-        void * mRawData;
-    public:
-        CVertexBuffer(CRenderManager& RenderManager, void* aRawData, uint32 aNumVertexs)
-            : mNumVertexs(aNumVertexs)
-            , mRawData(nullptr)
+        CVertexBuffer()
+            : CBuffer()
+            , mNumVertexs(0u)
         {
         }
 
         virtual ~CVertexBuffer()
         {
-            free(mRawData);
+            mNumVertexs = 0u;
         }
 
-        void Initialize(CDevicePtr _device)
+        void Initialize(ID3D11DevicePtr _device, const TVertexType * _data )
         {
-            HELIOSASSERT(mRawData);
+            HELIOSASSERT(!mInitialized);
+            HELIOSASSERT(_data);
 
             D3D11_BUFFER_DESC lVB;
             ZeroMemory(&lVB, sizeof(lVB));
-            lVB.Usage = D3D11_USAGE_DEFAULT;
+            lVB.Usage = mUsage;
             lVB.ByteWidth = sizeof(TVertexType)*mNumVertexs;
             lVB.BindFlags = D3D11_BIND_VERTEX_BUFFER;
             lVB.CPUAccessFlags = 0;
 
             D3D11_SUBRESOURCE_DATA lSubresourceData;
             ZeroMemory(&lSubresourceData, sizeof(lSubresourceData));
-            lSubresourceData.pSysMem = mRawData;
+            lSubresourceData.pSysMem = _data;
 
-            DXCall(_device->Device()->CreateBuffer(&lVB, &lSubresourceData, &mBuffer) );
+            DXCall(_device->CreateBuffer(&lVB, &lSubresourceData, &mBuffer) );
 
             mInitialized = true;
         }
 
-        virtual void Bind(CDevicePtr _device)
+        virtual void Bind(ID3D11DeviceContextPtr _device)
         {
             uint32 offset = 0, stride = GetStride();
-            _device->ImmediateContext()->IASetVertexBuffers(0, 1, &mBuffer, &stride, &offset);
+            _device->IASetVertexBuffers(0, 1, &mBuffer, &stride, &offset);
         }
 
         inline uint32 GetNumVertexs() const { return mNumVertexs; }
+        inline void   SetNumVertexs(uint32 _numVertex) { mNumVertexs = _numVertex; }
         inline uint32 GetStride() const { return sizeof(TVertexType); }
-
-    protected:
-        uint32 mNumVertexs;
+     protected:
+        uint32        mNumVertexs;
     };
 }
 #endif

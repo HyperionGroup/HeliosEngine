@@ -6,10 +6,8 @@
 //  All code and content licensed under Microsoft Public License (Ms-PL)
 //
 //=================================================================================================
-
+#include "Core.h"
 #include "Timer.h"
-
-#include <Windows.h>
 
 Timer::Timer()
 {

@@ -1,3 +1,4 @@
+#include "Core.h"
 #include "FreeListAllocator.h"
 
 FreeListAllocator::FreeListAllocator(size_t size, void* start) 
@@ -14,7 +15,7 @@ FreeListAllocator::~FreeListAllocator()
 	_free_blocks        = nullptr;
 }
 
-void* FreeListAllocator::allocate(size_t size, u8 alignment)
+void* FreeListAllocator::allocate(size_t size, uint8 alignment)
 {
 	ASSERT(size != 0 && alignment != 0);
 
@@ -24,7 +25,7 @@ void* FreeListAllocator::allocate(size_t size, u8 alignment)
 	while(free_block != nullptr)
 	{
 		//Calculate adjustment needed to keep object correctly aligned
-		u8 adjustment = pointer_math::alignForwardAdjustmentWithHeader(free_block, alignment, sizeof(AllocationHeader));
+		uint8 adjustment = pointer_math::alignForwardAdjustmentWithHeader(free_block, alignment, sizeof(AllocationHeader));
 
 		size_t total_size = size + adjustment;
 

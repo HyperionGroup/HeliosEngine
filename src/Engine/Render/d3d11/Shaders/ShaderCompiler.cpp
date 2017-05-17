@@ -1,3 +1,4 @@
+#include "Render.h"
 #include "ShaderCompiler.h"
 #include "ShaderStages\VertexStage.h"
 
@@ -15,11 +16,13 @@ namespace render
 
     CShader* CShaderCompiler::LoadShader( const std::vector< std::string >& _flags, const std::string& _vs, const std::string& _ps )
     {
+        /*
         std::string lShaderSrc = GetVertexStructures(_flags);
         lShaderSrc += "Vert2Pix VertexStageMain(App2Vert in)\n{\n" + _vs + "\n}\n\n";
         lShaderSrc += "float4 PixelStageMain(Vert2Pix in) : SV_Target\n{\n" + _ps + "\n}\n\n";
 
         render::CVertexShader* lVertexShader = new render::CVertexShader(lShaderSrc,);
+        */
         return nullptr;
     }
 
@@ -34,45 +37,45 @@ namespace render
             {
                 switch (lFlag)
                 {
-                case render::Position:
+                case render::VertexFlags::Position:
                 {
                     lVS += "float3 position : POSITION;\n";
                     lPS += "float4 position : POSITION;\n";
                     break;
                 }
-                case render::Position4:
+                case render::VertexFlags::Position4:
                 {
                     lVS += "float4 position : POSITION;\n";
                     lPS += "float4 position : POSITION;\n";
                     break;
                 }
-                case render::Normal:
+                case render::VertexFlags::Normal:
                 {
                     break;
                 }
-                case render::Tangent:
+                case render::VertexFlags::Tangent:
                 {
                     break;
                 }
-                case render::Binormal:
+                case render::VertexFlags::Binormal:
                 {
                     break;
                 }
-                case render::Uv:
+                case render::VertexFlags::Uv:
                 {
                     lVS += "float2 uv : TEXCOORD0;\n";
                     lPS += "float2 uv: TEXCOORD0;\n";
                     break;
                 }
-                case render::Uv2:
+                case render::VertexFlags::Uv2:
                 {
                     break;
                 }
-                case render::Weight:
+                case render::VertexFlags::Weight:
                 {
                     break;
                 }
-                case render::Indices:
+                case render::VertexFlags::Indices:
                 {
                     break;
                 }

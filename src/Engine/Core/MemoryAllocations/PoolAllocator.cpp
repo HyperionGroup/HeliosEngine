@@ -1,12 +1,13 @@
+#include "Core.h"
 #include "PoolAllocator.h"
 
-PoolAllocator::PoolAllocator(size_t objectSize, u8 objectAlignment, size_t size, void* mem) 
+PoolAllocator::PoolAllocator(size_t objectSize, uint8 objectAlignment, size_t size, void* mem) 
 	: Allocator(size, mem), _objectSize(objectSize), _objectAlignment(objectAlignment)
 {
 	ASSERT(objectSize >= sizeof(void*));
 
 	//Calculate adjustment needed to keep object correctly aligned
-	u8 adjustment = pointer_math::alignForwardAdjustment(mem, objectAlignment);
+	uint8 adjustment = pointer_math::alignForwardAdjustment(mem, objectAlignment);
 
 	_free_list = (void**)pointer_math::add(mem, adjustment);
 
@@ -29,7 +30,7 @@ PoolAllocator::~PoolAllocator()
 	_free_list = nullptr;
 }
 
-void* PoolAllocator::allocate(size_t size, u8 alignment)
+void* PoolAllocator::allocate(size_t size, uint8 alignment)
 {
 	ASSERT(size == _objectSize && alignment == _objectAlignment);
 

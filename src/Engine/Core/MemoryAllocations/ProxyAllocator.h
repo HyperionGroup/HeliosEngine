@@ -13,7 +13,7 @@ public:
 	ProxyAllocator(Allocator& allocator);
 	~ProxyAllocator();
 
-	void* allocate(size_t size, u8 alignment) override;
+	void* allocate(size_t size, uint8 alignment) override;
 		
 	void deallocate(void* p) override;
 

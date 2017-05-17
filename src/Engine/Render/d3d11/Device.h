@@ -9,8 +9,16 @@
 
 #pragma once
 
-#include "Render.h"
 #include "Singleton.h"
+#include "States.h"
+
+struct ID3D11Device;
+struct ID3D11DeviceContext;
+struct IDXGISwapChain;
+struct ID3D11RenderTargetView;
+struct ID3D11Texture2D;
+struct ID3D11DepthStencilView;
+struct ID3D11ShaderResourceView;
 
 namespace render
 {
@@ -67,6 +75,13 @@ namespace render
         void SetMinFeatureLevel(D3D_FEATURE_LEVEL level) { minFeatureLevel = level; };
         void SetNumVSYNCIntervals(UINT intervals) { numVSYNCIntervals = intervals; };
 
+        void SetBlendState(BlendState _state, float* _blendFactor = nullptr);
+        void SetRasterizerState(RasterizerState _state);
+        void SetDepthStencilState(DepthStencilState _state);
+
+        void SetViewport(float _topLeftX, float _topLeftY, float _w, float _h);
+        void ResetViewport();
+
     protected:
 
         void CheckForSuitableOutput();
@@ -101,6 +116,10 @@ namespace render
 
         D3D_FEATURE_LEVEL			featureLevel;
         D3D_FEATURE_LEVEL           minFeatureLevel;
+
+        BlendStates                 mBlendState;
+        RasterizerStates            mRasterizerState;
+        DepthStencilStates          mDepthStencilState;
 
         const char* mVSFeatureLevel;
         const char* mPSFeatureLevel;

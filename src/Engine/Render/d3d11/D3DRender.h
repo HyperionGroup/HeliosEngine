@@ -21,6 +21,7 @@
 #include <d3d11_2.h>
 
 #include <d3dcompiler.h>
+#include <d3dcommon.h>
 
 #include <wrl/client.h>
 
@@ -48,6 +49,10 @@ COM_SMARTPTR(ID3D11BlendState)
 COM_SMARTPTR(ID3D11RasterizerState)
 COM_SMARTPTR(ID3D11DepthStencilState)
 COM_SMARTPTR(ID3D11SamplerState)
+COM_SMARTPTR(ID3D11Buffer)
+COM_SMARTPTR(ID3D11VertexShader)
+COM_SMARTPTR(ID3D11InputLayout)
+COM_SMARTPTR(ID3D11Buffer)
 COM_SMARTPTR(ID3D11Buffer)
 
 #pragma comment(lib, "dxguid.lib")
@@ -91,3 +96,5 @@ inline void DXCall(HRESULT hr)
     HELIOSUNUSED(hr);
 #endif
 }
+
+#define DXCheckedRelease(dxPtr) if( dxPtr ) { dxPtr->Release(); dxPtr = nullptr; }

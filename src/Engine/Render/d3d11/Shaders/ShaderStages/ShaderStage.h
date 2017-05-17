@@ -1,17 +1,16 @@
-#ifndef __H_SHADER__
-#define __H_SHADER__
-
-#include "Render.h"
+#pragma once
 
 namespace render
 {
     class CShaderStage
     {
     public:
-        CShaderStage(const std::string& aShaderCode, ShaderStageType aType);
-        virtual ~CShaderStage();
-        bool Load( CDevicePtr _device );
-        virtual void Bind(CDevicePtr _device) = 0;
+        CShaderStage() = default;
+        virtual ~CShaderStage() = default;
+        virtual void Initialize(ID3D11DevicePtr _device, const std::string& aShaderCode);
+        virtual void ShutDown();
+        virtual void Bind(ID3D11DeviceContextPtr _device) = 0;
+        virtual void Unbind(ID3D11DeviceContextPtr _device) = 0;
     protected:
         ShaderStageType m_Type;
         std::string  m_Preprocessor;
@@ -20,8 +19,8 @@ namespace render
         D3D_SHADER_MACRO *m_ShaderMacros;
         std::vector<std::string> m_PreprocessorMacros;
         ID3DBlob     *m_Blob;
+        bool          mInitialized;
         void CreateShaderMacro();
         virtual const char* GetShaderModel() = 0;
     };
 }
-#endif //__H_SHADER__

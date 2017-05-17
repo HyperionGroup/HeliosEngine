@@ -1,3 +1,5 @@
+#include "User.h"
+
 #pragma once
 
 #include "Window.h"

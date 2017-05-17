@@ -1,11 +1,6 @@
+#include "Core.h"
+
 #include "StringUtils.h"
-#include <sstream>
-#include <stdio.h>
-#include <vector>
-#include <Windows.h>
-#include <sstream>
-#include <string>
-#include <sys\stat.h>
 
 namespace core
 {

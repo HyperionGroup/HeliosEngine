@@ -10,10 +10,10 @@
 class PoolAllocator : public Allocator
 {
 public:
-	PoolAllocator(size_t objectSize, u8 objectAlignment, size_t size, void* mem);
+	PoolAllocator(size_t objectSize, uint8 objectAlignment, size_t size, void* mem);
 	~PoolAllocator();
 
-	void* allocate(size_t size, u8 alignment) override;
+	void* allocate(size_t size, uint8 alignment) override;
 		
 	void deallocate(void* p) override;
 
@@ -22,14 +22,14 @@ private:
 	PoolAllocator& operator=(const PoolAllocator&);
 
 	size_t     _objectSize;
-	u8         _objectAlignment;
+	uint8         _objectAlignment;
 
 	void**     _free_list;
 };
 
 namespace allocator
 {
-	inline PoolAllocator* newPoolAllocator(size_t objectSize, u8 objectAlignment, size_t size, Allocator& allocator)
+	inline PoolAllocator* newPoolAllocator(size_t objectSize, uint8 objectAlignment, size_t size, Allocator& allocator)
 	{
 		void* p = allocator.allocate(size+sizeof(PoolAllocator), __alignof(PoolAllocator));
 		return new (p) PoolAllocator(objectSize, objectAlignment, size, pointer_math::add(p, sizeof(PoolAllocator)));

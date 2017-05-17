@@ -1,5 +1,6 @@
-#include "ShaderStage.h"
 #include "Render.h"
+
+#include "ShaderStage.h"
 #include "StringUtils.h"
 
 static std::string sShadersDirectory = "data/shaders/";
@@ -70,28 +71,21 @@ namespace ShaderUtils
 
 namespace render
 {
-    CShaderStage::CShaderStage(const std::string& aShaderCode, ShaderStageType aType)
-        : m_Type(aType)
-        , m_Blob(nullptr)
-        , m_ShaderCode(aShaderCode)
-        , m_ShaderMacros(nullptr)
-    {
-    }
-
-    CShaderStage::~CShaderStage()
+    void CShaderStage::ShutDown()
     {
         delete[] m_ShaderMacros;
         delete m_Blob;
     }
 
-    bool CShaderStage::Load(CDevicePtr _device)
+    void CShaderStage::Initialize(ID3D11DevicePtr _device, const std::string& aShaderCode)
     {
+        m_ShaderCode = aShaderCode;
         if (!m_ShaderCode.empty())
         {
             CreateShaderMacro();
             m_Blob = ShaderUtils::CompileShader(m_ShaderCode, m_EntryPoint, GetShaderModel(), m_ShaderMacros);
         }
-        return m_Blob != nullptr;
+        HELIOSASSERT(m_Blob != nullptr);
     }
 
     void CShaderStage::CreateShaderMacro()

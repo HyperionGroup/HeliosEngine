@@ -4,8 +4,6 @@
 #pragma once
 
 #include "Asset.h"
-#include "Serializable.h"
-#include "Core.h"
 
 namespace io
 {
@@ -21,23 +19,5 @@ namespace io
         virtual ~CShaderAsset();
         virtual bool Load();
     };
-
-#pragma region Serialization
-    SERIALIZABLE_SAVE_DECLARATION(CShaderAsset)
-    {
-        TO_ARCHIVE(Flags);
-        TO_ARCHIVE(VertexStage);
-        TO_ARCHIVE(PixelStage);
-    }
-
-    SERIALIZABLE_LOAD_DECLARATION(CShaderAsset)
-    {
-        FROM_ARCHIVE(Flags);
-        FROM_ARCHIVE(VertexStage);
-        FROM_ARCHIVE(PixelStage);
-        Load();
-    }
-#pragma endregion Serialization
-
 }
 #endif

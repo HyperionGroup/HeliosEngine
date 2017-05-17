@@ -1,7 +1,4 @@
-#pragma once
-
 #include "Render.h"
-#include "Core.h"
 
 namespace render
 {
@@ -20,6 +17,6 @@ namespace render
 
     uint16 BytesPerPixel(PixelDesc _pixelDesc)
     {
-        return sBitsPerPixel[_pixelDesc];
+        return sBitsPerPixel[static_cast<int>(_pixelDesc)];
     }
 }

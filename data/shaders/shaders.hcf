@@ -1,0 +1,19 @@
+{
+    "shaders": [
+        {
+            "name": "FullScreenQuad",
+			"flags": "Position|Uv",
+            "code": "quad.shader",
+        },
+        {
+            "Flags": "",
+            "VertexStage": "",
+            "PixelStage": ""
+        },
+        {
+            "Flags": "",
+            "VertexStage": "",
+            "PixelStage": ""
+        }
+    ]
+}
