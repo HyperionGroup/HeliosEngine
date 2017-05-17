@@ -11,12 +11,16 @@ namespace io
     {
         Texture = 0,
         Mesh,
+        Material,
+        Shader,
     };
 }
 
 Begin_Enum_String(io::AssetType)
 {
-    Enum_String_Id(io::Texture, "Texture");
-    Enum_String_Id(io::Mesh, "Mesh");
+    Enum_String_Id(io::Texture, "texture");
+    Enum_String_Id(io::Mesh, "mesh");
+    Enum_String_Id(io::Material, "material");
+    Enum_String_Id(io::Shader, "shader");
 }
 End_Enum_String;

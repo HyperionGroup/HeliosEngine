@@ -73,8 +73,9 @@ typedef Im3d::Color CColor;
 #define HELIOSSTRINGIFY_(_t) #_t
 #define HELIOSSTRINGIFY(_t) HELIOSSTRINGIFY_(_t)
 
-//#define CHECKED_DELETE(ptr) if( ptr ) { delete ptr; ptr = nullptr; }
-//#define CHECKED_DELETE_ARRAY(arrayPtr) if( arrayPtr ) { delete[] arrayPtr; arrayPtr = nullptr; }
+#define CHECKED_DELETE(ptr) if( ptr ) { delete ptr; ptr = nullptr; }
+#define CHECKED_DELETE_ARRAY(arrayPtr) if( arrayPtr ) { delete[] arrayPtr; arrayPtr = nullptr; }
+#define NON_COPYABLE_CLASS(Class) Class(const Class &); Class &operator=(const Class &);
 
 namespace Im3d {
     const char* GetPlatformErrorString(DWORD _err);
