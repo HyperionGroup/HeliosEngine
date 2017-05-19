@@ -23,7 +23,7 @@ protected:
     void ShutDown();
     void Apply(ID3D11DeviceContext* _context, BlendState _state, float* _blendFactor = nullptr);
 
-    friend CDevice;
+    friend class CDevice;
 
     static D3D11_BLEND_DESC BlendDisabledDesc();
     static D3D11_BLEND_DESC AdditiveBlendDesc();
@@ -56,7 +56,7 @@ protected:
     void ShutDown();
     void Apply(ID3D11DeviceContext* _context, RasterizerState _state);
 
-    friend CDevice;
+    friend class CDevice;
 
 protected:
 
@@ -100,7 +100,7 @@ protected:
     void ShutDown();
     void Apply(ID3D11DeviceContext* _context, DepthStencilState _state);
 
-    friend CDevice;
+    friend class CDevice;
 
     ID3D11DepthStencilStatePtr depthDisabled;
     ID3D11DepthStencilStatePtr depthEnabled;

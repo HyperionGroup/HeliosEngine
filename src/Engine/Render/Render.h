@@ -12,10 +12,6 @@
 
 namespace render
 {
-    DECLARE_SPTR(CDevice);
-    DECLARE_SPTR(CShader);
-    DECLARE_SPTR(CShaderStage);
-
     enum class BlendState
     {
         BlendDisabled = 0,

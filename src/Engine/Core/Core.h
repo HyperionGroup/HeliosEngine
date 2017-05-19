@@ -75,7 +75,8 @@ typedef Im3d::Color CColor;
 
 #define CHECKED_DELETE(ptr) if( ptr ) { delete ptr; ptr = nullptr; }
 #define CHECKED_DELETE_ARRAY(arrayPtr) if( arrayPtr ) { delete[] arrayPtr; arrayPtr = nullptr; }
-#define NON_COPYABLE_CLASS(Class) Class(const Class &); Class &operator=(const Class &);
+#define NON_COPYABLE_CLASS(Class) private: \
+Class(const Class &); Class &operator=(const Class &);
 
 namespace Im3d {
     const char* GetPlatformErrorString(DWORD _err);

@@ -1,11 +1,6 @@
-/* Copyright (C) Ubisoft Entertainment - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and confidential
-*/
-
 #pragma once
 
-#include <map>
+#include "AssetTypeHolder.h"
 
 namespace io
 {
@@ -14,32 +9,12 @@ namespace io
     {
         NON_COPYABLE_CLASS(CAssetManager);
 
-    private:
-        class AssetTypeHolder
-        {
-        public:
-            AssetTypeHolder() = default;
-            virtual ~AssetTypeHolder() = default;
-
-            CAsset* GetAsset(const std::string& name) const;
-            void    AddAsset(const std::string& name, CAsset* Asset);
-            void    ReleaseAsset(const std::string& name);
-
-            uint32  GetTotalBytesSize() const { return m_TotalBytesSize; }
-
-            void    DumpAliveAssets() const;
-
-        protected:
-            std::map< const std::string, CAsset* > m_Assets;
-            uint32 m_TotalBytesSize;
-        };
-
     public:
         template <typename T>
-        void Register()
+        void Register( const std::string& _heliosConfigFilename )
         {
             static_assert(std::is_base_of<CAsset, T>::value, "Registered type must derive from Asset");
-            m_AssetHolders[typeid(T).name()] = std::make_shared<AssetTypeHolder>();
+            m_AssetHolders[typeid(T).name()] = std::make_shared< CAssetTypeHolderT<T> >(_heliosConfigFilename);
         }
 
         template<typename T>
@@ -51,19 +26,19 @@ namespace io
             CAsset* Asset = holder->GetAsset(name);
             if (!Asset)
             {
-                Asset = new Asset_TYPE();
+                Asset = new T();
                 if (Asset->Load(name))
                 {
                     holder->AddAsset(name, Asset);
                 }
                 else
                 {
-                    LOG_WARNING_APPLICATION("Unable to load Asset %s of type %s", name.c_str(), typeid(Asset_TYPE).name());
+                    LOG_WARNING_APPLICATION("Unable to load Asset %s of type %s", name.c_str(), typeid(T).name());
                     CHECKED_DELETE(Asset);
                 }
             }
 
-            return static_cast< Asset_TYPE* >(Asset);
+            return static_cast< T* >(Asset);
         }
 
         template< typename T >
@@ -74,10 +49,7 @@ namespace io
             m_AssetHolders[typeid(T).name()]->ReleaseAsset(name);
         }
 
-    private:
-        friend class Engine;
-
-        std::map <std::string, std::shared_ptr<AssetTypeHolder>> m_AssetHolders;
+        std::map <std::string, std::shared_ptr<CAssetTypeHolder> > m_AssetHolders;
         
         CAssetManager();
         virtual ~CAssetManager();

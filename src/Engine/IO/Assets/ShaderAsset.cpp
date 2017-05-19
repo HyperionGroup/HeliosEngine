@@ -1,42 +1,47 @@
 #include "IO.h"
 
+#include "Render.h"
+
 #include "ShaderAsset.h"
-#include "Shaders\ShaderCompiler.h"
+#include "Shaders\Shader.h"
+#include "Shaders\ShaderStages\VertexStage.h"
+#include "Geometry/Vertex.h"
+
+#include "Device.h"
 
 namespace io
 {
-    CShaderAsset::CShaderAsset()
-        : CAsset()
+    bool CShaderAsset::Unload()
     {
-        
-    }
-
-    CShaderAsset::~CShaderAsset()
-    {
-
+        CHECKED_DELETE(mShader);
+        return true;
     }
 
     bool CShaderAsset::Load()
     {
-        render::CShaderCompiler& lShaderCompiler = render::CShaderCompiler::GetInstance();
-        render::CShader* lShader = lShaderCompiler.LoadShader(mFlags, mVertexStage, mPixelStage);
+        std::ifstream ifs("shaders/" + mSource);
+        std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+
+        render::CDevice& lDevice = render::CDevice::GetInstance();
+        ID3D11Device* d3d = lDevice.Device();
+
+        mShader = new render::CShader();
+        render::CShaderStage* lVS = new render::CVertexStage<render::CIm3dVertex>();
+        lVS->SetPreprocessor(mPreprocessorVS);
+        lVS->Initialize(d3d, content);
+        mShader->SetStage(render::ShaderStageType::VertexStage, lVS);
+
+        render::CShaderStage* lPS = new render::CVertexStage<render::CIm3dVertex>();
+        lPS->SetPreprocessor(mPreprocessorPS);
+        lPS->Initialize(d3d, content);
+        mShader->SetStage(render::ShaderStageType::PixelStage, lPS);
+
+        render::CShaderStage* lGS = new render::CVertexStage<render::CIm3dVertex>();
+        lVS->SetPreprocessor(mPreprocessorVS);
+        lVS->Initialize(d3d, content);
+        mShader->SetStage(render::ShaderStageType::VertexStage, lGS);
+
+        //mShader->SetStage(render::ShaderStageType::VertexStage, lVS);
         return false;
     }
-
-#pragma region Serialization
-    SERIALIZABLE_SAVE_DECLARATION(CShaderAsset)
-    {
-        TO_ARCHIVE(Flags);
-        TO_ARCHIVE(VertexStage);
-        TO_ARCHIVE(PixelStage);
-    }
-
-    SERIALIZABLE_LOAD_DECLARATION(CShaderAsset)
-    {
-        FROM_ARCHIVE(Flags);
-        FROM_ARCHIVE(VertexStage);
-        FROM_ARCHIVE(PixelStage);
-        Load();
-    }
-#pragma endregion Serialization
 }

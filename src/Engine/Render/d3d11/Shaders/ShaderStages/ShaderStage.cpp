@@ -81,22 +81,25 @@ namespace render
     {
         m_ShaderCode = aShaderCode;
         if (!m_ShaderCode.empty())
-        {
-            CreateShaderMacro();
             m_Blob = ShaderUtils::CompileShader(m_ShaderCode, m_EntryPoint, GetShaderModel(), m_ShaderMacros);
-        }
         HELIOSASSERT(m_Blob != nullptr);
     }
 
-    void CShaderStage::CreateShaderMacro()
+    void CShaderStage::SetPreprocessor( const std::string& _preprocessor )
     {
+        if (m_ShaderMacros)
+        {
+            delete[] m_ShaderMacros;
+            m_ShaderMacros = nullptr;
+        }
+
         m_PreprocessorMacros.clear();
-        if (m_Preprocessor.empty())
+        if (_preprocessor.empty())
         {
             m_ShaderMacros = nullptr;
             return;
         }
-        std::vector<std::string> l_PreprocessorItems = core::Split(m_Preprocessor, ';');
+        std::vector<std::string> l_PreprocessorItems = core::Split(_preprocessor, '|');
         m_ShaderMacros = new D3D10_SHADER_MACRO[l_PreprocessorItems.size() + 1];
         for (size_t i = 0; i < l_PreprocessorItems.size(); ++i)
         {

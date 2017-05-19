@@ -14,6 +14,8 @@ namespace io
         Material,
         Shader,
     };
+
+    std::string GetTag(const std::string& _filename);
 }
 
 Begin_Enum_String(io::AssetType)

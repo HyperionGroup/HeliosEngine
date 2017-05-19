@@ -6,12 +6,13 @@
 #include "Geometry\Vertex.h"
 #include "Assets\ShaderAsset.h"
 #include "Im3DDraw.h"
+#include "Assets\AssetManager.h"
 
 int main(int, char**)
 {
 #if defined(HELIOSPLATFORM_WIN)
     // force the current working directory to the exe location
-    TCHAR buf[MAX_PATH] = {};
+     TCHAR buf[MAX_PATH] = {};
     DWORD buflen;
     winAssert(buflen = GetModuleFileName(0, buf, MAX_PATH));
     char* pathend = strrchr(buf, (int)'\\');
@@ -22,13 +23,35 @@ int main(int, char**)
     winAssert(SetCurrentDirectory(strbuff.c_str() ));
     fprintf(stdout, "Set current directory: '%s'\n", buf);
 #endif
-
     user::CWindow& lWindow = user::CWindow::GetInstance();
     if( !lWindow.Create() )
 		return 1;
 
     render::CDevice& lDevice = render::CDevice::GetInstance();
     lDevice.Initialize(lWindow.winID());
+
+    /*
+    {
+        std::ofstream is("data.xml");
+        cereal::XMLOutputArchive archive(is);
+
+        int someInt;
+        double d;
+
+        std::vector< ShaderPreprocessor > lStr;
+        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
+        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
+        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
+        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
+        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
+        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
+        archive(lStr, someInt, d); // NVPs not strictly necessary when loading
+                                 // but could be used (even out of order)
+    }*/
+
+    io::CAssetManager lAssetManager;
+    //io::CAssetManager* lAssetManager = new io::CAssetManager();
+
     float lBackColor[4] = {1.0f, 0.25f ,0.25f , 0.25f };
 
     Im3d::Context& ctx = Im3d::GetContext();

@@ -21,14 +21,12 @@ namespace render
 
         CConstantBuffer< Layout > mCB;
         CDynamicVertexBuffer< Im3d::VertexData > mVB;
-        CShaderPtr mPointsShader;
-        CShaderPtr mLinesShader;
-        CShaderPtr mTrianglesShader;
+        CShader* mPointsShader;
+        CShader* mLinesShader;
+        CShader* mTrianglesShader;
 
         void Im3d_Draw::Initialize()
         {
-            CVertexStage<CMeshVertex> lMeshVertex;
-
             CDevice& lDevice = CDevice::GetInstance();
 
             ID3D11Device* d3d = lDevice.Device();
@@ -106,33 +104,6 @@ namespace render
             mCB.BindVS(ctx, 0);
 
             /*
-            // select shader/primitive topo
-            switch (_drawList.m_primType)
-            {
-            case Im3d::DrawPrimitive_Points:
-            ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-            ctx->VSSetShader(g_Im3dShaderPoints.m_vs, nullptr, 0);
-            ctx->GSSetShader(g_Im3dShaderPoints.m_gs, nullptr, 0);
-            ctx->GSSetConstantBuffers(0, 1, &g_Im3dConstantBuffer);
-            ctx->PSSetShader(g_Im3dShaderPoints.m_ps, nullptr, 0);
-            break;
-            case Im3d::DrawPrimitive_Lines:
-            ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-            ctx->VSSetShader(g_Im3dShaderLines.m_vs, nullptr, 0);
-            ctx->GSSetShader(g_Im3dShaderLines.m_gs, nullptr, 0);
-            ctx->GSSetConstantBuffers(0, 1, &g_Im3dConstantBuffer);
-            ctx->PSSetShader(g_Im3dShaderLines.m_ps, nullptr, 0);
-            break;
-            case Im3d::DrawPrimitive_Triangles:
-            ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            ctx->VSSetShader(g_Im3dShaderTriangles.m_vs, nullptr, 0);
-            ctx->PSSetShader(g_Im3dShaderTriangles.m_ps, nullptr, 0);
-            break;
-            default:
-            HELIOSASSERT(false);
-            return;
-            };
-
             UINT stride = sizeof(Im3d::VertexData);
             UINT offset = 0;
             ctx->IASetVertexBuffers(0, 1, &g_Im3dVertexBuffer, &stride, &offset);

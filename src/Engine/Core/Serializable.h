@@ -29,6 +29,8 @@ template <class Archive> void class_name::save(Archive & ar) const
 #define SERIALIZABLE_LOAD_DECLARATION( class_name) \
 template <class Archive> void class_name::load(Archive & ar)
 
+using namespace cereal;
+
 #define TO_ARCHIVE( name ) ar (cereal::make_nvp(#name, m##name) );
 #define FROM_ARCHIVE( name ) ar (cereal::make_nvp(#name, m##name) );
 
@@ -56,5 +58,7 @@ ar(cereal::make_nvp(#enum_name, EnumString< enum_type >::ToStr(m##enum_name)));
 
 #define TO_ARCHIVE_ENUM( enum_name ) \
 ar(cereal::make_nvp(#enum_name, EnumString< enum_name >::ToStr(m##enum_name)));
+
+#define FROM_ARCHIVE_SAFE( name, variable ) try { ar(make_nvp(name, variable)); } catch (...) { }
 
 #endif // _H_SERIALIZABLE_H_

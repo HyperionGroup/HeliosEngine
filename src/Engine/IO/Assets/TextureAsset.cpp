@@ -24,17 +24,4 @@ namespace io
         stbi_image_free(data);
         return false;
     }
-
-#pragma region Serialization
-    SERIALIZABLE_SAVE_DECLARATION(CTextureAsset)
-    {
-        CAsset::save(ar);
-        TO_ARCHIVE(Filename);
-    }
-
-    SERIALIZABLE_LOAD_DECLARATION(CTextureAsset)
-    {
-
-    }
-#pragma endregion Serialization
 }

@@ -1,19 +1,29 @@
 {
-    "shaders": [
-        {
-            "name": "FullScreenQuad",
-			"flags": "Position|Uv",
-            "code": "quad.shader",
-        },
-        {
-            "Flags": "",
-            "VertexStage": "",
-            "PixelStage": ""
-        },
-        {
-            "Flags": "",
-            "VertexStage": "",
-            "PixelStage": ""
-        }
-    ]
+	"shaders":
+	[
+		{
+			"name": "im3d_points_shader",
+			"src": "im3d/im3d.shader",
+			"vs": "VERTEX_SHADER|POINTS",
+			"gs": "GEOMETRY_SHADER|POINTS",
+			"ps": "PIXEL_SHADER|POINTS"
+		},
+		{
+			"name": "im3d_lines_shader",
+			"src": "im3d/im3d.shader",
+			"vs": "VERTEX_SHADER|LINES",
+			"gs": "GEOMETRY_SHADER|LINES",
+			"ps": "PIXEL_SHADER|LINES"
+		},
+		{
+			"name": "im3d_points_shader",
+			"src": "im3d/im3d.shader",
+			"vs": "VERTEX_SHADER|POINTS",
+			"ps": "PIXEL_SHADER|POINTS"
+		},
+		{
+			"name": "im3d_model",
+			"src": "im3d/model.shader"
+		}
+	]
 }

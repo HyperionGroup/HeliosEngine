@@ -11,9 +11,14 @@ namespace render
 
     CShader::~CShader()
     {
+        for (CShaderStage* stage : mShaders)
+        {
+            delete stage;
+            stage = nullptr;
+        }
     }
 
-    void CShader::SetStage(ShaderStageType _stage, CShaderStagePtr _shaderstage)
+    void CShader::SetStage(ShaderStageType _stage, CShaderStage* _shaderstage)
     {
         HELIOSASSERT( mShaders[static_cast<int>(_stage)] == nullptr );
         mShaders[static_cast<int>(_stage)] = _shaderstage;
@@ -21,13 +26,13 @@ namespace render
 
     void CShader::Bind(ID3D11DeviceContextPtr _device)
     {
-        for( CShaderStagePtr lShader : mShaders )
+        for(CShaderStage* lShader : mShaders )
             if (lShader) lShader->Bind(_device);
     }
 
     void CShader::Unbind(ID3D11DeviceContextPtr _device)
     {
-        for (CShaderStagePtr lShader : mShaders)
+        for (CShaderStage* lShader : mShaders)
             if (lShader) lShader->Unbind(_device);
     }
 
