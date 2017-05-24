@@ -25,9 +25,7 @@ namespace io
         {
             if (!_heliosConfigFilename.empty())
             {
-                std::ifstream ss(_heliosConfigFilename);
-                cereal::JSONInputArchive iarchive(ss);
-                iarchive(make_nvp(GetTag(_heliosConfigFilename).c_str(), mAssets));
+                //std::ifstream ss(_heliosConfigFilename);
                 for (size_t i = 0, lCount = mAssets.size(); i < lCount; ++i)
                     mAssetsMap[mAssets[i]->GetName()] = i;
             }

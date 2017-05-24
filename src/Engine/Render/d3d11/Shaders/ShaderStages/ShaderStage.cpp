@@ -1,7 +1,9 @@
+#include "Core.h"
 #include "Render.h"
 
 #include "ShaderStage.h"
 #include "StringUtils.h"
+#include <iosfwd>
 
 namespace render
 {
@@ -14,19 +16,19 @@ namespace render
             CShaderInclude() {}
             HRESULT __stdcall Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)
             {
-                std::ifstream lBinaryFile(sShadersDirectory + pFileName, std::ios::in | std::ios::binary | std::ios::ate);
+                //std::ifstream lBinaryFile(sShadersDirectory + pFileName, std::ios::in | std::ios::binary | std::ios::ate);
                 HRESULT lHR = E_FAIL;
-                if (lBinaryFile.is_open())
-                {
-                    std::streamoff fileSize = lBinaryFile.tellg();
-                    char* buf = new char[(uint32)fileSize];
-                    lBinaryFile.seekg(0, std::ios::beg);
-                    lBinaryFile.read(buf, fileSize);
-                    lBinaryFile.close();
-                    *ppData = buf;
-                    *pBytes = (UINT)fileSize;
-                    lHR = S_OK;
-                }
+//                 if (lBinaryFile.is_open())
+//                 {
+//                     std::streamoff fileSize = lBinaryFile.tellg();
+//                     char* buf = new char[(uint32)fileSize];
+//                     lBinaryFile.seekg(0, std::ios::beg);
+//                     lBinaryFile.read(buf, fileSize);
+//                     lBinaryFile.close();
+//                     *ppData = buf;
+//                     *pBytes = (UINT)fileSize;
+//                     lHR = S_OK;
+//                 }
                 return lHR;
             }
             HRESULT __stdcall Close(LPCVOID pData)
@@ -84,14 +86,9 @@ namespace render
 
     void CShaderStage::Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor)
     {
+        mSource = _src;
         std::vector<std::string> lMacros;
         D3D_SHADER_MACRO *lD3DMacros = nullptr;
-
-        if (lD3DMacros)
-        {
-            delete[] lD3DMacros;
-            lD3DMacros = nullptr;
-        }
 
         if (!_preprocessor.empty())
         {
@@ -128,9 +125,9 @@ namespace render
 
         if (!_src.empty())
         {
-            std::ifstream ifs(sShadersDirectory + _src);
+            /*std::ifstream ifs(sShadersDirectory + _src);
             std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
-            m_Blob = ShaderUtils::CompileShader(content, GetShaderModel(), lD3DMacros);
+            m_Blob = ShaderUtils::CompileShader(content, GetShaderModel(), lD3DMacros);*/
         }
 
         CHECKED_DELETE_ARRAY( lD3DMacros );

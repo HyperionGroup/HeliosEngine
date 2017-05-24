@@ -3,7 +3,6 @@
 #include "EnumToString.h"
 #include "Logger/Logger.h"
 #include "Containers.h"
-#include "Serializable.h"
 
 #include <im3d.h>
 #include <im3d_math.h>
@@ -39,6 +38,8 @@ typedef Im3d::Color CColor;
 #include <stddef.h>
 #include <iostream>
 #include <sys\stat.h>
+#include <cstdio>
+#include <fstream>
 #include <memory>
 
 #define winAssert(e) HELIOSVERIFY_MSG(e, Im3d::GetPlatformErrorString(GetLastError()))

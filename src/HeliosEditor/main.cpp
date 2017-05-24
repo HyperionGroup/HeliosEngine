@@ -8,6 +8,10 @@
 #include "Im3DDraw.h"
 #include "Assets\AssetManager.h"
 
+#include "Serialization/Serializable.h"
+#include "Shaders\Shader.h"
+
+using namespace rapidjson;
 int main(int, char**)
 {
 #if defined(HELIOSPLATFORM_WIN)
@@ -23,6 +27,16 @@ int main(int, char**)
     winAssert(SetCurrentDirectory(strbuff.c_str() ));
     fprintf(stdout, "Set current directory: '%s'\n", buf);
 #endif
+
+    io::CSerializableNode lShaders;
+    io::serialization::OpenFileAndGetNode(lShaders, "shaders/shaders.hcf", "shaders");
+    HELIOSASSERT(lShaders.IsArray());
+    for (io::ArraySize i = 0; i < lShaders.Size(); ++i)
+    {
+        render::CShader lShader;
+        lShader.Deserialize(lShaders[i]);
+    }
+
     user::CWindow& lWindow = user::CWindow::GetInstance();
     if( !lWindow.Create() )
 		return 1;

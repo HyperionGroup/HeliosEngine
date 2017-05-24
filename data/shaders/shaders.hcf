@@ -3,25 +3,25 @@
 	[
 		{
 			"name": "im3d_points_shader",
-			"vertex_type": "class render::CIm3dVertex",
 			"stages" :
 			[
 				{
 					"type" : "vs",
-					"file": "im3d/im3d.shader",
+					"vertex_type": "class render::CIm3dVertex",
+					"src": "im3d/im3d.shader",
 					"macros" : "VERTEX_SHADER|POINTS"
 				},
 				{
 					"type" : "gs",
-					"file": "im3d/im3d.shader",
+					"src": "im3d/im3d.shader",
 					"macros" : "GEOMETRY_SHADER|POINTS"
 				},
 				{
 					"type" : "ps",
-					"file": "im3d/im3d.shader",
+					"src": "im3d/im3d.shader",
 					"macros" : "PIXEL_SHADER|POINTS"
 				}
 			]
 		}
 	]
-}
+	}

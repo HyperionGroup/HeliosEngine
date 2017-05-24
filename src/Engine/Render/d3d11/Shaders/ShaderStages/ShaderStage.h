@@ -14,7 +14,8 @@ namespace render
 
     protected:
         ID3DBlob        *m_Blob;
-        bool          mInitialized;
+        std::string     mSource;
+        bool            mInitialized;
         
         virtual const char* GetShaderModel() = 0;
     };

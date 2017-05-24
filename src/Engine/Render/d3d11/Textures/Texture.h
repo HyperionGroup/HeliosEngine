@@ -7,7 +7,6 @@ namespace render
 {
     class CTexture
     {
-        SERIALIZABLE
         private:
             render::PixelDesc   mColorFormat;
             uint8*              mData;

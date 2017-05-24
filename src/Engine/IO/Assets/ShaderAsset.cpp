@@ -52,7 +52,7 @@ namespace io
                 }
                 HELIOSASSERT(lShaderStage != nullptr);
                 lShaderStage->Initialize(d3d, desc.file, desc.macros);
-                mShader->SetStage(lType, lShaderStage);
+               // mShader->SetStage(lType, lShaderStage);
             }
         }
         return true;
