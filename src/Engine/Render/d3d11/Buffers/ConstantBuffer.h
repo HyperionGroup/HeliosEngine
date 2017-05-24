@@ -17,6 +17,7 @@ namespace render
         CConstantBuffer()
             : CBuffer()
         {
+            mUsage = D3D11_USAGE_DYNAMIC;
             ZeroMemory(&Data, sizeof(T));
         }
 

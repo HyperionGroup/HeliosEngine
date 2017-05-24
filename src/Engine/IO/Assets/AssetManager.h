@@ -18,33 +18,17 @@ namespace io
         }
 
         template<typename T>
-        T* GetAsset(const std::string& name)
+        std::shared_ptr< T > GetAsset(const std::string& _name)
         {
-            ASSERT(!name.empty() && m_AssetHolders.find(typeid(T).name()) != m_AssetHolders.end());
-
-            shared_ptr<AssetTypeHolder>& holder = m_AssetHolders[typeid(T).name()];
-            CAsset* Asset = holder->GetAsset(name);
-            if (!Asset)
-            {
-                Asset = new T();
-                if (Asset->Load(name))
-                {
-                    holder->AddAsset(name, Asset);
-                }
-                else
-                {
-                    LOG_WARNING_APPLICATION("Unable to load Asset %s of type %s", name.c_str(), typeid(T).name());
-                    CHECKED_DELETE(Asset);
-                }
-            }
-
-            return static_cast< T* >(Asset);
+            HELIOSASSERT(!_name.empty() && m_AssetHolders.find(typeid(T).name()) != m_AssetHolders.end());
+            std::shared_ptr<CAssetTypeHolderT<T>> lHolder = std::static_pointer_cast<CAssetTypeHolderT<T>>(m_AssetHolders[typeid(T).name()]);
+            return lHolder->GetAsset(_name);
         }
 
         template< typename T >
         void ReleaseAsset(const std::string& name)
         {
-            ASSERT(!name.empty() && m_AssetHolders.find(typeid(T).name()) != m_AssetHolders.end());
+            HELIOSASSERT(!name.empty() && m_AssetHolders.find(typeid(T).name()) != m_AssetHolders.end());
 
             m_AssetHolders[typeid(T).name()]->ReleaseAsset(name);
         }

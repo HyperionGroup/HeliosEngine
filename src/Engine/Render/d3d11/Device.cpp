@@ -97,24 +97,28 @@ namespace render
         {
             mVSFeatureLevel = "vs_5_0";
             mPSFeatureLevel = "ps_5_0";
+            mGSFeatureLevel = "gs_5_0";
         }
         break;
         case D3D_FEATURE_LEVEL_10_1:
         {
             mVSFeatureLevel = "vs_4_1";
             mPSFeatureLevel = "ps_4_1";
+            mGSFeatureLevel = "gs_4_1";
         }
         break;
         case D3D_FEATURE_LEVEL_10_0:
         {
             mVSFeatureLevel = "vs_4_0";
             mPSFeatureLevel = "ps_4_0";
+            mGSFeatureLevel = "gs_4_0";
         }
         break;
         case D3D_FEATURE_LEVEL_9_3:
         {
             mVSFeatureLevel = "vs_4_0_level_9_3";
             mPSFeatureLevel = "ps_4_0_level_9_3";
+            mGSFeatureLevel = "gs_4_0_level_9_3";
         }
         break;
         case D3D_FEATURE_LEVEL_9_2:
@@ -122,6 +126,7 @@ namespace render
         {
             mVSFeatureLevel = "vs_4_0_level_9_1";
             mPSFeatureLevel = "ps_4_0_level_9_1";
+            mGSFeatureLevel = "gs_4_0_level_9_1";
         }
         break;
         } // switch( featureLevel )

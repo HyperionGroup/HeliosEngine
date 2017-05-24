@@ -9,19 +9,21 @@ namespace render
     public:
         CVertexStage() = default;
         virtual ~CVertexStage() = default;
-        virtual void Initialize(ID3D11DevicePtr _device, const std::string& aShaderCode )
+        virtual void Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor)
         {
-            m_Type = ShaderStageType::VertexStage;
-            m_EntryPoint = "mainVS";
-            CShaderStage::Initialize(_device, aShaderCode);
+            CShaderStage::Initialize(_device, _src, _preprocessor);
             DXCall(_device->CreateVertexShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_VertexShader->GetInterfacePtr()));
             TVertexType::CreateInputLayout(_device, m_Blob, &m_VertexLayout);
         }
 
         virtual void ShutDown()
         {
-            DXCheckedRelease(m_VertexShader);
-            DXCheckedRelease(m_VertexLayout);
+            if (mInitialized)
+            {
+                DXCheckedRelease(m_VertexShader);
+                DXCheckedRelease(m_VertexLayout);
+                mInitialized = false;
+            }
         }
 
         virtual void Bind(ID3D11DeviceContextPtr _device)

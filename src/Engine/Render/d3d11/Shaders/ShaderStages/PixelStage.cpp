@@ -4,20 +4,19 @@
 
 namespace render
 {
-    void CPixelStage::Initialize(ID3D11DevicePtr _device, const std::string& aShaderCode)
+    void CPixelStage::Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor)
     {
-        m_EntryPoint = "mainPS";
-        m_Type = ShaderStageType::PixelStage;
-        CShaderStage::Initialize(_device, aShaderCode);
+        CShaderStage::Initialize(_device, _src, _preprocessor);
         DXCall(_device->CreatePixelShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_PixelShader));
+        mInitialized = false;
     }
 
     void CPixelStage::ShutDown()
     {
         if (mInitialized)
         {
-            m_PixelShader->Release();
-            m_PixelShader = nullptr;
+            DXCheckedRelease(m_PixelShader);
+            mInitialized = false;
         }
     }
 
@@ -33,6 +32,6 @@ namespace render
 
     const char* CPixelStage::GetShaderModel()
     {
-        return CDevice::GetInstance().GetVertexStageFeatureLevel();
+        return CDevice::GetInstance().GetPixelStageFeatureLevel();
     }
 }

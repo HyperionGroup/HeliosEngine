@@ -7,6 +7,10 @@
 #include "Shaders/ShaderStages/VertexStage.h"
 #include "Buffers/DynamicVertexBuffer.h"
 
+#include "Assets/ShaderAsset.h"
+
+#include "Engine.h"
+
 #include "Shaders/Shader.h"
 
 namespace render
@@ -33,6 +37,9 @@ namespace render
             ID3D11DeviceContext* ctx = lDevice.ImmediateContext();
 
             mCB.Initialize(d3d);
+
+            helios::CEngine& lEngine = helios::CEngine::GetInstance();
+            mPointsShader = lEngine.GetAssetManager().GetAsset<io::CShaderAsset>("im3d_points_shader")->GetShader();
 
             Im3d::GetAppData().drawCallback = &Draw;
         }

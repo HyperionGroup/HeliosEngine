@@ -11,56 +11,40 @@ namespace render
 
 namespace io
 {
-    class CShaderAsset : public CAsset
+    class CShaderAsset : public CAsset , std::enable_shared_from_this<CShaderAsset>
     {
-        SERIALIZABLE
-    private:
-        struct ShaderPreprocessor
+    public:
+        template <class Archive>
+        void serialize(Archive & ar)
         {
-            std::string name;
-            std::string definition;
+            ar(make_nvp("stages", mStagesDescriptors));
+            ar(make_nvp("vertex_type", mVertexType));
+        }
+    private:
+        struct StageDesc
+        {
+            std::string type;
+            std::string file;
+            std::string macros;
 
-            // This method lets cereal know which data members to serialize
             template<class Archive>
             void serialize(Archive & archive)
             {
-                archive(make_nvp("name", name));
-                archive(make_nvp("definition", definition));
+                archive(make_nvp("type", type));
+                archive(make_nvp("file", file));
+                archive(make_nvp("macros", macros));
             }
         };
 
-        std::string mSource;
-        std::string mPreprocessorVS;
-        std::string mPreprocessorGS;
-        std::string mPreprocessorPS;
+        std::string mVertexType;
+        std::vector< StageDesc > mStagesDescriptors;
         render::CShader *mShader;
     public:
         CShaderAsset() = default;
         virtual ~CShaderAsset() = default;
+        render::CShader* GetShader() const { return mShader; }
         virtual bool Load();
         virtual bool Unload();
     };
-
-
-#pragma region Serialization
-    SERIALIZABLE_SAVE_DECLARATION(CShaderAsset)
-    {
-        CAsset::save(ar);
-        ar(make_nvp("src", mSource));
-        ar(make_nvp("vs", mPreprocessorVS));
-        ar(make_nvp("ps", mPreprocessorGS));
-        ar(make_nvp("gs", mPreprocessorPS));
-    }
-
-    SERIALIZABLE_LOAD_DECLARATION(CShaderAsset)
-    {
-        CAsset::load(ar);
-        ar(make_nvp("src", mSource));
-        FROM_ARCHIVE_SAFE("vs", mPreprocessorVS);
-        FROM_ARCHIVE_SAFE("ps", mPreprocessorGS);
-        FROM_ARCHIVE_SAFE("gs", mPreprocessorPS);
-        Load();
-    }
-#pragma endregion Serialization
 }
 #endif

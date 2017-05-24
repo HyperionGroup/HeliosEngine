@@ -49,7 +49,7 @@ int main(int, char**)
                                  // but could be used (even out of order)
     }*/
 
-    io::CAssetManager lAssetManager;
+    //io::CAssetManager lAssetManager;
     //io::CAssetManager* lAssetManager = new io::CAssetManager();
 
     float lBackColor[4] = {1.0f, 0.25f ,0.25f , 0.25f };

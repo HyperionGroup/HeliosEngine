@@ -25,11 +25,11 @@ project "HeliosEditor"
 	kind "WindowedApp"
 	flags { "ExtraWarnings" }
 	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/IO",  "../src/Engine/User" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/IO",  "../src/Engine/User", "../src/Engine/Engine" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
 	libdirs { "$(DXSDK_DIR)lib/x86/" }
-	links { "d3d11", "d3dcompiler", "Render", "IO", "Core", "User", "imgui"}
+	links { "d3d11", "d3dcompiler", "Render", "IO", "Core", "User", "imgui", "Engine"}
 	pchheader "HeliosEditor.h"
 	pchsource "../src/HeliosEditor/main.cpp"
 	
@@ -42,10 +42,18 @@ project "Core"
 	pchheader "Core.h"
 	pchsource "../src/Engine/Core/Core.cpp"
 
+project "Engine"
+    kind "StaticLib"
+    files { "../src/Engine/Engine/**.h", "../src/Engine/Engine/**.cpp", "../src/Engine/Engine/**.inl" }
+	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/IO"}
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	pchheader "Engine.h"
+	pchsource "../src/Engine/Engine/Engine.cpp"
+
 project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" , "../src/Engine/Engine", "../src/Engine/IO"}
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	pchheader "Render.h"
 	pchsource "../src/Engine/Render/Render.cpp"
@@ -54,7 +62,7 @@ project "Render"
 project "IO"
     kind "StaticLib"
     files { "../src/Engine/IO/**.h", "../src/Engine/IO/**.cpp", "../src/Engine/IO/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/IO", "../src/Engine/Render/d3d11"  }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/IO", "../src/Engine/Render/d3d11" , "../src/Engine/Engine" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	pchheader "IO.h"
 	pchsource "../src/Engine/IO/IO.cpp"
@@ -62,7 +70,7 @@ project "IO"
 project "User"
     kind "StaticLib"
     files { "../src/Engine/User/**.h", "../src/Engine/User/**.cpp", "../src/Engine/User/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/Render"  }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/Render" , "../src/Engine/Engine" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	pchheader "User.h"
 	pchsource "../src/Engine/User/User.cpp"
