@@ -1,5 +1,6 @@
 #pragma once
 #include "ShaderStage.h"
+#include "Engine.h"
 
 namespace render
 {
@@ -9,9 +10,9 @@ namespace render
     public:
         CVertexStage() = default;
         virtual ~CVertexStage() = default;
-        virtual void Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor)
+        virtual void Initialize(ID3D11DevicePtr _device)
         {
-            CShaderStage::Initialize(_device, _src, _preprocessor);
+            CShaderStage::Initialize(_device);
             DXCall(_device->CreateVertexShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_VertexShader->GetInterfacePtr()));
             TVertexType::CreateInputLayout(_device, m_Blob, &m_VertexLayout);
         }
@@ -45,7 +46,7 @@ namespace render
 
         virtual const char* GetShaderModel()
         {
-            return CDevice::GetInstance().GetVertexStageFeatureLevel();
+            return helios::CEngine::GetInstance().GetDevice().GetVertexStageFeatureLevel();
         }
     };
 }

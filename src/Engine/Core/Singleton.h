@@ -1,5 +1,5 @@
-#ifndef __CORE_CSingleton_
-#define __CORE_CSingleton_
+#pragma once
+#include <memory>
 
 namespace core
 {
@@ -16,5 +16,3 @@ namespace core
         CSingleton() {}
     };
 }
-
-#endif

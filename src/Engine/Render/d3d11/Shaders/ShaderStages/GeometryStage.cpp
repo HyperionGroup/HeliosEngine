@@ -2,12 +2,13 @@
 
 #include "GeometryStage.h"
 #include "Device.h"
+#include "Engine.h"
 
 namespace render
 {
-    void CGeometryStage::Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor)
+    void CGeometryStage::Initialize(ID3D11DevicePtr _device)
     {
-        CShaderStage::Initialize(_device, _src, _preprocessor);
+        CShaderStage::Initialize(_device);
         DXCall(_device->CreateGeometryShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_GeometryShader));
         mInitialized = true;
     }
@@ -33,6 +34,6 @@ namespace render
 
     const char* CGeometryStage::GetShaderModel()
     {
-        return CDevice::GetInstance().GetGeometryStageFeatureLevel();
+        return helios::CEngine::GetInstance().GetDevice().GetGeometryStageFeatureLevel();
     }
 }

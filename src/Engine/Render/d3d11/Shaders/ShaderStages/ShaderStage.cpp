@@ -3,6 +3,7 @@
 
 #include "ShaderStage.h"
 #include "StringUtils.h"
+#include "Engine.h"
 #include <iosfwd>
 
 namespace render
@@ -84,15 +85,14 @@ namespace render
         CHECKED_DELETE(m_Blob);
     }
 
-    void CShaderStage::Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor)
+    void CShaderStage::Initialize(ID3D11DevicePtr _device)
     {
-        mSource = _src;
         std::vector<std::string> lMacros;
         D3D_SHADER_MACRO *lD3DMacros = nullptr;
 
-        if (!_preprocessor.empty())
+        if (!mMacros.empty())
         {
-            std::vector<std::string> l_PreprocessorItems = core::Split(_preprocessor, '|');
+            std::vector<std::string> l_PreprocessorItems = core::Split(mMacros, '|');
             lD3DMacros = new D3D10_SHADER_MACRO[l_PreprocessorItems.size() + 1];
             for (size_t i = 0; i < l_PreprocessorItems.size(); ++i)
             {
@@ -123,13 +123,26 @@ namespace render
             lD3DMacros[l_PreprocessorItems.size()].Definition = NULL;
         }
 
-        if (!_src.empty())
+        if (!mSource.empty())
         {
-            /*std::ifstream ifs(sShadersDirectory + _src);
+            std::ifstream ifs(sShadersDirectory + mSource);
             std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
-            m_Blob = ShaderUtils::CompileShader(content, GetShaderModel(), lD3DMacros);*/
+            m_Blob = ShaderUtils::CompileShader(content, GetShaderModel(), lD3DMacros);
         }
 
         CHECKED_DELETE_ARRAY( lD3DMacros );
+    }
+
+    void CShaderStage::Deserialize(const io::CSerializableNode& _node)
+    {
+        HELIOSASSERT(_node.IsObject());
+        mSource = _node["src"].GetString();
+        mMacros = _node["macros"].GetString();
+        Initialize(helios::CEngine::GetInstance().GetDevice().Device());
+    }
+
+    void CShaderStage::Serialize(io::CSerializableNode& _node) const
+    {
+
     }
 }

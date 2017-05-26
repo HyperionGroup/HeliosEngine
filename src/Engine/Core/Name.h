@@ -1,23 +1,16 @@
 #pragma once
-#ifndef __H_NAME__
-#define __H_NAME__
-
-#include <string>
 
 namespace core
 {
     class CName
     {
     public:
-        CName() : m_Name("") {}
-        CName(const std::string& _name) : m_Name(_name) {}
+        CName() : mName("") {}
+        CName(const std::string& _name) : mName(_name) {}
         virtual ~CName() {}
-        const std::string& GetName() const { return m_Name;  }
-        void SetName(const std::string& _name) { m_Name = _name; }
+        const std::string& GetName() const { return mName;  }
+        void SetName(const std::string& _name) { mName = _name; }
     protected:
-        std::string m_Name;
-        uint32 m_Id;
+        std::string mName;
     };
 }
-
-#endif // __H_NAME__

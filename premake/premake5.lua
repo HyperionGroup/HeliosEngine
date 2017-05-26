@@ -24,11 +24,11 @@ project "HeliosEditor"
 	kind "WindowedApp"
 	flags { "ExtraWarnings" }
 	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/IO",  "../src/Engine/User", "../src/Engine/Engine" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User", "../src/Engine/Engine" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
 	libdirs { "$(DXSDK_DIR)lib/x86/" }
-	links { "d3d11", "d3dcompiler", "Render", "IO", "Core", "User", "imgui", "Engine"}
+	links { "d3d11", "d3dcompiler", "Render", "Core", "User", "imgui", "Engine"}
 	pchheader "HeliosEditor.h"
 	pchsource "../src/HeliosEditor/main.cpp"
 	
@@ -44,7 +44,7 @@ project "Core"
 project "Engine"
     kind "StaticLib"
     files { "../src/Engine/Engine/**.h", "../src/Engine/Engine/**.cpp", "../src/Engine/Engine/**.inl" }
-	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/IO"}
+	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
 	pchheader "Engine.h"
 	pchsource "../src/Engine/Engine/Engine.cpp"
@@ -52,19 +52,11 @@ project "Engine"
 project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" , "../src/Engine/Engine", "../src/Engine/IO"}
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" , "../src/Engine/Engine", "../src/Engine/User" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/" }
 	pchheader "Render.h"
 	pchsource "../src/Engine/Render/Render.cpp"
 	buildoptions { "-Zm150" }
-	
-project "IO"
-    kind "StaticLib"
-    files { "../src/Engine/IO/**.h", "../src/Engine/IO/**.cpp", "../src/Engine/IO/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/IO", "../src/Engine/Render/d3d11" , "../src/Engine/Engine" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/"}
-	pchheader "IO.h"
-	pchsource "../src/Engine/IO/IO.cpp"
 	
 project "User"
     kind "StaticLib"

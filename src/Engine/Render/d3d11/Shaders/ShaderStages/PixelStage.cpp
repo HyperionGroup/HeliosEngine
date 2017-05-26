@@ -1,12 +1,13 @@
 #include "Render.h"
 #include "PixelStage.h"
 #include "Device.h"
+#include "Engine.h"
 
 namespace render
 {
-    void CPixelStage::Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor)
+    void CPixelStage::Initialize(ID3D11DevicePtr _device)
     {
-        CShaderStage::Initialize(_device, _src, _preprocessor);
+        CShaderStage::Initialize(_device);
         DXCall(_device->CreatePixelShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_PixelShader));
         mInitialized = false;
     }
@@ -32,6 +33,6 @@ namespace render
 
     const char* CPixelStage::GetShaderModel()
     {
-        return CDevice::GetInstance().GetPixelStageFeatureLevel();
+        return helios::CEngine::GetInstance().GetDevice().GetPixelStageFeatureLevel();
     }
 }

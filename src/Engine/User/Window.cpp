@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Window.h"
-#include "Core.h"
+#include "Engine.h"
 #include "d3d11\Device.h"
 #include "imgui.h"
 
@@ -12,7 +12,7 @@ namespace
     static LRESULT CALLBACK WindowProc(HWND _hwnd, UINT _umsg, WPARAM _wparam, LPARAM _lparam)
     {
         ImGuiIO& imgui = ImGui::GetIO();
-        user::CWindow lWindow = user::CWindow::GetInstance();
+        user::CWindow lWindow = helios::CEngine::GetInstance().GetWindow();
         switch (_umsg) {
         case WM_SIZE: {
             int w = (int)LOWORD(_lparam), h = (int)HIWORD(_lparam);

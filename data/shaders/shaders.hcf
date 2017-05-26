@@ -2,12 +2,12 @@
 	"shaders":
 	[
 		{
+			"type": "shader",
 			"name": "im3d_points_shader",
 			"stages" :
 			[
 				{
-					"type" : "vs",
-					"vertex_type": "class render::CIm3dVertex",
+					"type" : "vs_im3d",
 					"src": "im3d/im3d.shader",
 					"macros" : "VERTEX_SHADER|POINTS"
 				},
@@ -22,6 +22,45 @@
 					"macros" : "PIXEL_SHADER|POINTS"
 				}
 			]
+		},
+		{
+			"type": "shader",
+			"name": "im3d_lines_shader",
+			"stages" :
+			[
+				{
+					"type" : "vs_im3d",
+					"src": "im3d/im3d.shader",
+					"macros" : "VERTEX_SHADER|LINES"
+				},
+				{
+					"type" : "gs",
+					"src": "im3d/im3d.shader",
+					"macros" : "GEOMETRY_SHADER|LINES"
+				},
+				{
+					"type" : "ps",
+					"src": "im3d/im3d.shader",
+					"macros" : "PIXEL_SHADER|LINES"
+				}
+			]
+		},
+		{
+			"type": "shader",
+			"name": "im3d_triangles_shader",
+			"stages" :
+			[
+				{
+					"type" : "vs_im3d",
+					"src": "im3d/im3d.shader",
+					"macros" : "VERTEX_SHADER|TRIANGLES"
+				},
+				{
+					"type" : "ps",
+					"src": "im3d/im3d.shader",
+					"macros" : "PIXEL_SHADER|TRIANGLES"
+				}
+			]
 		}
 	]
-	}
+}

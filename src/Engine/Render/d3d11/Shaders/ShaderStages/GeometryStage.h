@@ -9,7 +9,7 @@ namespace render
     public:
         CGeometryStage() = default;
         virtual ~CGeometryStage() = default;
-        virtual void Initialize(ID3D11DevicePtr _device, const std::string& _src, const std::string& _preprocessor);
+        virtual void Initialize(ID3D11DevicePtr _device);
         virtual void ShutDown();
         virtual void Bind(ID3D11DeviceContextPtr _device);
         virtual void Unbind(ID3D11DeviceContextPtr _device);

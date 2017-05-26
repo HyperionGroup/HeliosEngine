@@ -2,11 +2,12 @@
 
 #include "ShaderStages\ShaderStage.h"
 #include "Serialization\Serializable.h"
+#include "Name.h"
 
 namespace render
 {
     class CShaderStage;
-    class CShader : public io::CSerializable
+    class CShader : public io::CSerializableEntity, public core::CName
     {
         SERIALIZABLE
     public:

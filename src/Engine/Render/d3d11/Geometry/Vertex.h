@@ -55,6 +55,17 @@ namespace render
         Float2 uv;
         CScreenVertex() = default;
         virtual ~CScreenVertex() = default;
+        static void CreateInputLayout(ID3D11Device* _device, ID3DBlob *_vsBlob, ID3D11InputLayout **_inputLayout)
+        {
+            HELIOSASSERT(false);
+            D3D11_INPUT_ELEMENT_DESC lDesc[] =
+            {
+                { "POSITION_SIZE", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,   0, (UINT)offsetof(CIm3dVertex, m_positionSize), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "COLOR",         0, DXGI_FORMAT_R8G8B8A8_UNORM,       0, (UINT)offsetof(CIm3dVertex, m_color),        D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            };
+            DXCall(_device->CreateInputLayout(lDesc, ARRAYSIZE(lDesc), _vsBlob->GetBufferPointer(), _vsBlob->GetBufferSize(), _inputLayout));
+        }
+        static const uint32 Flags = Position4 | Color;
     };
 
     class CAnimatedVertex
@@ -69,5 +80,16 @@ namespace render
         Float4 indices;
         CAnimatedVertex() = default;
         virtual ~CAnimatedVertex() = default;
+        static void CreateInputLayout(ID3D11Device* _device, ID3DBlob *_vsBlob, ID3D11InputLayout **_inputLayout)
+        {
+            HELIOSASSERT(false);
+            D3D11_INPUT_ELEMENT_DESC lDesc[] =
+            {
+                { "POSITION_SIZE", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,   0, (UINT)offsetof(CIm3dVertex, m_positionSize), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "COLOR",         0, DXGI_FORMAT_R8G8B8A8_UNORM,       0, (UINT)offsetof(CIm3dVertex, m_color),        D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            };
+            DXCall(_device->CreateInputLayout(lDesc, ARRAYSIZE(lDesc), _vsBlob->GetBufferPointer(), _vsBlob->GetBufferSize(), _inputLayout));
+        }
+        static const uint32 Flags = Position4 | Color;
     };
 }

@@ -5,11 +5,9 @@
 
 #include <windows.h>
 
-#include <Singleton.h>
-
 namespace user
 {
-    class CWindow : public core::CSingleton< CWindow >
+    class CWindow
     {
     public:
         CWindow();

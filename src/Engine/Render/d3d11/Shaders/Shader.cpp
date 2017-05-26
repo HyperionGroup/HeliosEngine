@@ -5,63 +5,47 @@
 #include "ShaderStages\GeometryStage.h"
 #include "Device.h"
 #include "Geometry/Vertex.h"
+#include "Engine.h"
 
 namespace render
 {
     CShader::CShader()
+        : CSerializableEntity()
+        , CName("")
     {
-        mShaders.resize(static_cast<int>(ShaderStageType::MAX), nullptr);
     }
 
     void CShader::Bind(ID3D11DeviceContextPtr _device)
     {
-        for (auto& lShader : mShaders)
-            if (lShader) lShader->Bind(_device);
+        for (auto& lShader : mShaders) lShader->Bind(_device);
     }
 
     void CShader::Unbind(ID3D11DeviceContextPtr _device)
     {
-        for (auto& lShader : mShaders)
-            if (lShader) lShader->Unbind(_device);
+        for (auto& lShader : mShaders) lShader->Unbind(_device);
     }
 
     void CShader::Deserialize(const io::CSerializableNode& _node)
     {
-        CSerializable::Deserialize(_node);
+        HELIOSASSERT(_node.IsObject());
 
-        render::CDevice& lDevice = render::CDevice::GetInstance();
-        ID3D11Device* d3d = lDevice.Device();
+        SetName( _node["name"].GetString() );
 
+        helios::CEngine& lEngine = helios::CEngine::GetInstance();
+
+        const io::CSerializableEntityConstructor& lEntityCntr = lEngine.GetSerializableEntityConstructor();
+        
+        mShaders.clear();
+        
         const io::CSerializableNode& lStagesNode = _node["stages"];
         HELIOSASSERT(lStagesNode.IsArray());
-        for (io::ArraySize i = 0; i < lStagesNode.Size(); ++i)
+        for(const io::CSerializableNode& m : lStagesNode.GetArray())
         {
-            render::ShaderStageType lType;
-            if (EnumString<render::ShaderStageType>::ToEnum(lType, lStagesNode[i]["type"].GetString() ))
-            {
-                render::CShaderStage* lShaderStage = nullptr;
-                switch (lType)
-                {
-                case render::ShaderStageType::VertexStage:
-                {
-                    lShaderStage = new CVertexStage<render::CIm3dVertex>();
-                }
-                break;
-                case render::ShaderStageType::PixelStage:
-                {
-                    lShaderStage = new CPixelStage();
-                }
-                break;
-                case render::ShaderStageType::GeometryStage:
-                {
-                    lShaderStage = new CGeometryStage();
-                }
-                break;
-                }
-                HELIOSASSERT(lShaderStage != nullptr);
-                lShaderStage->Initialize(d3d, lStagesNode[i]["src"].GetString(), lStagesNode[i]["macros"].GetString() );
-                //mShader->SetStage(lType, lShaderStage);
-            }
+            std::shared_ptr< io::CSerializableEntity > lShaderStage
+                = lEntityCntr.Create( m["type"].GetString() );
+            lShaderStage->Deserialize(m);
+            mShaders.push_back(std::static_pointer_cast
+                <CShaderStage>(lShaderStage));
         }
     }
 

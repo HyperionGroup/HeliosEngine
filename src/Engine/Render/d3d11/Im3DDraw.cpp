@@ -7,8 +7,6 @@
 #include "Shaders/ShaderStages/VertexStage.h"
 #include "Buffers/DynamicVertexBuffer.h"
 
-#include "Assets/ShaderAsset.h"
-
 #include "Engine.h"
 
 #include "Shaders/Shader.h"
@@ -25,21 +23,23 @@ namespace render
 
         CConstantBuffer< Layout > mCB;
         CDynamicVertexBuffer< Im3d::VertexData > mVB;
-        CShader* mPointsShader;
-        CShader* mLinesShader;
-        CShader* mTrianglesShader;
+        std::shared_ptr<CShader> mPointsShader;
+        std::shared_ptr<CShader> mLinesShader;
+        std::shared_ptr<CShader> mTrianglesShader;
 
         void Im3d_Draw::Initialize()
         {
-            CDevice& lDevice = CDevice::GetInstance();
+            helios::CEngine& lEngine = helios::CEngine::GetInstance();
+            CDevice& lDevice = lEngine.GetDevice();
 
             ID3D11Device* d3d = lDevice.Device();
             ID3D11DeviceContext* ctx = lDevice.ImmediateContext();
 
             mCB.Initialize(d3d);
 
-            helios::CEngine& lEngine = helios::CEngine::GetInstance();
-            mPointsShader = lEngine.GetAssetManager().GetAsset<io::CShaderAsset>("im3d_points_shader")->GetShader();
+            mPointsShader    = lEngine.GetAssetManager().Get<CShader>("im3d_points_shader");
+            mLinesShader     = lEngine.GetAssetManager().Get<CShader>("im3d_lines_shader");
+            mTrianglesShader = lEngine.GetAssetManager().Get<CShader>("im3d_triangles_shader");
 
             Im3d::GetAppData().drawCallback = &Draw;
         }
@@ -53,7 +53,8 @@ namespace render
         {
             Im3d::AppData& ad = Im3d::GetAppData();
 
-            CDevice& lDevice = CDevice::GetInstance();
+            helios::CEngine& lEngine = helios::CEngine::GetInstance();
+            CDevice& lDevice = lEngine.GetDevice();
 
             ID3D11Device* d3d = lDevice.Device();
             ID3D11DeviceContext* ctx = lDevice.ImmediateContext();
@@ -86,6 +87,8 @@ namespace render
                 mVB.Apply(ctx, _drawList.m_vertexData);
             }
 
+            mCB.BindVS(ctx, 0);
+
             // select shader/primitive topo
             switch (_drawList.m_primType)
             {
@@ -93,35 +96,29 @@ namespace render
                 ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
                 mPointsShader->Bind(ctx);
                 mCB.BindGS(ctx, 0);
+                mVB.Bind(ctx);
+                ctx->Draw(_drawList.m_vertexCount, 0);
+                mPointsShader->Unbind(ctx);
                 break;
             case Im3d::DrawPrimitive_Lines:
                 ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
                 mLinesShader->Bind(ctx);
                 mCB.BindGS(ctx, 0);
+                mVB.Bind(ctx);
+                ctx->Draw(_drawList.m_vertexCount, 0);
+                mLinesShader->Unbind(ctx);
                 break;
             case Im3d::DrawPrimitive_Triangles:
                 ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
                 mTrianglesShader->Bind(ctx);
+                mVB.Bind(ctx);
+                ctx->Draw(_drawList.m_vertexCount, 0);
+                mTrianglesShader->Unbind(ctx);
                 break;
             default:
                 HELIOSASSERT(false);
                 return;
             };
-
-            mCB.BindVS(ctx, 0);
-
-            /*
-            UINT stride = sizeof(Im3d::VertexData);
-            UINT offset = 0;
-            ctx->IASetVertexBuffers(0, 1, &g_Im3dVertexBuffer, &stride, &offset);
-            ctx->IASetInputLayout(g_Im3dInputLayout);
-            ctx->VSSetConstantBuffers(0, 1, &g_Im3dConstantBuffer);
-            ctx->Draw(_drawList.m_vertexCount, 0);
-
-            ctx->VSSetShader(nullptr, nullptr, 0);
-            ctx->GSSetShader(nullptr, nullptr, 0);
-            ctx->PSSetShader(nullptr, nullptr, 0);
-            */
         }
     }
 }

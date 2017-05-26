@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Singleton.h"
 #include "States.h"
 
 struct ID3D11Device;
@@ -22,7 +21,7 @@ struct ID3D11ShaderResourceView;
 
 namespace render
 {
-    class CDevice : public core::CSingleton< CDevice >
+    class CDevice
     {
     public:
 

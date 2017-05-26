@@ -3,6 +3,7 @@
 #include "Core.h"
 #include <vector>
 #include <map>
+#include <memory>
 
 namespace core
 {
@@ -16,84 +17,72 @@ namespace core
             Shutdown();
         }
 
-        inline size_t Size()
+        inline size_t Length()
         {
-            return m_ResourcesVector.size();
+            return mArray.size();
         }
 
-        inline bool Exist(const std::string &aName)
+        inline bool Exist(const std::string &_name)
         {
-            return m_ResourcesMap.find(aName) != m_ResourcesMap.end;
+            return mMap.find(_name) != mMap.end;
         }
 
-        inline void Remove(const std::string &aName)
+        inline void Remove(const std::string &_name)
         {
-            CMapResouceValue l_ResourceValue = m_ResourcesMap[aName];
-            size_t index = l_ResourceValue.m_Id;
-            delete m_ResourcesVector[index];
-            delete m_ResourcesMap[aName];
-            m_ResourcesMap.erase(aName);
-            m_ResourcesVector.erase(m_ResourcesVector.begin() + index);
-            for (TMapResources::iterator lItb = m_ResourcesMap.begin(), lIte = m_ResourcesMap.end(); lItb != lIte; ++lItb)
+            TMap::const_iterator _find = mMap.find(_name);
+            if (_find != mMap.end())
             {
-                if (lItb->second->m_Id > index)
+                const size_t lIdx = _find->second;
+                mMap.erase(_find);
+                mArray.erase(mArray.begin() + index);
+                for ( auto& it : mMap )
                 {
-                    lItb->second->m_Id--;
+                    if (it.second > lIdx)
+                        it.second = it.second - 1;
                 }
             }
         }
 
-        virtual inline T operator[](size_t aId)
+        virtual std::shared_ptr<T> operator[](size_t _idx) const
         {
-            return m_ResourcesVector[aId];
+            return mArray[_idx];
         }
 
-        virtual inline T Get(const std::string &aName)
+        virtual std::shared_ptr<T> Get(const std::string &_name) const
         {
-            TMapResources::const_iterator lItfind = m_ResourcesMap.find(aName);
-            return (lItfind != m_ResourcesMap.end()) ? lItfind->second.m_Value : nullptr;
+            TMap::const_iterator _find = mMap.find(_name);
+            return (_find != mMap.end()) ? mArray[_find->second] : nullptr;
         }
 
-        virtual inline bool Add(const std::string &aName, T Resource)
+        virtual bool Add( const std::string& _name, std::shared_ptr<T> _resource )
         {
             bool lOk = false;
-            if (m_ResourcesMap.find(aName) == m_ResourcesMap.end())
+            if (mMap.find(_name) == mMap.end())
             {
-                m_ResourcesMap.insert(std::pair<std::string, CMapResourceValue>(aName, CMapResourceValue(Resource, m_ResourcesVector.size())));
-                m_ResourcesVector.push_back(Resource);
+                mMap[_name] = mArray.size();
+                mArray.push_back(_resource);
                 lOk = true;
             }
             return lOk;
         }
 
-        virtual inline void Clear()
+        virtual void Clear()
         {
-            m_ResourcesMap.clear();
-            m_ResourcesVector.clear();
+            mArray.clear();
+            mMap.clear();
         }
 
-        virtual inline void Shutdown()
+        virtual void Shutdown()
         {
-            for (auto i : m_ResourcesVector)
-                delete i;
             Clear();
         }
 
     protected:
-        class CMapResourceValue
-        {
-        public:
-            T m_Value;
-            size_t m_Id;
-            CMapResourceValue() { assert(!"Method must not be called"); }
-            CMapResourceValue(T aValue, size_t aId) : m_Value(aValue), m_Id(aId) {}
-        };
+        typedef std::vector< std::shared_ptr<T> > TArray;
+        typedef std::map< const std::string, size_t > TMap;
 
-        typedef std::vector<T> TVectorRes;
-        typedef std::map<std::string, CMapResourceValue> TMapResources;
-
-        TVectorRes m_ResourcesVector;
-        TMapResources	 m_ResourcesMap;
+        TArray mArray;
+        TMap   mMap;
     };
 
     template<class T>

@@ -1,88 +1,13 @@
 #include "HeliosEditor.h"
-
-#include "Window.h"
-#include "Device.h"
-#include "Buffers\Buffer.h"
-#include "Geometry\Vertex.h"
-#include "Assets\ShaderAsset.h"
-#include "Im3DDraw.h"
-#include "Assets\AssetManager.h"
-
-#include "Serialization/Serializable.h"
-#include "Shaders\Shader.h"
+#include "Engine.h"
 
 using namespace rapidjson;
 int main(int, char**)
 {
-#if defined(HELIOSPLATFORM_WIN)
-    // force the current working directory to the exe location
-     TCHAR buf[MAX_PATH] = {};
-    DWORD buflen;
-    winAssert(buflen = GetModuleFileName(0, buf, MAX_PATH));
-    char* pathend = strrchr(buf, (int)'\\');
-    *(++pathend) = '\0';
-    std::string strbuff = buf;
-    strbuff.erase(strbuff.find("helios\\") + 7);
-    strbuff += "data\\";
-    winAssert(SetCurrentDirectory(strbuff.c_str() ));
-    fprintf(stdout, "Set current directory: '%s'\n", buf);
-#endif
-
-    io::CSerializableNode lShaders;
-    io::serialization::OpenFileAndGetNode(lShaders, "shaders/shaders.hcf", "shaders");
-    HELIOSASSERT(lShaders.IsArray());
-    for (io::ArraySize i = 0; i < lShaders.Size(); ++i)
-    {
-        render::CShader lShader;
-        lShader.Deserialize(lShaders[i]);
-    }
-
-    user::CWindow& lWindow = user::CWindow::GetInstance();
-    if( !lWindow.Create() )
-		return 1;
-
-    render::CDevice& lDevice = render::CDevice::GetInstance();
-    lDevice.Initialize(lWindow.winID());
-
-    /*
-    {
-        std::ofstream is("data.xml");
-        cereal::XMLOutputArchive archive(is);
-
-        int someInt;
-        double d;
-
-        std::vector< ShaderPreprocessor > lStr;
-        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
-        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
-        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
-        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
-        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
-        lStr.push_back(ShaderPreprocessor{ "hola", "hola2" });
-        archive(lStr, someInt, d); // NVPs not strictly necessary when loading
-                                 // but could be used (even out of order)
-    }*/
-
-    //io::CAssetManager lAssetManager;
-    //io::CAssetManager* lAssetManager = new io::CAssetManager();
-
-    float lBackColor[4] = {1.0f, 0.25f ,0.25f , 0.25f };
-
-    Im3d::Context& ctx = Im3d::GetContext();
-    Im3d::AppData& ad = Im3d::GetAppData();
-
-    render::Im3d_Draw::Initialize();
-
-    while (lWindow.Update())
-    {
-        lDevice.ImmediateContext()->ClearRenderTargetView(lDevice.BackBuffer(), lBackColor);
-        Im3d::Draw();
-        //ImGui::Render();
-        lDevice.Present();
-    }
-
-    render::Im3d_Draw::ShutDown();
-
+    helios::CEngine::GetInstance().Initialize();
+    helios::CEngine::GetInstance().Run();
+    helios::CEngine::GetInstance().ShutDown();
+    return 0;
 #if 0
 	while (example.update()) {
 		
@@ -515,6 +440,4 @@ int main(int, char**)
 	}
 	example.shutdown();
 #endif
-    lWindow.ShutDown();
-	return 0;
 }
