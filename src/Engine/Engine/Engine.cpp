@@ -33,6 +33,8 @@ namespace helios
             RegisterGameAssets();
 
             render::Im3d_Draw::Initialize();
+
+            mInitialized = true;
         }
     }
 

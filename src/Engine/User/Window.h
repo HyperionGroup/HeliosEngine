@@ -21,12 +21,17 @@ namespace user
         void SetHeight(int val) { mHeight = val; }
         int GetWidth() const { return mWidth; }
         void SetWidth(int val) { mWidth = val; }
+        
+        bool HasFocus() const;
+        Float2 GetWindowRelativeCursor() const;
+
     protected:
         WNDCLASSEX wc;
         HWND hwnd;
         MSG msg;
         int mHeight;
         int mWidth;
+        Float2  mPrevCursorPos;
 
         virtual WNDPROC GetWNDPROC();
     };

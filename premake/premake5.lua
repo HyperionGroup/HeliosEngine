@@ -49,6 +49,14 @@ project "Engine"
 	pchheader "Engine.h"
 	pchsource "../src/Engine/Engine/Engine.cpp"
 
+project "Graphics"
+    kind "StaticLib"
+    files { "../src/Engine/Graphics/**.h", "../src/Engine/Graphics/**.cpp", "../src/Engine/GraphicsGraphics/**.inl" }
+	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User", "../src/Engine/Graphics" }
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	pchheader "Graphics.h"
+	pchsource "../src/Engine/Graphics/Graphics.cpp"
+
 project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }

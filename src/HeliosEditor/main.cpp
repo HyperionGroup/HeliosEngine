@@ -4,9 +4,10 @@
 using namespace rapidjson;
 int main(int, char**)
 {
-    helios::CEngine::GetInstance().Initialize();
-    helios::CEngine::GetInstance().Run();
-    helios::CEngine::GetInstance().ShutDown();
+    helios::CEngine& lEngine = helios::CEngine::GetInstance();
+    lEngine.Initialize();
+    lEngine.Run();
+    lEngine.ShutDown();
     return 0;
 #if 0
 	while (example.update()) {

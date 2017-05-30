@@ -208,4 +208,16 @@ namespace user
         return WindowProc;
     }
 
+    bool CWindow::HasFocus() const { return hwnd == GetFocus(); }
+
+    Float2 CWindow::GetWindowRelativeCursor() const
+    {
+        #if defined(HELIOSPLATFORM_WIN)
+                POINT p = {};
+                winAssert(GetCursorPos(&p));
+                winAssert(ScreenToClient(hwnd, &p));
+                return Float2((float)p.x, (float)p.y);
+        #endif
+    }
+
 }
