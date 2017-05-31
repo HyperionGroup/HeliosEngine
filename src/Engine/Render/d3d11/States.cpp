@@ -568,6 +568,29 @@ namespace render
         return dsDesc;
     }
 
+    void SamplerStates::ShutDown()
+    {
+
+    }
+
+    void SamplerStates::Apply(ID3D11DeviceContext* _context, SamplerStates _state)
+    {
+        /*
+        enum class SamplerType
+        {
+            Linear = 0,
+            LinearClamp,
+            LinearBorder,
+            Point,
+            Anisotropic,
+            ShadowMap,
+            ShadowMapPCF,
+
+            MAX
+        };*/
+    }
+
+
     void SamplerStates::Initialize(ID3D11Device* device)
     {
         DXCall(device->CreateSamplerState(&LinearDesc(), &linear));

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace graphcs
+namespace graphics
 {
     class CCamera
     {

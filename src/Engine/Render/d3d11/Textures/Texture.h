@@ -1,19 +1,26 @@
-#ifndef _RENDER_TEXTURE_
-#define _RENDER_TEXTURE_
-
 #pragma once
+#include "Serialization\Serializable.h"
 
 namespace render
 {
-    class CTexture
+    class CTexture : public io::CSerializableEntity
     {
+        SERIALIZABLE
         private:
             render::PixelDesc   mColorFormat;
-            uint8*              mData;
+            SamplerType         mSampler;
+            std::string         mFilename;
+            TextureType         mType;
+
+            ID3D11ShaderResourceViewPtr mResourceView;
+            Float2 mSize;
+            bool Load();
+
         public:
-            CTexture();
-            virtual ~CTexture();
+            CTexture() = default;
+            virtual ~CTexture() = default;
+            
+            void Bind(uint32 aStageId, ID3D11DeviceContextPtr aContext);
+            ID3D11ShaderResourceViewPtr GetRawResource() { return mResourceView; }
     };
 }
-
-#endif
