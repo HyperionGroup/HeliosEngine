@@ -3,7 +3,6 @@ workspace "Helios"
    platforms { "x64" }
    location "../vs"
    language "C++"
-   debugdir "\$(OutDir)"
    
    filter "configurations:Debug"
       defines { "DEBUG", "DX_LOG_CALLS" }
@@ -23,12 +22,12 @@ project "HeliosEditor"
 	kind "WindowedApp"
 	flags { "ExtraWarnings" }
 	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User", "../src/Engine/Engine" }
+	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/Graphics" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/luajit-2.0/src/" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
 	libdirs { "$(DXSDK_DIR)lib/x86/" }
 	libdirs { "$(SolutionDir)../bin/luajit/" }
-	links { "d3d11", "d3dcompiler", "Render", "Core", "User", "imgui", "Engine", "lua51" }
+	links { "d3d11", "d3dcompiler", "Render", "Core", "imgui", "Engine", "lua51" }
 	pchheader "HeliosEditor.h"
 	pchsource "../src/HeliosEditor/main.cpp"
 	postbuildcommands { 'echo F | xcopy "$(SolutionDir)../bin/luajit/lua51.dll" "$(SolutionDir)bin/x64/%{cfg.buildcfg}/lua51.dll" /Y' }
@@ -38,42 +37,34 @@ project "Core"
     kind "StaticLib"
     files { "../src/Engine/Core/**.h", "../src/Engine/Core/**.cpp", "../src/Engine/Core/**.inl" }
 	includedirs { "../src/Engine/Core" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/" }
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d" }
 	pchheader "Core.h"
 	pchsource "../src/Engine/Core/Core.cpp"
 
 project "Engine"
     kind "StaticLib"
     files { "../src/Engine/Engine/**.h", "../src/Engine/Engine/**.cpp", "../src/Engine/Engine/**.inl" }
-	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/", "../src/3rdParty/sol2", "../src/3rdParty/luajit-2.0/src/" }
+	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/Graphics" }
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d" }
 	pchheader "Engine.h"
 	pchsource "../src/Engine/Engine/Engine.cpp"
 
 project "Graphics"
     kind "StaticLib"
     files { "../src/Engine/Graphics/**.h", "../src/Engine/Graphics/**.cpp", "../src/Engine/GraphicsGraphics/**.inl" }
-	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User", "../src/Engine/Graphics" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/Graphics" }
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d" }
 	pchheader "Graphics.h"
 	pchsource "../src/Engine/Graphics/Graphics.cpp"
 
 project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" , "../src/Engine/Engine", "../src/Engine/User" }
+	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" , "../src/Engine/Engine", "../src/Engine/Graphics" }
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/" }
 	pchheader "Render.h"
 	pchsource "../src/Engine/Render/Render.cpp"
 	buildoptions { "-Zm150" }
-	
-project "User"
-    kind "StaticLib"
-    files { "../src/Engine/User/**.h", "../src/Engine/User/**.cpp", "../src/Engine/User/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render" , "../src/Engine/Render" , "../src/Engine/Engine" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/" }
-	pchheader "User.h"
-	pchsource "../src/Engine/User/User.cpp"
 
 group "3rdParty"
 project "imgui"

@@ -47,20 +47,19 @@ namespace helios
 
     void CEngine::Run()
     {
-        if (mInitialized)
+        HELIOSASSERT(mInitialized);
+
+        float lBackColor[4] = { 1.0f, 0.25f ,0.25f , 0.25f };
+
+        Im3d::Context& ctx = Im3d::GetContext();
+        Im3d::AppData& ad = Im3d::GetAppData();
+
+        while (mWindow.Update())
         {
-            float lBackColor[4] = { 1.0f, 0.25f ,0.25f , 0.25f };
-
-            Im3d::Context& ctx = Im3d::GetContext();
-            Im3d::AppData& ad = Im3d::GetAppData();
-
-            while (mWindow.Update())
-            {
-                mDevice.ImmediateContext()->ClearRenderTargetView(mDevice.BackBuffer(), lBackColor);
-                Im3d::Draw();
-                //ImGui::Render();
-                mDevice.Present();
-            }
+            mDevice.ImmediateContext()->ClearRenderTargetView(mDevice.BackBuffer(), lBackColor);
+            Im3d::Draw();
+            //ImGui::Render();
+            mDevice.Present();
         }
     }
 
