@@ -1,7 +1,7 @@
 workspace "Helios"
    configurations { "Debug", "Release" }
    platforms { "x64" }
-   location "../vs2015"
+   location "../vs"
    language "C++"
    debugdir "\$(OutDir)"
    
