@@ -5,7 +5,6 @@ workspace "Helios"
    language "C++"
    debugdir "\$(OutDir)"
    
-   
    filter "configurations:Debug"
       defines { "DEBUG", "DX_LOG_CALLS" }
 	  rtti ("off")
@@ -25,12 +24,14 @@ project "HeliosEditor"
 	flags { "ExtraWarnings" }
 	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
 	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User", "../src/Engine/Engine" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/" }
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/luajit-2.0/src/" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
 	libdirs { "$(DXSDK_DIR)lib/x86/" }
-	links { "d3d11", "d3dcompiler", "Render", "Core", "User", "imgui", "Engine"}
+	libdirs { "$(SolutionDir)../bin/luajit/" }
+	links { "d3d11", "d3dcompiler", "Render", "Core", "User", "imgui", "Engine", "lua51" }
 	pchheader "HeliosEditor.h"
 	pchsource "../src/HeliosEditor/main.cpp"
+	postbuildcommands { 'echo F | xcopy "$(SolutionDir)../bin/luajit/lua51.dll" "$(SolutionDir)bin/x64/%{cfg.buildcfg}/lua51.dll" /Y' }
 	
 group "Engine"
 project "Core"
@@ -45,7 +46,7 @@ project "Engine"
     kind "StaticLib"
     files { "../src/Engine/Engine/**.h", "../src/Engine/Engine/**.cpp", "../src/Engine/Engine/**.inl" }
 	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/User" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/" }
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/cereal/include/", "../src/3rdParty/sol2", "../src/3rdParty/luajit-2.0/src/" }
 	pchheader "Engine.h"
 	pchsource "../src/Engine/Engine/Engine.cpp"
 
