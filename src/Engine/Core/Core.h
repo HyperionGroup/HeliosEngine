@@ -15,6 +15,8 @@ typedef Im3d::Mat4 Float4x4;
 typedef Im3d::Mat3 Float3x3;
 typedef Im3d::Color CColor;
 
+using namespace Im3d;
+
 // Compiler
 #if defined(__GNUC__)
 #define HELIOSCOMPILER_GNU

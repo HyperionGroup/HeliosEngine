@@ -1,4 +1,4 @@
-#include "User.h"
+#include "Engine.h"
 
 #pragma once
 
@@ -12,7 +12,7 @@ namespace
     static LRESULT CALLBACK WindowProc(HWND _hwnd, UINT _umsg, WPARAM _wparam, LPARAM _lparam)
     {
         ImGuiIO& imgui = ImGui::GetIO();
-        user::CWindow lWindow = helios::CEngine::GetInstance().GetWindow();
+        helios::CWindow lWindow = helios::CEngine::GetInstance().GetWindow();
         switch (_umsg) {
         case WM_SIZE: {
             int w = (int)LOWORD(_lparam), h = (int)HIWORD(_lparam);
@@ -118,7 +118,7 @@ namespace
     }
 }
 
-namespace user
+namespace helios
 {
     CWindow::CWindow()
     {

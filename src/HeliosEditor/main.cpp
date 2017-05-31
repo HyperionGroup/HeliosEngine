@@ -1,7 +1,6 @@
 #include "HeliosEditor.h"
 #include "Engine.h"
 
-using namespace rapidjson;
 int main(int, char**)
 {
     helios::CEngine& lEngine = helios::CEngine::GetInstance();

@@ -1299,7 +1299,7 @@ bool Example::update()
 	float kCamSpeed = 2.0f;
 	float kCamSpeedMul = 10.0f;
 	float kCamRotationMul = 10.0f;
-	m_camWorld = LookAt(m_camPos, m_camPos - m_camDir);
+    m_camWorld = LookAt(m_camPos, m_camPos - m_camDir);
 	m_camView = Inverse(m_camWorld);
 	#if defined(HELIOSPLATFORM_WIN)
 		Vec2 cursorPos = getWindowRelativeCursor();

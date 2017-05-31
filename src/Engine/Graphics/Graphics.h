@@ -4,4 +4,5 @@
 
 namespace graphics
 {
+    DECLARE_SPTR(CCamera);
 }

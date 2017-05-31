@@ -5,7 +5,7 @@
 
 #include <windows.h>
 
-namespace user
+namespace helios
 {
     class CWindow
     {
