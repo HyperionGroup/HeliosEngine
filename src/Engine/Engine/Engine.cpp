@@ -22,8 +22,8 @@ namespace helios
             char* pathend = strrchr(buf, (int)'\\');
             *(++pathend) = '\0';
             std::string strbuff = buf;
-            strbuff.erase(strbuff.find("helios\\") + 7);
-            strbuff += "data\\";
+            strbuff.erase(strbuff.find("HeliosEngine\\") + 12);
+            strbuff += "\\data\\";
             winAssert(SetCurrentDirectory(strbuff.c_str()));
             fprintf(stdout, "Set current directory: '%s'\n", buf);
 #endif
