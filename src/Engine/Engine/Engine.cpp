@@ -8,8 +8,6 @@
 
 #include "Im3DDraw.h"
 
-#include "sol.hpp"
-
 namespace helios
 {
     void CEngine::Initialize()
@@ -37,11 +35,6 @@ namespace helios
             render::Im3d_Draw::Initialize();
 
             mInitialized = true;
-
-            sol::state lua;
-            // open some common libraries
-            lua.open_libraries(sol::lib::base, sol::lib::package);
-            lua.script("print('bark bark bark!')");
         }
     }
 
