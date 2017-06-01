@@ -1,0 +1,13 @@
+version: 0.1.{build}
+image:
+- Visual Studio 2015
+- Visual Studio 2017
+configuration:
+- Debug
+- Release
+platform: x64
+build:
+- project: vs/Helios.sln
+- verbosity: minimal
+before_build:
+- cmd: vs2017.bat
