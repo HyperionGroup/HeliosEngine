@@ -1,4 +1,4 @@
-version: 0.1.{build}
+version: {build}
 image: Visual Studio 2017
 configuration:
 - Debug
@@ -8,4 +8,5 @@ build:
   project: vs/Helios.sln
   verbosity: minimal
 before_build:
-  cmd: vs2017.bat
+- cmd: git submodule update --init --recursive
+- cmd: vs2017.bat
