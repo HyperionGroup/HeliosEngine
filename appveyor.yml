@@ -8,5 +8,5 @@ build:
   project: vs/Helios.sln
   verbosity: minimal
 before_build:
-  cmd: git submodule update --init --recursive
-  cmd: vs2017.bat
+- git submodule update --init --recursive
+- vs2017.bat
