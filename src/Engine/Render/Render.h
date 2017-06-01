@@ -53,6 +53,19 @@ namespace render
         MAX
     };
 
+    enum class SamplerType
+    {
+        Linear = 0,
+        LinearClamp,
+        LinearBorder,
+        Point,
+        Anisotropic,
+        ShadowMap,
+        ShadowMapPCF,
+
+        MAX
+    };
+
     enum VertexFlags
     {
         Position = 0x0001,
@@ -150,5 +163,17 @@ Begin_Enum_String(render::VertexFlags)
     Enum_String_Id(render::VertexFlags::Bump, "bump");
     Enum_String_Id(render::VertexFlags::Weight, "weight");
     Enum_String_Id(render::VertexFlags::Indices, "indices");
+}
+End_Enum_String;
+
+Begin_Enum_String(render::SamplerType)
+{
+    Enum_String_Id(render::SamplerType::Linear, "Linear");
+    Enum_String_Id(render::SamplerType::LinearClamp, "LinearClamp");
+    Enum_String_Id(render::SamplerType::LinearBorder, "LinearBorder");
+    Enum_String_Id(render::SamplerType::Anisotropic, "Anisotropic");
+    Enum_String_Id(render::SamplerType::Point, "Point");
+    Enum_String_Id(render::SamplerType::ShadowMap, "ShadowMap");
+    Enum_String_Id(render::SamplerType::ShadowMapPCF, "ShadowMapPCF");
 }
 End_Enum_String;
