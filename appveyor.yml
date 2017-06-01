@@ -8,6 +8,5 @@ build:
   project: vs/Helios.sln
   verbosity: minimal
 before_build:
-  cmd:
-  - vs2017.bat
-  - cd vs
+- cmd: vs2017.bat
+- cmd: cd vs
