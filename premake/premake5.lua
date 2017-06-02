@@ -4,6 +4,8 @@ workspace "Helios"
    location "../vs"
    language "C++"
    
+   targetdir "$(SolutionDir)bin/%{cfg.buildcfg}"
+   
    filter "configurations:Debug"
       defines { "DEBUG", "DX_LOG_CALLS" }
 	  rtti ("off")
@@ -15,8 +17,6 @@ workspace "Helios"
 	  characterset ("MBCS")
 	  rtti ("off")
       optimize "On"
-	
-	targetdir "../bin/Helios/%{cfg.buildcfg}"
 	
 project "HeliosEditor"
 	kind "WindowedApp"

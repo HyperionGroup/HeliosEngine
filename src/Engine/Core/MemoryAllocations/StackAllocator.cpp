@@ -53,8 +53,9 @@ void* StackAllocator::allocate(size_t size, uint8 alignment)
 
 void StackAllocator::deallocate(void* p)
 {
+#if _DEBUG
 	HELIOSASSERT( p == _prev_position );
-
+#endif
 	//Access the AllocationHeader in the bytes before p
 	AllocationHeader* header = (AllocationHeader*)(pointer_math::subtract(p, sizeof(AllocationHeader)));
 
