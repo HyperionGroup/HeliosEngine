@@ -4,8 +4,9 @@
 #include "Shaders/ShaderStages/VertexStage.h"
 #include "Shaders/ShaderStages/PixelStage.h"
 #include "Shaders/ShaderStages/GeometryStage.h"
-#include "Geometry/Vertex.h"
+#include "Vertex.h"
 
+#include "Model\Model.h"
 #include "Im3DDraw.h"
 
 namespace helios
@@ -72,6 +73,11 @@ namespace helios
         mSerializableConstructor.Register<render::CVertexStage<render::CAnimatedVertex> >("vs_animated");
         mSerializableConstructor.Register<render::CPixelStage>("ps");
         mSerializableConstructor.Register<render::CGeometryStage>("gs");
+        mSerializableConstructor.Register<render::CModel>("model");
+        //
+
+        // Graphics library entities
+        
         //
     }
 
@@ -79,6 +85,7 @@ namespace helios
     {
         // Register game Assets classes here!
         mAssetManager.Register<render::CShader>("shaders", "shaders/shaders.hcf");
+        mAssetManager.Register<render::CModel>("models", "models/models.hcf");
         //
     }
 }

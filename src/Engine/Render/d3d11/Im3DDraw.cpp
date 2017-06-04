@@ -2,10 +2,9 @@
 #include "Im3DDraw.h"
 
 #include "Device.h"
-#include "Geometry/Vertex.h"
-#include "Buffers/ConstantBuffer.h"
+#include "Vertex.h"
+#include "Buffer.h"
 #include "Shaders/ShaderStages/VertexStage.h"
-#include "Buffers/DynamicVertexBuffer.h"
 
 #include "Engine.h"
 
@@ -77,10 +76,7 @@ namespace render
 
             // If is the first execution or the VB has been shutdown init the VB
             if (!mVB.IsInitizalized())
-            {
-                mVB.SetNumVertexs(_drawList.m_vertexCount);
-                mVB.Initialize(d3d, _drawList.m_vertexData);
-            }
+                mVB.Initialize(d3d, _drawList.m_vertexData, _drawList.m_vertexCount);
             else
             {
                 // If the only thing that has changed is the VB data itself only update the VB

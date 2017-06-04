@@ -26,11 +26,13 @@ project "HeliosEditor"
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/sol2", "../src/3rdParty/luajit-2.0/src" }
 	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
 	libdirs { "$(DXSDK_DIR)lib/x86/" }
-	libdirs { "$(SolutionDir)../bin/luajit/" }
-	links { "d3d11", "d3dcompiler", "Render", "Core", "imgui", "Engine", "lua51", "Logic" }
+	libdirs { "../bin/luajit/" }
+	libdirs { "../bin/assimp/" }
+	links { "d3d11", "d3dcompiler", "Render", "Core", "imgui", "Engine", "lua51", "Logic", "Graphics", "assimp" }
 	pchheader "HeliosEditor.h"
 	pchsource "../src/HeliosEditor/main.cpp"
 	postbuildcommands { 'echo F | xcopy "$(SolutionDir)..\\bin\\luajit\\lua51.dll" "$(TargetDir)lua51.dll" /Y' }
+	postbuildcommands { 'echo F | xcopy "$(SolutionDir)..\\bin\\assimp\\assimp.dll" "$(TargetDir)assimp.dll" /Y' }
 	
 group "Engine"
 project "Core"
@@ -71,7 +73,7 @@ project "Render"
     kind "StaticLib"
     files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
 	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" , "../src/Engine/Engine", "../src/Engine/Graphics" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/" }
+	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/assimp"  }
 	pchheader "Render.h"
 	pchsource "../src/Engine/Render/Render.cpp"
 	buildoptions { "-Zm150" }
