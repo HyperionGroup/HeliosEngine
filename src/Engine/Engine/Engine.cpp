@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Core.h"
 
 #include "Shaders/Shader.h"
 #include "Shaders/ShaderStages/VertexStage.h"
@@ -10,12 +11,13 @@
 #include "Cameras/Camera.h"
 
 #include "ImGui_Im3D.h"
+#include <imgui.h>
 
 namespace helios
 {
     void CEngine::Initialize()
     {
-        if (mWindow.Create())
+        if (mWindow.Create(600,800))
         {
 #if defined(HELIOSPLATFORM_WIN)
             // force the current working directory to the exe location
@@ -30,7 +32,7 @@ namespace helios
             winAssert(SetCurrentDirectory(strbuff.c_str()));
             fprintf(stdout, "Set current directory: '%s'\n", buf);
 #endif
-            mDevice.Initialize(mWindow.winID());
+            mDevice.Initialize(mWindow);
 
             RegisterSerializableEntities();
             RegisterGameAssets();
@@ -57,11 +59,20 @@ namespace helios
         Im3d::Context& ctx = Im3d::GetContext();
         Im3d::AppData& ad = Im3d::GetAppData();
 
+        bool show_test_window = true;
+
         while (mWindow.Update())
         {
+            render::ImGui_Im3D::NewFrame();
+
+            render::ImGui_Im3D::Update(0.0f);
+
+            //ImGui::SetNextWindowPos(ImVec2(0, 0)); 
+            //ImGui::SetNextWindowSize()// Normally user code doesn't need/want to call it because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+            ImGui::ShowTestWindow(&show_test_window);
+
             mDevice.ImmediateContext()->ClearRenderTargetView(mDevice.BackBuffer(), lBackColor);
-            Im3d::Draw();
-            //ImGui::Render();
+            render::ImGui_Im3D::Render();
             mDevice.Present();
         }
     }

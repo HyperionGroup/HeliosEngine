@@ -11,6 +11,8 @@ namespace render
     {
         void Initialize();
         void Update( float dt );
+        void NewFrame();
+        void Render();
         void ShutDown();
     }
 }

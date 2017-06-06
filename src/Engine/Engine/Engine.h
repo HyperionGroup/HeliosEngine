@@ -7,7 +7,7 @@
 
 #include "Serialization/Serializable.h"
 #include "Assets/AssetManager.h"
-#include "Window/Window.h"
+#include "Window.h"
 #include "d3d11/Device.h"
 
 namespace helios
@@ -28,8 +28,8 @@ namespace helios
         const io::CAssetManager& GetAssetManager() const { return mAssetManager; }
         io::CAssetManager& GetAssetManager() { return mAssetManager; }
 
-        const CWindow& GetWindow() const { return mWindow; }
-        CWindow& GetWindow() { return mWindow; }
+        const render::CWindow& GetWindow() const { return mWindow; }
+        render::CWindow& GetWindow() { return mWindow; }
 
         const render::CDevice& GetDevice() const { return mDevice; }
         render::CDevice& GetDevice() { return mDevice; }
@@ -39,7 +39,7 @@ namespace helios
     protected:
         io::CSerializableEntityConstructor mSerializableConstructor;
         io::CAssetManager                  mAssetManager;
-        CWindow                            mWindow;
+        render::CWindow                    mWindow;
         render::CDevice                    mDevice;
 
         graphics::CCameraPtr               mCamera;

@@ -139,37 +139,37 @@ namespace render
             mNumVertexs = 0u;
         }
 
-        void Initialize(ID3D11DevicePtr _device, const TVertexType * _data, uint32 _numVertices)
-        {
-            HELIOSASSERT(!mInitialized);
-            HELIOSASSERT(_data);
+void Initialize(ID3D11DevicePtr _device, const TVertexType * _data, uint32 _numVertices)
+{
+    HELIOSASSERT(!mInitialized);
+    HELIOSASSERT(_data);
 
-            D3D11_BUFFER_DESC lVB;
-            ZeroMemory(&lVB, sizeof(lVB));
-            lVB.Usage = mUsage;
-            lVB.ByteWidth = sizeof(TVertexType)*_numVertices;
-            lVB.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-            lVB.CPUAccessFlags = 0;
+    D3D11_BUFFER_DESC lVB;
+    ZeroMemory(&lVB, sizeof(lVB));
+    lVB.Usage = mUsage;
+    lVB.ByteWidth = sizeof(TVertexType)*_numVertices;
+    lVB.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    lVB.CPUAccessFlags = 0;
 
-            D3D11_SUBRESOURCE_DATA lSubresourceData;
-            ZeroMemory(&lSubresourceData, sizeof(lSubresourceData));
-            lSubresourceData.pSysMem = _data;
+    D3D11_SUBRESOURCE_DATA lSubresourceData;
+    ZeroMemory(&lSubresourceData, sizeof(lSubresourceData));
+    lSubresourceData.pSysMem = _data;
 
-            DXCall(_device->CreateBuffer(&lVB, &lSubresourceData, &mBuffer));
+    DXCall(_device->CreateBuffer(&lVB, &lSubresourceData, &mBuffer));
 
-            mInitialized = true;
-            mNumVertexs = _numVertices;
-        }
+    mInitialized = true;
+    mNumVertexs = _numVertices;
+}
 
-        virtual void Bind(ID3D11DeviceContextPtr _device)
-        {
-            uint32 offset = 0, stride = GetStride();
-            _device->IASetVertexBuffers(0, 1, &mBuffer, &stride, &offset);
-        }
+virtual void Bind(ID3D11DeviceContextPtr _device)
+{
+    uint32 offset = 0, stride = GetStride();
+    _device->IASetVertexBuffers(0, 1, &mBuffer, &stride, &offset);
+}
 
-        inline uint32 GetNumVertexs() const { return mNumVertexs; }
-        inline void   SetNumVertexs(uint32 _numVertex) { mNumVertexs = _numVertex; }
-        inline uint32 GetStride() const { return sizeof(TVertexType); }
+inline uint32 GetNumVertexs() const { return mNumVertexs; }
+inline void   SetNumVertexs(uint32 _numVertex) { mNumVertexs = _numVertex; }
+inline uint32 GetStride() const { return sizeof(TVertexType); }
     protected:
         uint32        mNumVertexs;
     };
@@ -220,6 +220,34 @@ namespace render
         uint32 mNumIndices;
     };
 
+    class CDynamicIndexBuffer : public CIndexBuffer
+    {
+    public:
+        CDynamicIndexBuffer()
+            : CIndexBuffer()
+        {
+        }
+
+        virtual ~CDynamicIndexBuffer()
+        {
+        }
+
+        void Apply(ID3D11DevicePtr _device, ID3D11DeviceContextPtr _deviceCtx, const uint32* _data, uint32 _numIndices)
+        {
+            HELIOSASSERT(mInitialized);
+
+            if (mNumIndices != _numIndices )
+            {
+                ShutDown();
+                Initialize(_device, _data, mNumIndices);
+            }
+            else
+            {
+                //TODO
+            }
+        }
+    };
+
     template< class TVertexType >
     class CDynamicVertexBuffer : public CVertexBuffer< TVertexType >
     {
@@ -234,13 +262,22 @@ namespace render
         {
         }
 
-        void Apply(ID3D11DeviceContextPtr _device, const TVertexType * _data)
+        void Apply(ID3D11DevicePtr _device, ID3D11DeviceContextPtr _deviceCtx , const TVertexType * _data, uint32 _numVertices)
         {
             HELIOSASSERT(mInitialized);
-            D3D11_MAPPED_SUBRESOURCE mappedResource;
-            DXCall(_device->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
-            CopyMemory(mappedResource.pData, &_data, sizeof(TVertexType)*mNumVertexs);
-            _device->Unmap(mBuffer, 0);
+
+            if (mNumVertexs != _numVertices )
+            {
+                ShutDown();
+                Initialize(_device, _data, _numVertices);
+            }
+            else
+            {
+                D3D11_MAPPED_SUBRESOURCE mappedResource;
+                DXCall(_deviceCtx->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
+                CopyMemory(mappedResource.pData, &_data, sizeof(TVertexType)*mNumVertexs);
+                _deviceCtx->Unmap(mBuffer, 0);
+            }
         }
     };
 }

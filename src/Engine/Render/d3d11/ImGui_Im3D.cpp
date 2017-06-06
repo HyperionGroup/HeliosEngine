@@ -1,4 +1,6 @@
 #include "Render.h"
+
+#include <imgui.h>
 #include "ImGui_Im3D.h"
 
 #include "Device.h"
@@ -12,6 +14,10 @@
 
 #include "Shaders/Shader.h"
 
+extern bool        ImGui_ImplDX11_Init(void* hwnd, ID3D11Device* device, ID3D11DeviceContext* device_context);
+extern void        ImGui_ImplDX11_Shutdown();
+extern void        ImGui_ImplDX11_NewFrame();
+
 namespace render
 {
     namespace ImGui_Im3D
@@ -23,113 +29,15 @@ namespace render
         };
 
         CConstantBuffer< Layout > mCBIm3d;
-        CConstantBuffer< Float4x4 > mCBImgui;
-        CDynamicVertexBuffer< Im3d::VertexData > mVB;
+        CDynamicVertexBuffer< CIm3dVertex > mVBIm3d;
 
-        std::shared_ptr<CShader> mImGuiShader;
         std::shared_ptr<CShader> mPointsShader;
         std::shared_ptr<CShader> mLinesShader;
         std::shared_ptr<CShader> mTrianglesShader;
 
-
-
-        /*
-        void ImGui_Draw(ImGui::ImDrawData* _drawData)
-        {
-        ImGuiIO& io = ImGui::GetIO();
-        ID3D11Device* d3d = g_Example->m_d3dDevice;
-        ID3D11DeviceContext* ctx = g_Example->m_d3dDeviceCtx;
-
-        // (re)alloc vertex/index buffers
-        static int s_vertexBufferSize = 0;
-        if (!g_ImGuiVertexBuffer || s_vertexBufferSize < _drawData->TotalVtxCount) {
-        if (g_ImGuiVertexBuffer) {
-        g_ImGuiVertexBuffer->Release();
-        g_ImGuiVertexBuffer = nullptr;
-        }
-        s_vertexBufferSize = _drawData->TotalVtxCount;
-        g_ImGuiVertexBuffer = CreateVertexBuffer(s_vertexBufferSize * sizeof(ImDrawVert), D3D11_USAGE_DYNAMIC);
-        }
-        static int s_indexBufferSize = 0;
-        if (!g_ImGuiIndexBuffer || s_indexBufferSize < _drawData->TotalIdxCount) {
-        if (g_ImGuiIndexBuffer) {
-        g_ImGuiIndexBuffer->Release();
-        g_ImGuiIndexBuffer = nullptr;
-        }
-        s_indexBufferSize = _drawData->TotalIdxCount;
-        g_ImGuiIndexBuffer = CreateIndexBuffer(s_indexBufferSize * sizeof(ImDrawIdx), D3D11_USAGE_DYNAMIC);
-        }
-
-        // copy and convert all vertices into a single contiguous buffer
-        ImDrawVert* vtxDst = (ImDrawVert*)MapBuffer(g_ImGuiVertexBuffer, D3D11_MAP_WRITE_DISCARD);
-        ImDrawIdx* idxDst = (ImDrawIdx*)MapBuffer(g_ImGuiIndexBuffer, D3D11_MAP_WRITE_DISCARD);
-        for (int i = 0; i < _drawData->CmdListsCount; ++i) {
-        const ImDrawList* cmdList = _drawData->CmdLists[i];
-        memcpy(vtxDst, cmdList->VtxBuffer.Data, cmdList->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy(idxDst, cmdList->IdxBuffer.Data, cmdList->IdxBuffer.Size * sizeof(ImDrawIdx));
-        vtxDst += cmdList->VtxBuffer.Size;
-        idxDst += cmdList->IdxBuffer.Size;
-        }
-        UnmapBuffer(g_ImGuiVertexBuffer);
-        UnmapBuffer(g_ImGuiIndexBuffer);
-
-        // update constant buffer
-        *(Mat4*)MapBuffer(g_ImGuiConstantBuffer, D3D11_MAP_WRITE_DISCARD)
-        = Mat4(
-        2.0f / io.DisplaySize.x, 0.0f, 0.0f, -1.0f,
-        0.0f, 2.0f / -io.DisplaySize.y, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 0.0f
-        );
-        UnmapBuffer(g_ImGuiConstantBuffer);
-
-        // set state
-        D3D11_VIEWPORT viewport = {};
-        viewport.Width = ImGui::GetIO().DisplaySize.x;
-        viewport.Height = ImGui::GetIO().DisplaySize.y;
-        viewport.MinDepth = 0.0f;
-        viewport.MaxDepth = 1.0f;
-        viewport.TopLeftX = viewport.TopLeftY = 0.0f;
-        ctx->RSSetViewports(1, &viewport);
-
-        unsigned int stride = sizeof(ImDrawVert);
-        unsigned int offset = 0;
-        ctx->IASetInputLayout(g_ImGuiInputLayout);
-        ctx->IASetVertexBuffers(0, 1, &g_ImGuiVertexBuffer, &stride, &offset);
-        ctx->IASetIndexBuffer(g_ImGuiIndexBuffer, sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
-        ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-        ctx->VSSetShader(g_ImGuiVertexShader, nullptr, 0);
-        ctx->VSSetConstantBuffers(0, 1, &g_ImGuiConstantBuffer);
-        ctx->PSSetShader(g_ImGuiPixelShader, nullptr, 0);
-        ctx->PSSetSamplers(0, 1, &g_ImGuiFontSampler);
-
-        ctx->OMSetBlendState(g_ImGuiBlendState, nullptr, 0xffffffff);
-        ctx->OMSetDepthStencilState(g_ImGuiDepthStencilState, 0);
-        ctx->RSSetState(g_ImGuiRasterizerState);
-
-        int vtxOffset = 0;
-        int idxOffset = 0;
-        for (int i = 0; i < _drawData->CmdListsCount; ++i) {
-        const ImDrawList* cmdList = _drawData->CmdLists[i];
-        for (const ImDrawCmd* pcmd = cmdList->CmdBuffer.begin(); pcmd != cmdList->CmdBuffer.end(); ++pcmd) {
-        if (pcmd->UserCallback) {
-        pcmd->UserCallback(cmdList, pcmd);
-        }
-        else {
-        const D3D11_RECT r = { (LONG)pcmd->ClipRect.x, (LONG)pcmd->ClipRect.y, (LONG)pcmd->ClipRect.z, (LONG)pcmd->ClipRect.w };
-        ctx->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView**)&pcmd->TextureId);
-        ctx->RSSetScissorRects(1, &r);
-        ctx->DrawIndexed(pcmd->ElemCount, idxOffset, vtxOffset);
-        }
-        idxOffset += pcmd->ElemCount;
-        }
-        vtxOffset += cmdList->VtxBuffer.Size;
-        }
-        }
-        */
-
         void ShutDown()
         {
-
+            ImGui_ImplDX11_Shutdown();
         }
 
         void Im3D_Draw(const Im3d::DrawList& _drawList)
@@ -152,21 +60,7 @@ namespace render
             mCBIm3d.Data.mViewProj = lEngine.GetMainCamera()->GetViewProjection();
 
             mCBIm3d.Apply(ctx);
-
-            // If is not the first execution, and the number of vertex has changed re-init the VB
-            if (mVB.IsInitizalized() && mVB.GetNumVertexs() != _drawList.m_vertexCount)
-                mVB.ShutDown();
-
-            // If is the first execution or the VB has been shutdown init the VB
-            if (!mVB.IsInitizalized())
-            {
-                mVB.Initialize(d3d, _drawList.m_vertexData, _drawList.m_vertexCount);
-            }
-            else
-            {
-                // If the only thing that has changed is the VB data itself only update the VB
-                mVB.Apply(ctx, _drawList.m_vertexData);
-            }
+            mVBIm3d.Apply(d3d, ctx, (CIm3dVertex*)_drawList.m_vertexData, _drawList.m_vertexCount);
 
             mCBIm3d.BindVS(ctx, 0);
 
@@ -177,7 +71,7 @@ namespace render
                 ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
                 mPointsShader->Bind(ctx);
                 mCBIm3d.BindGS(ctx, 0);
-                mVB.Bind(ctx);
+                mVBIm3d.Bind(ctx);
                 ctx->Draw(_drawList.m_vertexCount, 0);
                 mPointsShader->Unbind(ctx);
                 break;
@@ -185,14 +79,14 @@ namespace render
                 ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
                 mLinesShader->Bind(ctx);
                 mCBIm3d.BindGS(ctx, 0);
-                mVB.Bind(ctx);
+                mVBIm3d.Bind(ctx);
                 ctx->Draw(_drawList.m_vertexCount, 0);
                 mLinesShader->Unbind(ctx);
                 break;
             case Im3d::DrawPrimitive_Triangles:
                 ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
                 mTrianglesShader->Bind(ctx);
-                mVB.Bind(ctx);
+                mVBIm3d.Bind(ctx);
                 ctx->Draw(_drawList.m_vertexCount, 0);
                 mTrianglesShader->Unbind(ctx);
                 break;
@@ -207,10 +101,10 @@ namespace render
         // which is necessary for interacting with gizmos.
         void Update(float dt)
         {
-            AppData& ad = GetAppData();
-
             helios::CEngine& lEngine = helios::CEngine::GetInstance();
-            helios::CWindow& lWindow = lEngine.GetWindow();
+            render::CWindow& lWindow = lEngine.GetWindow();
+
+            AppData& ad = GetAppData();
 
             graphics::CCameraPtr lMainCamera = lEngine.GetMainCamera();
             const Float4x4& lProjection = lMainCamera->GetProjection();
@@ -268,8 +162,18 @@ namespace render
             ad.m_snapTranslation = ctrlDown ? 0.1f : 0.0f;
             ad.m_snapRotation = ctrlDown ? Im3d::Radians(15.0f) : 0.0f;
             ad.m_snapScale = ctrlDown ? 0.5f : 0.0f;
+        }
 
+        void NewFrame()
+        {
             Im3d::NewFrame();
+            ImGui_ImplDX11_NewFrame();
+        }
+
+        void Render()
+        {
+            Im3d::Draw();
+            ImGui::Render();
         }
 
         void Initialize()
@@ -285,19 +189,13 @@ namespace render
             mPointsShader = lEngine.GetAssetManager().Get<CShader>("im3d_points_shader");
             mLinesShader = lEngine.GetAssetManager().Get<CShader>("im3d_lines_shader");
             mTrianglesShader = lEngine.GetAssetManager().Get<CShader>("im3d_triangles_shader");
-            mImGuiShader = lEngine.GetAssetManager().Get<CShader>("imgui");
+
 
             Im3d::GetAppData().drawCallback = &Im3D_Draw;
 
-            /*ImGuiIO& io = ImGui::GetIO();
+            // Setup ImGui binding
+            ImGui_ImplDX11_Init(lEngine.GetWindow().winId(), d3d, ctx);
 
-            unsigned char* txbuf;
-            int txX, txY;
-            io.Fonts->GetTexDataAsAlpha8(&txbuf, &txX, &txY);
-            CreateTexture2D(txX, txY, DXGI_FORMAT_R8_UNORM, &g_ImGuiFontResourceView, txbuf)->Release();
-
-            io.Fonts->TexID = (void*)g_ImGuiFontResourceView;
-            io.RenderDrawListsFn = &ImGui_Draw;*/
         }
     }
 }

@@ -5,7 +5,7 @@
 
 #include <windows.h>
 
-namespace helios
+namespace render
 {
     class CWindow
     {
@@ -24,6 +24,8 @@ namespace helios
         
         bool HasFocus() const;
         Float2 GetWindowRelativeCursor() const;
+
+        HWND winId() const { return hwnd; }
 
     protected:
         WNDCLASSEX wc;
