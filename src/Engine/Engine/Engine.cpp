@@ -6,7 +6,9 @@
 #include "Shaders/ShaderStages/GeometryStage.h"
 #include "Geometry/Vertex.h"
 
-#include "Im3DDraw.h"
+#include "Cameras/Camera.h"
+
+#include "ImGui_Im3D.h"
 
 namespace helios
 {
@@ -32,7 +34,14 @@ namespace helios
             RegisterSerializableEntities();
             RegisterGameAssets();
 
-            render::Im3d_Draw::Initialize();
+            render::ImGui_Im3D::Initialize();
+
+            // Set up the main camera
+            mCamera = std::make_shared< graphics::CCamera >();
+            mCamera->SetIsOrtho(false);
+            mCamera->SetPosition(Float3(0.0f, 2.0f, 3.0f));
+            mCamera->SetForward(Normalize(Float3(0.0f, -0.5f, -1.0f)));
+            mCamera->SetFovDeg(50.0f);
 
             mInitialized = true;
         }
@@ -58,7 +67,7 @@ namespace helios
 
     void CEngine::ShutDown()
     {
-        render::Im3d_Draw::ShutDown();
+        render::ImGui_Im3D::ShutDown();
         mWindow.ShutDown();
     }
 

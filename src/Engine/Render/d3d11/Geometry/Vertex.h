@@ -17,7 +17,7 @@ namespace render
         {
             D3D11_INPUT_ELEMENT_DESC lDesc[] =
             {
-                { "SV_POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,      0, (UINT)offsetof(CMeshVertex, position), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,         0, (UINT)offsetof(CMeshVertex, position), D3D11_INPUT_PER_VERTEX_DATA, 0 },
                 { "NORMAL",      0, DXGI_FORMAT_R32G32B32_FLOAT,      0, (UINT)offsetof(CMeshVertex, normal),   D3D11_INPUT_PER_VERTEX_DATA, 0 },
                 { "TANGENT",     0, DXGI_FORMAT_R32G32B32A32_FLOAT,   0, (UINT)offsetof(CMeshVertex, tangent),  D3D11_INPUT_PER_VERTEX_DATA, 0 },
                 { "BINORMAL",    0, DXGI_FORMAT_R32G32B32A32_FLOAT,   0, (UINT)offsetof(CMeshVertex, binormal), D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -53,15 +53,15 @@ namespace render
     public:
         Float3 position;
         Float2 uv;
+        uint32 color;
         CScreenVertex() = default;
         virtual ~CScreenVertex() = default;
         static void CreateInputLayout(ID3D11Device* _device, ID3DBlob *_vsBlob, ID3D11InputLayout **_inputLayout)
         {
-            HELIOSASSERT(false);
-            D3D11_INPUT_ELEMENT_DESC lDesc[] =
-            {
-                { "POSITION_SIZE", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,   0, (UINT)offsetof(CIm3dVertex, m_positionSize), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-                { "COLOR",         0, DXGI_FORMAT_R8G8B8A8_UNORM,       0, (UINT)offsetof(CIm3dVertex, m_color),        D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            D3D11_INPUT_ELEMENT_DESC lDesc[] = {
+                { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (UINT)offsetof(CScreenVertex, position), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (UINT)offsetof(CScreenVertex, uv),  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (UINT)offsetof(CScreenVertex, color), D3D11_INPUT_PER_VERTEX_DATA, 0 },
             };
             DXCall(_device->CreateInputLayout(lDesc, ARRAYSIZE(lDesc), _vsBlob->GetBufferPointer(), _vsBlob->GetBufferSize(), _inputLayout));
         }

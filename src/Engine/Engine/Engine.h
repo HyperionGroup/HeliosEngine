@@ -34,6 +34,8 @@ namespace helios
         const render::CDevice& GetDevice() const { return mDevice; }
         render::CDevice& GetDevice() { return mDevice; }
 
+        graphics::CCameraPtr GetMainCamera() const { return mCamera; }
+
     protected:
         io::CSerializableEntityConstructor mSerializableConstructor;
         io::CAssetManager                  mAssetManager;

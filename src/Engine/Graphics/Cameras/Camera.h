@@ -1,6 +1,6 @@
 #pragma once
 
-namespace graphcs
+namespace graphics
 {
     class CCamera
     {
@@ -11,12 +11,15 @@ namespace graphcs
         void SetIsOrtho(bool _ortho) { mOrtho = _ortho; }
         bool IsOrtho() const { return mOrtho; }
 
-        void SetFovDeg(bool _fov) { mFovDeg = _fov; }
-        bool GerFovDeg() const { return mFovDeg; }
+        void SetFovDeg(float _fov) { mFovDeg = _fov; }
+        float GetFovDeg() const { return mFovDeg; }
 
         void SetPosition(const Float3& _position) { mPosition = _position;  }
         const Float3& GetPosition() const { return mPosition; }
+        void SetForward(const Float3& _forward) { mForward = _forward; }
+        const Float3& GetForward() const { return mForward; }
 
+        const Float4x4& GetWorld() const { return mWorld; }
         const Float4x4& GetView() const { return mView; }
         const Float4x4& GetProjection() const { return mProjection; }
         const Float4x4& GetViewProjection() const { return mViewProjection; }

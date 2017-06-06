@@ -61,6 +61,23 @@
 					"macros" : "PIXEL_SHADER|TRIANGLES"
 				}
 			]
+		},
+		{
+			"type": "shader",
+			"name": "imgui",
+			"stages" :
+			[
+				{
+					"type" : "vs_screen",
+					"src": "im3d/imgui.shader",
+					"macros" : "VERTEX_SHADER"
+				},
+				{
+					"type" : "ps",
+					"src": "im3d/imgui.shader",
+					"macros" : "PIXEL_SHADER"
+				}
+			]
 		}
 	]
 }
