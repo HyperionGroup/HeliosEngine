@@ -3,14 +3,16 @@
 #include "StringUtils.h"
 #include "Containers.h"
 #include "Serialization/Serializable.h"
+#include "Bindings/Bindeable.h"
 
 namespace io
 {
-    class CAssetTypeHolder
+    class CAssetTypeHolder : public CBindeableEntity
     {
     public:
         CAssetTypeHolder() = default;
         virtual ~CAssetTypeHolder() = default;
+        virtual void Bind() = 0;
     };
 
     template< typename T >
@@ -21,6 +23,7 @@ namespace io
         CAssetTypeHolderT(const std::string& _tag, const std::string& _heliosConfigFilename)
             : CAssetTypeHolder()
             , mHeliosConfigFilename(_heliosConfigFilename)
+            , mTag(_tag)
         {
             if (!_heliosConfigFilename.empty())
             {
@@ -38,8 +41,22 @@ namespace io
             }
         }
         virtual ~CAssetTypeHolderT() = default;
+        virtual void Bind()
+        {
+            if (ImGui::CollapsingHeader(mTag.c_str()))
+            {
+                ImGui::Indent();
+                for (size_t i = 0; i < Length(); ++i)
+                {
+                    std::shared_ptr<T> lAsset = operator[](i);
+                    lAsset->Bind();
+                }
+                ImGui::Unindent();
+            }
+        }
 
     protected:
         std::string mHeliosConfigFilename;
+        std::string mTag;
     };
 }

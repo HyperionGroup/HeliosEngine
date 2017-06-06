@@ -67,9 +67,13 @@ namespace helios
 
             render::ImGui_Im3D::Update(0.0f);
 
-            //ImGui::SetNextWindowPos(ImVec2(0, 0)); 
-            //ImGui::SetNextWindowSize()// Normally user code doesn't need/want to call it because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowTestWindow(&show_test_window);
+            ImGui::SetNextWindowPos(ImVec2(0, 0));
+            if( ImGui::Begin("Project") )
+            {
+                mAssetManager.Bind();
+            }
+            ImGui::End();
+            
 
             mDevice.ImmediateContext()->ClearRenderTargetView(mDevice.BackBuffer(), lBackColor);
             render::ImGui_Im3D::Render();

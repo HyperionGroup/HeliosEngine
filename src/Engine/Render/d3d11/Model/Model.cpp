@@ -22,6 +22,8 @@ namespace render
     {
         mFilename = sModelsFilename + _node["filename"].GetString();
 
+        SetName(_node["name"].GetString());
+
         // Create an instance of the Importer class
         Assimp::Importer importer;
         // And have it read the given file with some example postprocessing
@@ -96,5 +98,13 @@ namespace render
     void CModel::Serialize(io::CSerializableNode& _node) const
     {
 
+    }
+
+    void CModel::Bind()
+    {
+        if (ImGui::CollapsingHeader(GetName().c_str()))
+        {
+
+        }
     }
 }

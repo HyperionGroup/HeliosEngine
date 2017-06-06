@@ -5,7 +5,7 @@
 namespace io
 {
     class CAsset;
-    class CAssetManager
+    class CAssetManager: public io::CBindeableEntity
     {
     public:
         template <typename T>
@@ -22,6 +22,14 @@ namespace io
             HELIOSASSERT(!_name.empty() && mAssets.find(typeid(T).name()) != mAssets.end());
             std::shared_ptr<CAssetTypeHolderT<T>> lHolder = std::static_pointer_cast<CAssetTypeHolderT<T>>(mAssets[typeid(T).name()]);
             return lHolder->Get(_name);
+        }
+
+        virtual void Bind()
+        {
+            for (auto& holder : mAssets)
+            {
+                holder.second->Bind();
+            }
         }
 
         std::map <std::string, std::shared_ptr<CAssetTypeHolder> > mAssets;

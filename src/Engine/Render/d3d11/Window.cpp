@@ -132,8 +132,8 @@ namespace render
     {
         RECT rect;
         GetClientRect(hwnd, &rect);
-        float w = (float)(rect.right - rect.left);
-        float h = (float)(rect.bottom - rect.top);
+        int  w = (rect.right - rect.left);
+        int h = (rect.bottom - rect.top);
 
         if (GetWidth() != w || GetHeight() != h)
         {

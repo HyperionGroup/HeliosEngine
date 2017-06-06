@@ -2,14 +2,16 @@
 
 #include "ShaderStages\ShaderStage.h"
 #include "Serialization\Serializable.h"
+#include "Bindings\Bindeable.h"
 #include "Name.h"
 
 namespace render
 {
     class CShaderStage;
-    class CShader : public io::CSerializableEntity, public core::CName
+    class CShader : public io::CSerializableEntity, public core::CName, public io::CBindeableEntity
     {
         SERIALIZABLE
+        BINDEABLE
     public:
         CShader();
         virtual ~CShader() = default;
