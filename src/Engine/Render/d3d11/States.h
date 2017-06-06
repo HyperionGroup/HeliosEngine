@@ -132,6 +132,14 @@ protected:
 
 class SamplerStates
 {
+protected:
+    SamplerStates() = default;
+    virtual ~SamplerStates() = default;
+    void Initialize(ID3D11Device* device);
+    void ShutDown();
+    void Apply(ID3D11DeviceContext* _context, SamplerStates _state);
+
+    friend class CDevice;
 
     ID3D11SamplerStatePtr linear;
     ID3D11SamplerStatePtr linearClamp;
@@ -141,9 +149,6 @@ class SamplerStates
     ID3D11SamplerStatePtr shadowMap;
     ID3D11SamplerStatePtr shadowMapPCF;
 public:
-
-    void Initialize(ID3D11Device* device);
-
     ID3D11SamplerState* Linear() { return linear; };
     ID3D11SamplerState* LinearClamp() { return linearClamp; };
     ID3D11SamplerState* LinearBorder() { return linearBorder; };

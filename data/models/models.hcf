@@ -1,0 +1,10 @@
+{
+	"models":
+	[
+		{
+			"type": "model",
+			"name": "cube",
+			"filename" : "cube/cube.obj"
+		}
+	]
+}

@@ -1,7 +1,5 @@
 #include "Engine.h"
 
-#pragma once
-
 #include "Window.h"
 #include "Engine.h"
 #include "d3d11\Device.h"

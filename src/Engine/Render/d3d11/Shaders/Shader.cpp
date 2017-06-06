@@ -4,7 +4,7 @@
 #include "ShaderStages\PixelStage.h"
 #include "ShaderStages\GeometryStage.h"
 #include "Device.h"
-#include "Geometry/Vertex.h"
+#include "Vertex.h"
 #include "Engine.h"
 
 namespace render
