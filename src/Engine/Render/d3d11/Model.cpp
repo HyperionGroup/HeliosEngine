@@ -85,7 +85,7 @@ namespace render
                 CVertexBuffer< render::CMeshVertex >* lVB = new render::CVertexBuffer< render::CMeshVertex >();
                 CIndexBuffer *lIB = new render::CIndexBuffer();
                 lVB->Initialize(lDevice.Device(), lGeometryData.data(), lNumVertices );
-                lIB->Initialize(lDevice.Device(), lIndices.data(), lIndices.size() );
+                lIB->Initialize(lDevice.Device(), lIndices.data(), static_cast<uint32>(lIndices.size() ) );
                 mGeometries[iMeshes] = new CTemplatedIndexedGeometry< render::CMeshVertex >(lVB, lIB, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
             }
         }
@@ -100,11 +100,11 @@ namespace render
 
     }
 
-    void CModel::Bind()
+    void CModel::OnGui()
     {
-        if (ImGui::CollapsingHeader(GetName().c_str()))
+        if (CollapsingHeader(GetName()))
         {
-
+            LabelText("Filename", mFilename);
         }
     }
 }

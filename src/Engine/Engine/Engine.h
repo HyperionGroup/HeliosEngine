@@ -7,12 +7,13 @@
 
 #include "Serialization/Serializable.h"
 #include "Assets/AssetManager.h"
+#include "ImmediateGui/ImmediateGui.h"
 #include "Window.h"
 #include "d3d11/Device.h"
 
 namespace helios
 {
-    class CEngine : public core::CSingleton< CEngine >
+    class CEngine : public core::CSingleton< CEngine >, public gui::CImmediateGui
     {
     public:
         CEngine() = default;
@@ -21,6 +22,8 @@ namespace helios
         void Initialize();
         void ShutDown();
         void Run();
+
+        virtual void OnGui();
 
         const io::CSerializableEntityConstructor& GetSerializableEntityConstructor() const { return mSerializableConstructor;  }
         io::CSerializableEntityConstructor& GetSerializableEntityConstructor() { return mSerializableConstructor; }

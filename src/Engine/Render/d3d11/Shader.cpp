@@ -1,8 +1,6 @@
 #include "Render.h"
 #include "Shader.h"
-#include "ShaderStages\VertexStage.h"
-#include "ShaderStages\PixelStage.h"
-#include "ShaderStages\GeometryStage.h"
+#include "ShaderStage.h"
 #include "Device.h"
 #include "Vertex.h"
 #include "Engine.h"
@@ -20,17 +18,20 @@ namespace render
         for (auto& lShader : mShaders) lShader->Bind(_device);
     }
 
-    void CShader::Bind()
-    {
-        if (ImGui::CollapsingHeader(GetName().c_str()))
-        {
-
-        }
-    }
-
     void CShader::Unbind(ID3D11DeviceContextPtr _device)
     {
         for (auto& lShader : mShaders) lShader->Unbind(_device);
+    }
+
+    void CShader::OnGui()
+    {
+        if (CollapsingHeader(GetName()))
+        {
+            for (auto& lShader : mShaders)
+            {
+
+            }
+        }
     }
 
     void CShader::Deserialize(const io::CSerializableNode& _node)

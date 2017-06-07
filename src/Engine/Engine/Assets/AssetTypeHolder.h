@@ -3,16 +3,16 @@
 #include "StringUtils.h"
 #include "Containers.h"
 #include "Serialization/Serializable.h"
-#include "Bindings/Bindeable.h"
+#include "ImmediateGui/ImmediateGui.h"
 
 namespace io
 {
-    class CAssetTypeHolder : public CBindeableEntity
+    class CAssetTypeHolder : public gui::CImmediateGui
     {
     public:
         CAssetTypeHolder() = default;
         virtual ~CAssetTypeHolder() = default;
-        virtual void Bind() = 0;
+        virtual void OnGui() = 0;
     };
 
     template< typename T >
@@ -41,17 +41,14 @@ namespace io
             }
         }
         virtual ~CAssetTypeHolderT() = default;
-        virtual void Bind()
+        virtual void OnGui()
         {
-            if (ImGui::CollapsingHeader(mTag.c_str()))
+            if (CollapsingHeader(mTag.c_str()))
             {
-                ImGui::Indent();
+                Indent();
                 for (size_t i = 0; i < Length(); ++i)
-                {
-                    std::shared_ptr<T> lAsset = operator[](i);
-                    lAsset->Bind();
-                }
-                ImGui::Unindent();
+                    GetByIdx(i)->OnGui();
+                Unindent();
             }
         }
 

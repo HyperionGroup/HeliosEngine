@@ -43,7 +43,7 @@ namespace core
             }
         }
 
-        virtual std::shared_ptr<T> operator[](size_t _idx) const
+        virtual std::shared_ptr<T> GetByIdx(size_t _idx) const
         {
             return mArray[_idx];
         }

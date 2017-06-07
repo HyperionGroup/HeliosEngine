@@ -6,13 +6,12 @@
 #include "Device.h"
 #include "Vertex.h"
 #include "Buffer.h"
-#include "Shaders/ShaderStages/VertexStage.h"
+#include "Shader.h"
+#include "ShaderStage.h"
 
 #include "Cameras/Camera.h"
 
 #include "Engine.h"
-
-#include "Shaders/Shader.h"
 
 extern bool        ImGui_ImplDX11_Init(void* hwnd, ID3D11Device* device, ID3D11DeviceContext* device_context);
 extern void        ImGui_ImplDX11_Shutdown();
@@ -195,6 +194,9 @@ namespace render
 
             // Setup ImGui binding
             ImGui_ImplDX11_Init(lEngine.GetWindow().winId(), d3d, ctx);
+
+            ImGuiIO& io = ImGui::GetIO();
+            io.Fonts->AddFontFromFileTTF("fonts/Roboto-Regular.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
 
         }
     }

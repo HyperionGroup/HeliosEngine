@@ -51,4 +51,24 @@ namespace core
             return "";
         }
     }
+
+    std::string ToUpperCase(const std::string& _str)
+    {
+        std::string lUpperLabel = _str;
+        for (unsigned int i = 0; i < _str.length(); i++)
+        {
+            lUpperLabel[i] = toupper(_str[i]);
+        }
+        return lUpperLabel;
+    }
+
+    std::string ToLowerCase(const std::string& _str)
+    {
+        std::string lLower = _str;
+        for (unsigned int i = 0; i < _str.length(); i++)
+        {
+            lLower[i] = tolower(_str[i]);
+        }
+        return lLower;
+    }
 }

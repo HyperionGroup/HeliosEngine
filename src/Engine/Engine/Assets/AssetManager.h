@@ -5,7 +5,7 @@
 namespace io
 {
     class CAsset;
-    class CAssetManager: public io::CBindeableEntity
+    class CAssetManager : public gui::CImmediateGui
     {
     public:
         template <typename T>
@@ -24,12 +24,10 @@ namespace io
             return lHolder->Get(_name);
         }
 
-        virtual void Bind()
+        virtual void OnGui()
         {
             for (auto& holder : mAssets)
-            {
-                holder.second->Bind();
-            }
+                holder.second->OnGui();
         }
 
         std::map <std::string, std::shared_ptr<CAssetTypeHolder> > mAssets;

@@ -145,4 +145,66 @@ namespace render
     {
 
     }
+
+    void CPixelStage::Initialize(ID3D11DevicePtr _device)
+    {
+        CShaderStage::Initialize(_device);
+        DXCall(_device->CreatePixelShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_PixelShader));
+        mInitialized = false;
+    }
+
+    void CPixelStage::ShutDown()
+    {
+        if (mInitialized)
+        {
+            DXCheckedRelease(m_PixelShader);
+            mInitialized = false;
+        }
+    }
+
+    void CPixelStage::Bind(ID3D11DeviceContextPtr _device)
+    {
+        _device->PSSetShader(m_PixelShader, nullptr, 0);
+    }
+
+    void CPixelStage::Unbind(ID3D11DeviceContextPtr _device)
+    {
+        _device->PSSetShader(nullptr, nullptr, 0);
+    }
+
+    const char* CPixelStage::GetShaderModel()
+    {
+        return helios::CEngine::GetInstance().GetDevice().GetPixelStageFeatureLevel();
+    }
+
+    void CGeometryStage::Initialize(ID3D11DevicePtr _device)
+    {
+        CShaderStage::Initialize(_device);
+        DXCall(_device->CreateGeometryShader(m_Blob->GetBufferPointer(), m_Blob->GetBufferSize(), nullptr, &m_GeometryShader));
+        mInitialized = true;
+    }
+
+    void CGeometryStage::ShutDown()
+    {
+        if (mInitialized)
+        {
+            DXCheckedRelease(m_GeometryShader);
+            mInitialized = false;
+        }
+    }
+
+    void CGeometryStage::Bind(ID3D11DeviceContextPtr _device)
+    {
+        _device->GSSetShader(m_GeometryShader, nullptr, 0);
+    }
+
+    void CGeometryStage::Unbind(ID3D11DeviceContextPtr _device)
+    {
+        _device->GSSetShader(nullptr, nullptr, 0);
+    }
+
+    const char* CGeometryStage::GetShaderModel()
+    {
+        return helios::CEngine::GetInstance().GetDevice().GetGeometryStageFeatureLevel();
+    }
 }

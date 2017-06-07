@@ -1,17 +1,17 @@
 #include "Engine.h"
 #include "Core.h"
 
-#include "Shaders/Shader.h"
-#include "Shaders/ShaderStages/VertexStage.h"
-#include "Shaders/ShaderStages/PixelStage.h"
-#include "Shaders/ShaderStages/GeometryStage.h"
+#include "Shader.h"
+#include "ShaderStage.h"
 #include "Vertex.h"
-#include "Model\Model.h"
+#include "Model.h"
 
 #include "Cameras/Camera.h"
 
 #include "ImGui_Im3D.h"
-#include <imgui.h>
+
+#include "Quad.h"
+
 
 namespace helios
 {
@@ -47,6 +47,8 @@ namespace helios
             mCamera->SetFovDeg(50.0f);
 
             mInitialized = true;
+
+            render::CQuad lQuad;
         }
     }
 
@@ -64,21 +66,19 @@ namespace helios
         while (mWindow.Update())
         {
             render::ImGui_Im3D::NewFrame();
-
             render::ImGui_Im3D::Update(0.0f);
-
-            ImGui::SetNextWindowPos(ImVec2(0, 0));
-            if( ImGui::Begin("Project") )
-            {
-                mAssetManager.Bind();
-            }
-            ImGui::End();
-            
-
+            OnGui();
             mDevice.ImmediateContext()->ClearRenderTargetView(mDevice.BackBuffer(), lBackColor);
             render::ImGui_Im3D::Render();
             mDevice.Present();
         }
+    }
+
+    void CEngine::OnGui()
+    {
+        BeginWindow("Project", Float2(0, 0));
+        mAssetManager.OnGui();
+        EndWindow();
     }
 
     void CEngine::ShutDown()
