@@ -1,5 +1,7 @@
 #pragma once
 #include "Render.h"
+#include "Vertex.h"
+#include "Buffer.h"
 
 namespace render
 {
@@ -32,7 +34,7 @@ namespace render
     class CTemplatedGeometry : public CGeometry
     {
     public:
-        CTemplatedGeometry(CVertexBuffer<TVertexType>* VertexBuffer, D3D11_PRIMITIVE_TOPOLOGY _topology )
+        CTemplatedGeometry( std::shared_ptr< CVertexBuffer<TVertexType> > VertexBuffer, D3D11_PRIMITIVE_TOPOLOGY _topology )
             : CGeometry(_topology)
             , m_VertexBuffer(VertexBuffer)
         {
@@ -40,7 +42,6 @@ namespace render
 
         virtual ~CTemplatedGeometry()
         {
-            delete m_VertexBuffer;
         }
 
         virtual void Render(ID3D11DeviceContextPtr _device)
@@ -51,7 +52,7 @@ namespace render
         }
 
     protected:
-        CVertexBuffer<TVertexType> *m_VertexBuffer;
+        std::shared_ptr< CVertexBuffer<TVertexType > > m_VertexBuffer;
     };
 
     template < typename TVertexType >
@@ -83,4 +84,18 @@ namespace render
         CIndexBuffer*  m_IndexBuffer;
         CVertexBuffer<TVertexType> * m_VertexBuffer;
     };
+
+#define GEOMETRY_DEFINITION(ClassName, TopologyType)\
+template< class T > \
+class ClassName : public CTemplatedGeometry<T>\
+{\
+public:\
+  ClassName( std::shared_ptr< CVertexBuffer< T > > _vb )\
+    : CTemplatedGeometry( _vb, TopologyType)\
+  {}\
+}; \
+
+    GEOMETRY_DEFINITION(CGeometryLinesList, D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+    GEOMETRY_DEFINITION(CGeometryTriangleList, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    GEOMETRY_DEFINITION(CGeometryTriangleStrip, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 }

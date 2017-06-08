@@ -7,10 +7,12 @@ namespace Im3d
 
 namespace render
 {
-    namespace Im3d_Draw
+    namespace ImGui_Im3D
     {
         void Initialize();
+        void Update( float dt );
+        void NewFrame();
+        void Render();
         void ShutDown();
-        void Draw(const Im3d::DrawList& _drawList);
     }
 }

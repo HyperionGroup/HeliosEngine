@@ -21,6 +21,7 @@ struct ID3D11ShaderResourceView;
 
 namespace render
 {
+    class CWindow;
     class CDevice
     {
     public:
@@ -28,7 +29,7 @@ namespace render
         CDevice();
         ~CDevice();
 
-        void Initialize(HWND outputWindow);
+        void Initialize(const render::CWindow& _window);
         void Reset();
         void Present();
 
@@ -119,6 +120,8 @@ namespace render
         BlendStates                 mBlendState;
         RasterizerStates            mRasterizerState;
         DepthStencilStates          mDepthStencilState;
+
+        bool mInitialized;
 
         const char* mVSFeatureLevel;
         const char* mPSFeatureLevel;

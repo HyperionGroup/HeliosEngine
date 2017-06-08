@@ -22,6 +22,8 @@ namespace render
     {
         mFilename = sModelsFilename + _node["filename"].GetString();
 
+        SetName(_node["name"].GetString());
+
         // Create an instance of the Importer class
         Assimp::Importer importer;
         // And have it read the given file with some example postprocessing
@@ -83,7 +85,7 @@ namespace render
                 CVertexBuffer< render::CMeshVertex >* lVB = new render::CVertexBuffer< render::CMeshVertex >();
                 CIndexBuffer *lIB = new render::CIndexBuffer();
                 lVB->Initialize(lDevice.Device(), lGeometryData.data(), lNumVertices );
-                lIB->Initialize(lDevice.Device(), lIndices.data(), lIndices.size() );
+                lIB->Initialize(lDevice.Device(), lIndices.data(), static_cast<uint32>(lIndices.size() ) );
                 mGeometries[iMeshes] = new CTemplatedIndexedGeometry< render::CMeshVertex >(lVB, lIB, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
             }
         }
@@ -96,5 +98,13 @@ namespace render
     void CModel::Serialize(io::CSerializableNode& _node) const
     {
 
+    }
+
+    void CModel::OnGui()
+    {
+        if (CollapsingHeader(GetName()))
+        {
+            LabelText("Filename", mFilename);
+        }
     }
 }

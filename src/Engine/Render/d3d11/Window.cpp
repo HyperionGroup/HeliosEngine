@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "Render.h"
 
 #include "Window.h"
 #include "Engine.h"
@@ -10,99 +10,46 @@ namespace
     static LRESULT CALLBACK WindowProc(HWND _hwnd, UINT _umsg, WPARAM _wparam, LPARAM _lparam)
     {
         ImGuiIO& imgui = ImGui::GetIO();
-        helios::CWindow lWindow = helios::CEngine::GetInstance().GetWindow();
-        switch (_umsg) {
-        case WM_SIZE: {
-            int w = (int)LOWORD(_lparam), h = (int)HIWORD(_lparam);
-            if (lWindow.GetWidth() != w || lWindow.GetHeight() != h)
-            {
-                lWindow.SetWidth(w);
-                lWindow.SetHeight(h);
-            }
-#if defined(HELIOSDX11)
-            // DX requires that we reset the backbuffer when the window resizes
-            if (g_Example->m_d3dRenderTarget) {
-                g_Example->m_d3dRenderTarget->Release();
-                g_Example->m_d3dDepthStencil->Release();
-                dxAssert(g_Example->m_dxgiSwapChain->ResizeBuffers(0, (UINT)w, (UINT)h, DXGI_FORMAT_UNKNOWN, 0));
-                ID3D11Texture2D* backBuffer;
-                dxAssert(g_Example->m_dxgiSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer));
-                dxAssert(g_Example->m_d3dDevice->CreateRenderTargetView(backBuffer, nullptr, &g_Example->m_d3dRenderTarget));
-                g_Example->m_d3dDepthStencil = CreateDepthStencil((UINT)w, (UINT)h, DXGI_FORMAT_D24_UNORM_S8_UINT);
-                g_Example->m_d3dDeviceCtx->OMSetRenderTargets(1, &g_Example->m_d3dRenderTarget, g_Example->m_d3dDepthStencil);
-                backBuffer->Release();
-            }
-
-#endif
-            break;
-        }
-        case WM_SIZING: {
-            RECT* r = (RECT*)_lparam;
-            int w = (int)(r->right - r->left);
-            int h = (int)(r->bottom - r->top);
-            if (lWindow.GetWidth() != w || lWindow.GetHeight() != h)
-            {
-                lWindow.SetWidth(w);
-                lWindow.SetHeight(h);
-            }
-            break;
-        }
+        switch (_umsg)
+        {
         case WM_LBUTTONDOWN:
+            imgui.MouseDown[0] = true;
+            return true;
         case WM_LBUTTONUP:
-            imgui.MouseDown[0] = _umsg == WM_LBUTTONDOWN;
-            break;
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-            imgui.MouseDown[2] = _umsg == WM_MBUTTONDOWN;
-            break;
+            imgui.MouseDown[0] = false;
+            return true;
         case WM_RBUTTONDOWN:
+            imgui.MouseDown[1] = true;
+            return true;
         case WM_RBUTTONUP:
-            imgui.MouseDown[1] = _umsg == WM_RBUTTONDOWN;
-            break;
+            imgui.MouseDown[1] = false;
+            return true;
+        case WM_MBUTTONDOWN:
+            imgui.MouseDown[2] = true;
+            return true;
+        case WM_MBUTTONUP:
+            imgui.MouseDown[2] = false;
+            return true;
         case WM_MOUSEWHEEL:
-            imgui.MouseWheel = (float)(GET_WHEEL_DELTA_WPARAM(_wparam)) / (float)(WHEEL_DELTA);
-            break;
+            imgui.MouseWheel += GET_WHEEL_DELTA_WPARAM(_wparam) > 0 ? +1.0f : -1.0f;
+            return true;
         case WM_MOUSEMOVE:
-            imgui.MousePos.x = LOWORD(_lparam);
-            imgui.MousePos.y = HIWORD(_lparam);
-            break;
-        case WM_SYSKEYDOWN:
-        case WM_SYSKEYUP:
+            imgui.MousePos.x = (signed short)(_lparam);
+            imgui.MousePos.y = (signed short)(_lparam >> 16);
+            return true;
         case WM_KEYDOWN:
-        case WM_KEYUP: {
-            WPARAM vk = _wparam;
-            UINT sc = (_lparam & 0x00ff0000) >> 16;
-            bool e0 = (_lparam & 0x01000000) != 0;
-            if (vk == VK_SHIFT) {
-                vk = MapVirtualKey(sc, MAPVK_VSC_TO_VK_EX);
-            }
-            switch (vk) {
-            case VK_CONTROL:
-                imgui.KeyCtrl = _umsg == WM_KEYDOWN;
-                break;
-            case VK_MENU:
-                imgui.KeyAlt = _umsg == WM_KEYDOWN;
-                break;
-            case VK_LSHIFT:
-            case VK_RSHIFT:
-                imgui.KeyShift = _umsg == WM_KEYDOWN;
-                break;
-            case VK_ESCAPE:
-                PostQuitMessage(0);
-                break;
-            default:
-                if (vk < 512) {
-                    imgui.KeysDown[vk] = _umsg == WM_KEYDOWN;
-                }
-                break;
-            };
-            return 0;
-        }
+            if (_wparam < 256)
+                imgui.KeysDown[_wparam] = 1;
+            return true;
+        case WM_KEYUP:
+            if (_wparam < 256)
+                imgui.KeysDown[_wparam] = 0;
+            return true;
         case WM_CHAR:
-            if (_wparam > 0 && _wparam < 0x10000) {
+            // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
+            if (_wparam > 0 && _wparam < 0x10000)
                 imgui.AddInputCharacter((unsigned short)_wparam);
-            }
-            return 0;
+            return true;
         case WM_PAINT:
             //HELIOSASSERT(false); // should be suppressed by calling ValidateRect()
             break;
@@ -116,7 +63,7 @@ namespace
     }
 }
 
-namespace helios
+namespace render
 {
     CWindow::CWindow()
     {
@@ -183,6 +130,21 @@ namespace helios
 
     bool CWindow::Update()
     {
+        RECT rect;
+        GetClientRect(hwnd, &rect);
+        int  w = (rect.right - rect.left);
+        int h = (rect.bottom - rect.top);
+
+        if (GetWidth() != w || GetHeight() != h)
+        {
+            SetWidth(w);
+            SetHeight(h);
+            CDevice& lDevice = helios::CEngine::GetInstance().GetDevice();
+            lDevice.SetBackBufferWidth(w);
+            lDevice.SetBackBufferHeight(h);
+            lDevice.Reset();
+        }
+
         while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
             TranslateMessage(&msg);

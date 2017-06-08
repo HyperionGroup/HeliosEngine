@@ -3,14 +3,16 @@
 #include "StringUtils.h"
 #include "Containers.h"
 #include "Serialization/Serializable.h"
+#include "ImmediateGui/ImmediateGui.h"
 
 namespace io
 {
-    class CAssetTypeHolder
+    class CAssetTypeHolder : public gui::CImmediateGui
     {
     public:
         CAssetTypeHolder() = default;
         virtual ~CAssetTypeHolder() = default;
+        virtual void OnGui() = 0;
     };
 
     template< typename T >
@@ -21,6 +23,7 @@ namespace io
         CAssetTypeHolderT(const std::string& _tag, const std::string& _heliosConfigFilename)
             : CAssetTypeHolder()
             , mHeliosConfigFilename(_heliosConfigFilename)
+            , mTag(_tag)
         {
             if (!_heliosConfigFilename.empty())
             {
@@ -38,8 +41,19 @@ namespace io
             }
         }
         virtual ~CAssetTypeHolderT() = default;
+        virtual void OnGui()
+        {
+            if (CollapsingHeader(mTag.c_str()))
+            {
+                Indent();
+                for (size_t i = 0; i < Length(); ++i)
+                    GetByIdx(i)->OnGui();
+                Unindent();
+            }
+        }
 
     protected:
         std::string mHeliosConfigFilename;
+        std::string mTag;
     };
 }

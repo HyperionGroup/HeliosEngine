@@ -1,6 +1,5 @@
 #include "Engine.h"
-
-#include "Assets/AssetManager.h"
+#include "Bindeable.h"
 
 namespace io
 {

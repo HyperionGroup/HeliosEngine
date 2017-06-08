@@ -86,3 +86,4 @@ project "imgui"
 	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d"}
 	excludes {"../src/3rdParty/imgui/examples/**.cpp", "../src/3rdParty/imgui/examples/**.h"}
 	excludes {"../src/3rdParty/im3d/examples/**.cpp", "../src/3rdParty/im3d/examples/**.h"}
+	files { "../src/3rdParty/imgui/examples/directx11_example/imgui_impl_dx11.h", "../src/3rdParty/imgui/examples/directx11_example/imgui_impl_dx11.cpp" }

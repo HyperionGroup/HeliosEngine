@@ -44,6 +44,7 @@ using namespace Im3d;
 #include <cstdio>
 #include <fstream>
 #include <memory>
+#include <locale>         // std::locale, std::toupper
 
 #define winAssert(e) HELIOSVERIFY_MSG(e, Im3d::GetPlatformErrorString(GetLastError()))
 

@@ -1,13 +1,17 @@
 #include "Engine.h"
+#include "Core.h"
 
-#include "Shaders/Shader.h"
-#include "Shaders/ShaderStages/VertexStage.h"
-#include "Shaders/ShaderStages/PixelStage.h"
-#include "Shaders/ShaderStages/GeometryStage.h"
+#include "Shader.h"
+#include "ShaderStage.h"
 #include "Vertex.h"
+#include "Model.h"
 
-#include "Model\Model.h"
-#include "Im3DDraw.h"
+#include "Cameras/Camera.h"
+
+#include "ImGui_Im3D.h"
+
+#include "Quad.h"
+
 
 #include "Materials\Material.h"
 #include "Materials\MaterialParameter.h"
@@ -16,7 +20,7 @@ namespace helios
 {
     void CEngine::Initialize()
     {
-        if (mWindow.Create())
+        if (mWindow.Create(600,800))
         {
 #if defined(HELIOSPLATFORM_WIN)
             // force the current working directory to the exe location
@@ -31,14 +35,23 @@ namespace helios
             winAssert(SetCurrentDirectory(strbuff.c_str()));
             fprintf(stdout, "Set current directory: '%s'\n", buf);
 #endif
-            mDevice.Initialize(mWindow.winID());
+            mDevice.Initialize(mWindow);
 
             RegisterSerializableEntities();
             RegisterGameAssets();
 
-            render::Im3d_Draw::Initialize();
+            render::ImGui_Im3D::Initialize();
+
+            // Set up the main camera
+            mCamera = std::make_shared< graphics::CCamera >();
+            mCamera->SetIsOrtho(false);
+            mCamera->SetPosition(Float3(0.0f, 2.0f, 3.0f));
+            mCamera->SetForward(Normalize(Float3(0.0f, -0.5f, -1.0f)));
+            mCamera->SetFovDeg(50.0f);
 
             mInitialized = true;
+
+            render::CQuad lQuad;
         }
     }
 
@@ -51,18 +64,29 @@ namespace helios
         Im3d::Context& ctx = Im3d::GetContext();
         Im3d::AppData& ad = Im3d::GetAppData();
 
+        bool show_test_window = true;
+
         while (mWindow.Update())
         {
+            render::ImGui_Im3D::NewFrame();
+            render::ImGui_Im3D::Update(0.0f);
+            OnGui();
             mDevice.ImmediateContext()->ClearRenderTargetView(mDevice.BackBuffer(), lBackColor);
-            Im3d::Draw();
-            //ImGui::Render();
+            render::ImGui_Im3D::Render();
             mDevice.Present();
         }
     }
 
+    void CEngine::OnGui()
+    {
+        BeginWindow("Project", Float2(0, 0));
+        mAssetManager.OnGui();
+        EndWindow();
+    }
+
     void CEngine::ShutDown()
     {
-        render::Im3d_Draw::ShutDown();
+        render::ImGui_Im3D::ShutDown();
         mWindow.ShutDown();
     }
 

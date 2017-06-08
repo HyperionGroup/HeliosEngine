@@ -8,6 +8,8 @@ namespace core
     std::vector<std::string>& Split(const std::string& s, char delim, std::vector<std::string>& elems);
     std::vector<std::string> Split(const std::string& s, char delim);
     std::string GetFilenameExtension(const std::string& aFilename);
+    std::string ToUpperCase(const std::string& _str);
+    std::string ToLowerCase(const std::string& _str);
 }
 
 #endif

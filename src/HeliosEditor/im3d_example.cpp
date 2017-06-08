@@ -1294,8 +1294,6 @@ bool Example::update()
 		
 	ImGui_Update();
 
-
-
 	float kCamSpeed = 2.0f;
 	float kCamSpeedMul = 10.0f;
 	float kCamRotationMul = 10.0f;

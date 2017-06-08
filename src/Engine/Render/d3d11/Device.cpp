@@ -9,6 +9,7 @@
 #include "Render.h"
 
 #include "Device.h"
+#include "Window.h"
 
 using std::wstring;
 
@@ -28,6 +29,7 @@ namespace render
         useAutoDSAsSR(false),
         vsync(true),
         numVSYNCIntervals(1)
+        , mInitialized(false)
     {
         refreshRate.Numerator = 60;
         refreshRate.Denominator = 1;
@@ -42,7 +44,7 @@ namespace render
         }
     }
 
-    void CDevice::Initialize(HWND outputWindow)
+    void CDevice::Initialize(const render::CWindow& _window)
     {
         CheckForSuitableOutput();
 
@@ -57,6 +59,9 @@ namespace render
             refreshRate.Denominator = 1;
         }
 
+        backBufferWidth = _window.GetWidth();
+        backBufferHeight = _window.GetHeight();
+
         desc.BufferCount = 2;
         desc.BufferDesc.Format = backBufferFormat;
         desc.BufferDesc.Width = backBufferWidth;
@@ -69,7 +74,7 @@ namespace render
         desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
         desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-        desc.OutputWindow = outputWindow;
+        desc.OutputWindow = _window.winID();
         desc.Windowed = !fullScreen;
 
         UINT flags = D3D11_CREATE_DEVICE_SINGLETHREADED;
@@ -132,6 +137,8 @@ namespace render
         } // switch( featureLevel )
 
         AfterReset();
+
+        mInitialized = true;
     }
 
     void CDevice::AfterReset()
@@ -262,6 +269,9 @@ namespace render
 
     void CDevice::Reset()
     {
+        if (!mInitialized)
+            return;
+
         _ASSERT(swapChain);
 
         // Release all references
@@ -280,7 +290,8 @@ namespace render
         if (autoDSSRView)
             autoDSSRView.Release();
 
-        immediateContext->ClearState();
+        if(immediateContext)
+            immediateContext->ClearState();
 
         if (fullScreen)
             PrepareFullScreenSettings();
