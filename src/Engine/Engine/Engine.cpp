@@ -9,6 +9,9 @@
 #include "Model\Model.h"
 #include "Im3DDraw.h"
 
+#include "Materials\Material.h"
+#include "Materials\MaterialParameter.h"
+
 namespace helios
 {
     void CEngine::Initialize()
@@ -77,7 +80,12 @@ namespace helios
         //
 
         // Graphics library entities
-        
+        mSerializableConstructor.Register<graphics::CMaterial>("material");
+        mSerializableConstructor.Register<graphics::CTemplatedMaterialParameter<float>>("float_parameter");
+        mSerializableConstructor.Register<graphics::CTemplatedMaterialParameter<Float2>>("float2_parameter");
+        mSerializableConstructor.Register<graphics::CTemplatedMaterialParameter<Float3>>("float3_parameter");
+        mSerializableConstructor.Register<graphics::CTemplatedMaterialParameter<Float4>>("float4_parameter");
+        mSerializableConstructor.Register<graphics::CTemplatedMaterialParameter<CColor>>("color_parameter");
         //
     }
 
