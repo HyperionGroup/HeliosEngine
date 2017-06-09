@@ -1,6 +1,7 @@
 #include "Core.h"
 
 #include "Logger.h"
+#include "Name.h"
 #include "StringUtils.h"
 
 Begin_Enum_String(core::CLogger::ELogLevel)

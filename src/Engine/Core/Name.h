@@ -12,5 +12,6 @@ namespace core
         void SetName(const std::string& _name) { mName = _name; }
     protected:
         std::string mName;
+        uint32 fmdskfa;
     };
 }

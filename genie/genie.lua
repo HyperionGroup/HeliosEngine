@@ -1,8 +1,3 @@
---
--- Copyright 2010-2017 Branimir Karadzic. All rights reserved.
--- License: https://github.com/bkaradzic/HELIOS#license-bsd-2-clause
---
-
 newoption {
 	trigger = "with-amalgamated",
 	description = "Enable amalgamated build.",
@@ -48,7 +43,7 @@ newoption {
 	description = "Enable building examples.",
 }
 
-solution "HELIOS"
+solution "helios"
 	configurations {
 		"Debug",
 		"Release",
@@ -73,24 +68,39 @@ solution "HELIOS"
 MODULE_DIR = path.getabsolute("../")
 HELIOS_DIR   = path.getabsolute("..")
 
+ENGINE_DIR   = path.join(HELIOS_DIR, path.join("src", "Engine"))
+CORE_DIR   = path.join(ENGINE_DIR, "Core")
+GFX_DIR   = path.join(ENGINE_DIR, "Gfx")
+
 local HELIOS_BUILD_DIR = path.join(HELIOS_DIR, ".build")
+local GENIE_SCRIPTS_DIR = path.join(HELIOS_DIR, "genie/scripts")
 local HELIOS_THIRD_PARTY_DIR = path.join(HELIOS_DIR, "src/3rdparty")
 if not BX_DIR then
 	BX_DIR = path.getabsolute(path.join(HELIOS_DIR, "../bx"))
 end
 
-BIMG_DIR   = path.getabsolute(path.join(HELIOS_DIR, "../bimg"))
-BX_DIR     = os.getenv("BX_DIR")
+IMGUI_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "imgui"))
+IM3D_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "im3d"))
+BGFX_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bgfx"))
+WORKING_DIR = path.join(BGFX_DIR, "examples/runtime")
+print("WORKING_DIR->" .. WORKING_DIR)
+BIMG_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bimg"))
+BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
+BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
 
-if not os.isdir(BX_DIR) then
-	print("bx not found at " .. BX_DIR)
-	print("HELIOS dir" .. HELIOS_DIR)
-	print("HELIOS dir" .. HELIOS_DIR)
-	print("HELIOS_THIRD_PARTY_DIR"..HELIOS_THIRD_PARTY_DIR)
-	print("For more info see: https://bkaradzic.github.io/HELIOS/build.html")
-	print("For more info see: https://bkaradzic.github.io/HELIOS/build.html")
-	os.exit()
-end
+BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
+BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
+BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
+
+--[[
+print("Directories\n" .. HELIOS_DIR)
+print("BX_DIR->" .. BX_DIR)
+print("BIMG_DIR->" .. BIMG_DIR)
+print("BGFX_DIR->" .. BGFX_DIR)
+print("IMGUI_DIR->" .. IMGUI_DIR)
+print("GENIE_SCRIPTS_DIR->" .. GENIE_SCRIPTS_DIR)
+print("HELIOS_THIRD_PARTY_DIR->"..HELIOS_THIRD_PARTY_DIR)
+]]
 
 dofile (path.join(BX_DIR, "scripts/toolchain.lua"))
 if not toolchain(HELIOS_BUILD_DIR, HELIOS_THIRD_PARTY_DIR) then
@@ -100,44 +110,28 @@ end
 function copyLib()
 end
 
-if _OPTIONS["with-sdl"] then
-	if os.is("windows") then
-		if not os.getenv("SDL2_DIR") then
-			print("Set SDL2_DIR enviroment variable.")
-		end
-	end
-end
-
-if _OPTIONS["with-profiler"] then
-	defines {
-		"ENTRY_CONFIG_PROFILER=1",
-		"HELIOS_CONFIG_PROFILER_REMOTERY=1",
-        "_WINSOCKAPI_"
-	}
-end
-
-function exampleProject(_name)
+function engineLibrary(_name)
 
 	project ("example-" .. _name)
 		uuid (os.uuid("example-" .. _name))
 		kind "WindowedApp"
 
 	configuration {}
-
-	debugdir (path.join(HELIOS_DIR, "examples/runtime"))
-
+	
+	debugdir (WORKING_DIR)
+	
 	includedirs {
 		path.join(BX_DIR,   "include"),
 		path.join(BIMG_DIR, "include"),
-		path.join(HELIOS_DIR, "include"),
-		path.join(HELIOS_DIR, "3rdparty"),
-		path.join(HELIOS_DIR, "examples/common"),
+		path.join(BGFX_DIR, "include"),
+		path.join(BGFX_DIR, "3rdparty"),
+		path.join(BGFX_DIR, "examples/common"),
 	}
 
 	files {
-		path.join(HELIOS_DIR, "examples", _name, "**.c"),
-		path.join(HELIOS_DIR, "examples", _name, "**.cpp"),
-		path.join(HELIOS_DIR, "examples", _name, "**.h"),
+		path.join(BGFX_DIR, "examples", _name, "**.c"),
+		path.join(BGFX_DIR, "examples", _name, "**.cpp"),
+		path.join(BGFX_DIR, "examples", _name, "**.h"),
 	}
 
 	removefiles {
@@ -147,10 +141,10 @@ function exampleProject(_name)
 	flags {
 		"FatalWarnings",
 	}
-
+	
 	links {
 		"example-common",
-		"HELIOS",
+		"bgfx",
 		"bimg_decode",
 		"bimg",
 		"bx",
@@ -368,14 +362,22 @@ function exampleProject(_name)
 	strip()
 end
 
-dofile "HELIOS.lua"
+dofile(path.join(BGFX_DIR,   "scripts/bgfx.lua"))
 
-group "libs"
-HELIOSProject("", "StaticLib", {})
+group "3rdparty"
+bgfxProject("", "StaticLib", {})
 
-dofile(path.join(BX_DIR,   "scripts/bx.lua"))
+dofile(path.join(GENIE_SCRIPTS_DIR,   "imgui.lua"))
 dofile(path.join(BIMG_DIR, "scripts/bimg.lua"))
 dofile(path.join(BIMG_DIR, "scripts/bimg_decode.lua"))
+dofile(path.join(BX_DIR,   "scripts/bx.lua"))
+
+group "Engine"
+dofile(path.join(GENIE_SCRIPTS_DIR,   "core.lua"))
+dofile(path.join(GENIE_SCRIPTS_DIR,   "render.lua"))
+dofile(path.join(GENIE_SCRIPTS_DIR,   "editor.lua"))
+
+
 
 if _OPTIONS["with-tools"] then
 	dofile(path.join(BIMG_DIR, "scripts/bimg_encode.lua"))
@@ -383,54 +385,54 @@ end
 
 if _OPTIONS["with-examples"] or _OPTIONS["with-tools"] then
 	group "examples"
-	dofile "example-common.lua"
+	dofile(path.join(BGFX_DIR, "scripts/example-common.lua"))
 end
 
 if _OPTIONS["with-examples"] then
 	group "examples"
-	exampleProject("00-helloworld")
-	exampleProject("01-cubes")
-	exampleProject("02-metaballs")
-	exampleProject("03-raymarch")
-	exampleProject("04-mesh")
-	exampleProject("05-instancing")
-	exampleProject("06-bump")
-	exampleProject("07-callback")
-	exampleProject("08-update")
-	exampleProject("09-hdr")
-	exampleProject("10-font")
-	exampleProject("11-fontsdf")
-	exampleProject("12-lod")
-	exampleProject("13-stencil")
-	exampleProject("14-shadowvolumes")
-	exampleProject("15-shadowmaps-simple")
-	exampleProject("16-shadowmaps")
-	exampleProject("17-drawstress")
-	exampleProject("18-ibl")
-	exampleProject("19-oit")
-	exampleProject("20-nanovg")
-	exampleProject("21-deferred")
-	exampleProject("22-windows")
-	exampleProject("23-vectordisplay")
-	exampleProject("24-nbody")
-	exampleProject("26-occlusion")
-	exampleProject("27-terrain")
-	exampleProject("28-wireframe")
-	exampleProject("29-debugdraw")
-	exampleProject("30-picking")
-	exampleProject("31-rsm")
-	exampleProject("32-particles")
-	exampleProject("33-pom")
+	engineLibrary("00-helloworld")
+	engineLibrary("01-cubes")
+	engineLibrary("02-metaballs")
+	engineLibrary("03-raymarch")
+	engineLibrary("04-mesh")
+	engineLibrary("05-instancing")
+	engineLibrary("06-bump")
+	engineLibrary("07-callback")
+	engineLibrary("08-update")
+	engineLibrary("09-hdr")
+	engineLibrary("10-font")
+	engineLibrary("11-fontsdf")
+	engineLibrary("12-lod")
+	engineLibrary("13-stencil")
+	engineLibrary("14-shadowvolumes")
+	engineLibrary("15-shadowmaps-simple")
+	engineLibrary("16-shadowmaps")
+	engineLibrary("17-drawstress")
+	engineLibrary("18-ibl")
+	engineLibrary("19-oit")
+	engineLibrary("20-nanovg")
+	engineLibrary("21-deferred")
+	engineLibrary("22-windows")
+	engineLibrary("23-vectordisplay")
+	engineLibrary("24-nbody")
+	engineLibrary("26-occlusion")
+	engineLibrary("27-terrain")
+	engineLibrary("28-wireframe")
+	engineLibrary("29-debugdraw")
+	engineLibrary("30-picking")
+	engineLibrary("31-rsm")
+	engineLibrary("32-particles")
+	engineLibrary("33-pom")
 
 	-- C99 source doesn't compile under WinRT settings
 	if not premake.vstudio.iswinrt() then
-		exampleProject("25-c99")
+		engineLibrary("25-c99")
 	end
 end
 
 if _OPTIONS["with-shared-lib"] then
 	group "libs"
-	HELIOSProject("-shared-lib", "SharedLib", {})
+	bgfxProject("-shared-lib", "SharedLib", {})
 end
 
 if _OPTIONS["with-tools"] then

@@ -4,18 +4,26 @@
 #include "Logger/Logger.h"
 #include "Containers.h"
 
-#include <im3d.h>
-#include <im3d_math.h>
+struct Float2 {
+    float x, y;
+};
 
+struct Float3{
+    float x, y, z;
+    Float3(float _x, float _y, float _z)
+        : x(_x), y(_y), z(_z)
+    {
 
-typedef Im3d::Vec2 Float2;
-typedef Im3d::Vec3 Float3;
-typedef Im3d::Vec4 Float4;
-typedef Im3d::Mat4 Float4x4;
-typedef Im3d::Mat3 Float3x3;
-typedef Im3d::Color CColor;
+    }
+};
 
-using namespace Im3d;
+struct Float4 {
+    float x, y, z, w;
+};
+
+struct CColor {
+    float x, y, z, w;
+};
 
 // Compiler
 #if defined(__GNUC__)
@@ -31,7 +39,6 @@ using namespace Im3d;
 // Windows
 #define HELIOSPLATFORM_WIN
 
-#define NOMINMAX 1
 #define WIN32_LEAN_AND_MEAN 1
 #define VC_EXTRALEAN 1
 #include <Windows.h>
@@ -45,8 +52,6 @@ using namespace Im3d;
 #include <fstream>
 #include <memory>
 #include <locale>         // std::locale, std::toupper
-
-#define winAssert(e) HELIOSVERIFY_MSG(e, Im3d::GetPlatformErrorString(GetLastError()))
 
 #define HELIOSUNUSED(x) x;
 #ifdef HELIOSCOMPILER_MSVC
@@ -82,10 +87,6 @@ using namespace Im3d;
 #define CHECKED_DELETE_ARRAY(arrayPtr) if( arrayPtr ) { delete[] arrayPtr; arrayPtr = nullptr; }
 #define DISABLE_COPY_AND_ASSIGN(Class) private: \
 Class(const Class &); Class &operator=(const Class &);
-
-namespace Im3d {
-    const char* GetPlatformErrorString(DWORD _err);
-}
 
 #else
 #error Platform not defined
