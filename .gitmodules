@@ -22,3 +22,12 @@
 [submodule "src/3rdParty/anax"]
 	path = src/3rdParty/anax
 	url = https://github.com/miguelmartin75/anax.git
+[submodule "src/3rdParty/bimg"]
+	path = src/3rdParty/bimg
+	url = https://github.com/bkaradzic/bimg.git
+[submodule "src/3rdParty/bx"]
+	path = src/3rdParty/bx
+	url = https://github.com/bkaradzic/bx.git
+[submodule "src/3rdParty/bgfx"]
+	path = src/3rdParty/bgfx
+	url = https://github.com/bkaradzic/bgfx.git
