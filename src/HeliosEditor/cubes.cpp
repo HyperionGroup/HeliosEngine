@@ -9,6 +9,8 @@
 #include "Vertex.h"
 #include "Buffer.h"
 
+#include "Logic/Logic.h"
+
 static render::CPositionColorVertex s_cubeVertices[] =
 {
     {Float3(-1.0f,  1.0f,  1.0f), 0xff000000 },
@@ -53,6 +55,10 @@ static const uint16_t s_cubeTriStrip[] =
 	5,
 };
 
+#include "Core/Logger\Logger.h"
+
+#include "sol.hpp"
+
 class ExampleCubes : public entry::AppI
 {
 	void init(int _argc, char** _argv) BX_OVERRIDE
@@ -89,6 +95,8 @@ class ExampleCubes : public entry::AppI
 		m_program = loadProgram("vs_cubes", "fs_cubes");
 
 		m_timeOffset = bx::getHPCounter();
+
+        logic::sol_example();
 	}
 
 	virtual int shutdown() BX_OVERRIDE
