@@ -55,7 +55,6 @@ solution "helios"
 		}
 	else
 		platforms {
-			"x32",
 			"x64",
 --			"Xbox360",
 			"Native", -- for targets where bitness is not specified
@@ -63,7 +62,7 @@ solution "helios"
 	end
 
 	language "C++"
-	startproject "example-00-helloworld"
+	startproject "editor"
 
 MODULE_DIR = path.getabsolute("../")
 HELIOS_DIR   = path.getabsolute("..")
@@ -82,8 +81,11 @@ end
 IMGUI_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "imgui"))
 IM3D_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "im3d"))
 BGFX_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bgfx"))
+SOL2_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "sol2"))
+LUA_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "luajit-2.0/src"))
+
 WORKING_DIR = path.join(BGFX_DIR, "examples/runtime")
-print("WORKING_DIR->" .. WORKING_DIR)
+
 BIMG_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bimg"))
 BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
 BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
@@ -91,16 +93,6 @@ BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
 BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
 BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
 BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
-
---[[
-print("Directories\n" .. HELIOS_DIR)
-print("BX_DIR->" .. BX_DIR)
-print("BIMG_DIR->" .. BIMG_DIR)
-print("BGFX_DIR->" .. BGFX_DIR)
-print("IMGUI_DIR->" .. IMGUI_DIR)
-print("GENIE_SCRIPTS_DIR->" .. GENIE_SCRIPTS_DIR)
-print("HELIOS_THIRD_PARTY_DIR->"..HELIOS_THIRD_PARTY_DIR)
-]]
 
 dofile (path.join(BX_DIR, "scripts/toolchain.lua"))
 if not toolchain(HELIOS_BUILD_DIR, HELIOS_THIRD_PARTY_DIR) then
@@ -183,19 +175,16 @@ function engineLibrary(_name)
 	end
 
 	if _OPTIONS["with-ovr"] then
-		configuration { "x32" }
-			libdirs { path.join("$(OVR_DIR)/LibOVR/Lib/Windows/Win32/Release", _ACTION) }
-
 		configuration { "x64" }
 			libdirs { path.join("$(OVR_DIR)/LibOVR/Lib/Windows/x64/Release", _ACTION) }
 
-		configuration { "x32 or x64" }
+		configuration { "x64" }
 			links { "libovr" }
 
 		configuration {}
 	end
 
-	configuration { "vs*", "x32 or x64" }
+	configuration { "vs*", "x64" }
 		linkoptions {
 			"/ignore:4199", -- LNK4199: /DELAYLOAD:*.dll ignored; no imports found from *.dll
 		}
@@ -203,7 +192,7 @@ function engineLibrary(_name)
 			"DelayImp",
 		}
 
-	configuration { "vs201*", "x32 or x64" }
+	configuration { "vs201*", "x64" }
 		linkoptions { -- this is needed only for testing with GLES2/3 on Windows with VS201x
 			"/DELAYLOAD:\"libEGL.dll\"",
 			"/DELAYLOAD:\"libGLESv2.dll\"",
@@ -216,7 +205,7 @@ function engineLibrary(_name)
 			"psapi",
 		}
 
-	configuration { "vs20*", "x32 or x64" }
+	configuration { "vs20*", "x64" }
 		links {
 			"gdi32",
 			"psapi",
@@ -245,12 +234,8 @@ function engineLibrary(_name)
 		}
 
 	-- WinRT targets need their own output directories or build files stomp over each other
-	configuration { "x32", "winphone8* or winstore8*" }
-		targetdir (path.join(HELIOS_BUILD_DIR, "win32_" .. _ACTION, "bin", _name))
-		objdir (path.join(HELIOS_BUILD_DIR, "win32_" .. _ACTION, "obj", _name))
-
 	configuration { "x64", "winphone8* or winstore8*" }
-		targetdir (path.join(HELIOS_BUILD_DIR, "win64_" .. _ACTION, "bin", _name))
+		targetdir (path.join(HELIOS_BUILD_DIR, "win64_" .. _ACTION, "bin", _name ))
 		objdir (path.join(HELIOS_BUILD_DIR, "win64_" .. _ACTION, "obj", _name))
 
 	configuration { "ARM", "winphone8* or winstore8*" }
@@ -371,10 +356,14 @@ dofile(path.join(GENIE_SCRIPTS_DIR,   "imgui.lua"))
 dofile(path.join(BIMG_DIR, "scripts/bimg.lua"))
 dofile(path.join(BIMG_DIR, "scripts/bimg_decode.lua"))
 dofile(path.join(BX_DIR,   "scripts/bx.lua"))
+--dofile(path.join(GENIE_SCRIPTS_DIR,   "luajit.lua"))
 
 group "Engine"
 dofile(path.join(GENIE_SCRIPTS_DIR,   "core.lua"))
 dofile(path.join(GENIE_SCRIPTS_DIR,   "render.lua"))
+dofile(path.join(GENIE_SCRIPTS_DIR,   "script.lua"))
+
+group "Apps"
 dofile(path.join(GENIE_SCRIPTS_DIR,   "editor.lua"))
 
 
