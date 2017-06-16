@@ -5,9 +5,8 @@
 
 namespace graphics
 {
-    class CMaterialParameter : public io::CSerializableEntity, public core::CName
+    class CMaterialParameter : public core::CName
     {
-        SERIALIZABLE
     public:
         CMaterialParameter() = default;
         virtual ~CMaterialParameter() = default;

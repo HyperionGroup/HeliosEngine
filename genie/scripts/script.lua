@@ -10,6 +10,8 @@ project "script"
 		SOL2_DIR,
 		LUA_DIR,
 		ENGINE_DIR,
+		CORE_DIR,
+		GFX_DIR,
 	}
 
 	files {

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "bgfx_utils.h"
 
-namespace render
+namespace gfx
 {
     struct CPositionColorVertex
     {
@@ -22,6 +22,4 @@ namespace render
 
         static bgfx::VertexDecl mDeclaration;
     };
-
-    bgfx::VertexDecl CPositionColorVertex::mDeclaration;
 }
