@@ -1,3 +1,3 @@
-cd premake
-premake5 vs2017
+cd genie
+genie --with-examples vs2017
 cd ..

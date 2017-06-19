@@ -7,6 +7,7 @@ project "imgui"
 	}
 
 	files {
+		path.join(UCRT_DIR,   "include"),
 		path.join(IMGUI_DIR, "**.h"),
 		path.join(IMGUI_DIR, "**.cpp"),
 		path.join(IM3D_DIR, "**.h"),

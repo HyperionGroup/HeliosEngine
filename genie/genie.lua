@@ -67,6 +67,7 @@ solution "helios"
 MODULE_DIR = path.getabsolute("../")
 HELIOS_DIR   = path.getabsolute("..")
 
+UCRT_DIR =  path.join(HELIOS_DIR, "bin/ucrt")
 ENGINE_DIR   = path.join(HELIOS_DIR, path.join("src", "Engine"))
 CORE_DIR   = path.join(ENGINE_DIR, "Core")
 GFX_DIR   = path.join(ENGINE_DIR, "Gfx")
@@ -78,6 +79,7 @@ if not BX_DIR then
 	BX_DIR = path.getabsolute(path.join(HELIOS_DIR, "../bx"))
 end
 
+ANAX_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "anax"))
 IMGUI_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "imgui"))
 IM3D_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "im3d"))
 BGFX_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bgfx"))
@@ -113,6 +115,7 @@ function engineLibrary(_name)
 	debugdir (WORKING_DIR)
 	
 	includedirs {
+		path.join(UCRT_DIR,   "include"),
 		path.join(BX_DIR,   "include"),
 		path.join(BIMG_DIR, "include"),
 		path.join(BGFX_DIR, "include"),
@@ -140,6 +143,11 @@ function engineLibrary(_name)
 		"bimg_decode",
 		"bimg",
 		"bx",
+	}
+	
+	libdirs
+	{
+		"C:/Program Files (x86)/Windows Kits/10/Lib/10.0.15063.0/ucrt/x64"
 	}
 
 	if _OPTIONS["with-sdl"] then

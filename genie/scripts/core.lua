@@ -2,6 +2,7 @@ project "core"
 	kind "StaticLib"
 
 	includedirs {
+		path.join(UCRT_DIR,   "include"),
 		IMGUI_DIR,
 		IM3D_DIR,
 		CORE_DIR,

@@ -6,6 +6,7 @@ project "editor"
 	debugdir (WORKING_DIR)
 	
 	includedirs {
+		path.join(UCRT_DIR,   "include"),
 		path.join(BX_DIR,   "include"),
 		path.join(BIMG_DIR, "include"),
 		path.join(BGFX_DIR, "include"),
@@ -31,6 +32,7 @@ project "editor"
 	libdirs
 	{
 		path.join(HELIOS_DIR, "bin/luajit" ),
+		path.join(UCRT_DIR,   "x64"),
 	}
 	
 	links

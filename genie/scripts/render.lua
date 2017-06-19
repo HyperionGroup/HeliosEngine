@@ -2,6 +2,7 @@ project "gfx"
 	kind "StaticLib"
 	
 	includedirs {
+		path.join(UCRT_DIR,   "include"),
 		path.join(BX_DIR,   "include"),
 		path.join(BIMG_DIR, "include"),
 		path.join(BGFX_DIR, "include"),
