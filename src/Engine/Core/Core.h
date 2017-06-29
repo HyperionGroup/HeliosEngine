@@ -3,9 +3,16 @@
 #include "EnumToString.h"
 #include "Logger/Logger.h"
 #include "Containers.h"
+#include "Str.h"
 
-struct Float2 {
+struct Float2
+{
+    Float2() = default;
     float x, y;
+    Float2( float _x, float _y)
+        : x(_x), y(_y)
+    {}
+
 };
 
 struct Float3{

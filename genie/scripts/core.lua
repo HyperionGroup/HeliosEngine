@@ -3,6 +3,11 @@ project "core"
 
 	includedirs {
 		path.join(UCRT_DIR,   "include"),
+		path.join(ANAX_DIR, "include"),
+		path.join(BIMG_DIR, "include"),
+		path.join(BGFX_DIR, "include"),
+		path.join(BGFX_DIR, "3rdparty"),
+		path.join(BGFX_DIR, "examples/common"),
 		IMGUI_DIR,
 		IM3D_DIR,
 		CORE_DIR,

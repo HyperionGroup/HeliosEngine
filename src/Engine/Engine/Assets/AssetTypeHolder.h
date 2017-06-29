@@ -1,7 +1,7 @@
 #pragma once
 
-#include "StringUtils.h"
-#include "Containers.h"
+#include "Core/Str.h"
+#include "Core/Containers.h"
 #include "Serialization/Serializable.h"
 #include "ImmediateGui/ImmediateGui.h"
 

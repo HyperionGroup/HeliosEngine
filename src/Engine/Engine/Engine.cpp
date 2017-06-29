@@ -1,26 +1,17 @@
 #include "Engine.h"
-#include "Core.h"
+#include "Core/Core.h"
 
-#include "Shader.h"
-#include "ShaderStage.h"
-#include "Vertex.h"
-#include "Model.h"
+#include "Gfx/Shader.h"
+#include "Gfx/Shader.h"
+#include "Gfx/Vertex.h"
 
-#include "Cameras/Camera.h"
-
-#include "ImGui_Im3D.h"
-
-#include "Quad.h"
-
-
-#include "Materials\Material.h"
-#include "Materials\MaterialParameter.h"
+#include "Gfx/Material.h"
 
 namespace helios
 {
     void CEngine::Initialize()
     {
-        if (mWindow.Create(600,800))
+        /*        if (mWindow.Create(600,800))
         {
 #if defined(HELIOSPLATFORM_WIN)
             // force the current working directory to the exe location
@@ -52,11 +43,12 @@ namespace helios
             mInitialized = true;
 
             render::CQuad lQuad;
-        }
+        }*/
     }
 
     void CEngine::Run()
     {
+        /*
         HELIOSASSERT(mInitialized);
 
         float lBackColor[4] = { 1.0f, 0.25f ,0.25f , 0.25f };
@@ -74,24 +66,27 @@ namespace helios
             mDevice.ImmediateContext()->ClearRenderTargetView(mDevice.BackBuffer(), lBackColor);
             render::ImGui_Im3D::Render();
             mDevice.Present();
-        }
+        }*/
     }
 
     void CEngine::OnGui()
     {
+        /*
         BeginWindow("Project", Float2(0, 0));
         mAssetManager.OnGui();
         EndWindow();
+        */
     }
 
     void CEngine::ShutDown()
     {
-        render::ImGui_Im3D::ShutDown();
-        mWindow.ShutDown();
+        //render::ImGui_Im3D::ShutDown();
+        //mWindow.ShutDown();
     }
 
     void CEngine::RegisterSerializableEntities()
     {
+        /*
         // Render library entities
         mSerializableConstructor.Register<render::CShader>("shader");
         mSerializableConstructor.Register<render::CVertexStage<render::CIm3dVertex> >("vs_im3d");
@@ -111,13 +106,16 @@ namespace helios
         mSerializableConstructor.Register<graphics::CTemplatedMaterialParameter<Float4>>("float4_parameter");
         mSerializableConstructor.Register<graphics::CTemplatedMaterialParameter<CColor>>("color_parameter");
         //
+        */
     }
 
     void CEngine::RegisterGameAssets()
     {
+        /*
         // Register game Assets classes here!
         mAssetManager.Register<render::CShader>("shaders", "shaders/shaders.hcf");
         mAssetManager.Register<render::CModel>("models", "models/models.hcf");
         //
+        */
     }
 }

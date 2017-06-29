@@ -1,7 +1,8 @@
 #include "Gfx.h"
+
 #include "Window.h"
 
-namespace render
+namespace gfx
 {
     CWindow::CWindow()
     {

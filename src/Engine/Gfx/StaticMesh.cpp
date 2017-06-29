@@ -54,7 +54,6 @@ namespace gfx
 {
     CCubePrimitive::CCubePrimitive()
     {
-        BX_UNUSED(s_cubeTriList, s_cubeTriStrip);
         mVB.Initialize(s_cubeVertices, 8);
         mIB.Initialize(s_cubeTriStrip, ARRAYSIZE(s_cubeTriStrip));
     }

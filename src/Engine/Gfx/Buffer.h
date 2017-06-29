@@ -50,11 +50,6 @@ namespace render
             HELIOSASSERT(!mInitialized);
             HELIOSASSERT(_data);
 
-            m_vbh = bgfx::createVertexBuffer
-            (
-                // Static data can be passed with bgfx::makeRef
-                bgfx::makeRef(_data, _numVertices * sizeof(TVertexType)) , TVertexType::mDeclaration
-            );
 
             mInitialized = true;
             mNumVertexs = _numVertices;
@@ -63,19 +58,17 @@ namespace render
         virtual void ShutDown()
         {
             HELIOSASSERT(mInitialized);
-            bgfx::destroyVertexBuffer(m_vbh);
         }
 
         void Bind()
         {
-            bgfx::setVertexBuffer(0, m_vbh);
         }
 
         inline uint32 GetNumVertexs() const { return mNumVertexs; }
         inline void   SetNumVertexs(uint32 _numVertex) { mNumVertexs = _numVertex; }
         inline uint32 GetStride() const { return sizeof(TVertexType); }
     protected:
-        bgfx::VertexBufferHandle m_vbh;
+
         uint32        mNumVertexs;
     };
 
@@ -99,11 +92,7 @@ namespace render
             HELIOSASSERT(!mInitialized);
             HELIOSASSERT(_indices);
 
-            // Create static index buffer.
-            m_ibh = bgfx::createIndexBuffer(
-                // Static data can be passed with bgfx::makeRef
-                bgfx::makeRef(s_cubeTriStrip, _numIndices * sizeof(TIndexType) )
-            );
+            
 
             mInitialized = true;
             mNumIndices = _numIndices;
@@ -111,12 +100,10 @@ namespace render
 
         void Bind()
         {
-            bgfx::setIndexBuffer(m_ibh);
         }
 
         void ShutDown()
         {
-            bgfx::destroyIndexBuffer(m_ibh);
         }
 
         inline uint32 GetIndexCount() const { return mNumIndices; }
@@ -124,7 +111,6 @@ namespace render
 
     protected:
         uint32 mNumIndices;
-        bgfx::IndexBufferHandle m_ibh;
     };
 
     template < typename TIndexType>

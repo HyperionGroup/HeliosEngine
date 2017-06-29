@@ -1,126 +1,49 @@
-newoption {
-	trigger = "with-amalgamated",
-	description = "Enable amalgamated build.",
-}
-
-newoption {
-	trigger = "with-ovr",
-	description = "Enable OculusVR integration.",
-}
-
-newoption {
-	trigger = "with-sdl",
-	description = "Enable SDL entry.",
-}
-
-newoption {
-	trigger = "with-glfw",
-	description = "Enable GLFW entry.",
-}
-
-newoption {
-	trigger = "with-profiler",
-	description = "Enable build with intrusive profiler.",
-}
-
-newoption {
-	trigger = "with-scintilla",
-	description = "Enable building with Scintilla editor.",
-}
-
-newoption {
-	trigger = "with-shared-lib",
-	description = "Enable building shared library.",
-}
-
-newoption {
-	trigger = "with-tools",
-	description = "Enable building tools.",
-}
-
-newoption {
-	trigger = "with-examples",
-	description = "Enable building examples.",
-}
-
 solution "helios"
 	configurations {
 		"Debug",
 		"Release",
 	}
 
-	if _ACTION == "xcode4" then
-		platforms {
-			"Universal",
-		}
-	else
-		platforms {
-			"x64",
---			"Xbox360",
-			"Native", -- for targets where bitness is not specified
-		}
-	end
+	
+	platforms { "x64" }
 
 	language "C++"
 	startproject "editor"
 
 MODULE_DIR = path.getabsolute("../")
+
 HELIOS_DIR   = path.getabsolute("..")
 
 UCRT_DIR =  path.join(HELIOS_DIR, "bin/ucrt")
 ENGINE_DIR   = path.join(HELIOS_DIR, path.join("src", "Engine"))
-CORE_DIR   = path.join(ENGINE_DIR, "Core")
-GFX_DIR   = path.join(ENGINE_DIR, "Gfx")
 
 local HELIOS_BUILD_DIR = path.join(HELIOS_DIR, ".build")
 local GENIE_SCRIPTS_DIR = path.join(HELIOS_DIR, "genie/scripts")
 local HELIOS_THIRD_PARTY_DIR = path.join(HELIOS_DIR, "src/3rdparty")
-if not BX_DIR then
-	BX_DIR = path.getabsolute(path.join(HELIOS_DIR, "../bx"))
-end
 
 ANAX_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "anax"))
 IMGUI_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "imgui"))
 IM3D_DIR  = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "im3d"))
-BGFX_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bgfx"))
 SOL2_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "sol2"))
 LUA_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "luajit-2.0/src"))
 
-WORKING_DIR = path.join(BGFX_DIR, "examples/runtime")
-
-BIMG_DIR   = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bimg"))
-BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
-BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
-
-BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
-BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
-BX_DIR      = path.getabsolute(path.join(HELIOS_THIRD_PARTY_DIR, "bx"))
-
-dofile (path.join(BX_DIR, "scripts/toolchain.lua"))
-if not toolchain(HELIOS_BUILD_DIR, HELIOS_THIRD_PARTY_DIR) then
-	return -- no action specified
-end
-
-function copyLib()
-end
+WORKING_DIR = path.join(HELIOS_DIR, "data")
 
 function engineLibrary(_name)
 
-	project ("example-" .. _name)
-		uuid (os.uuid("example-" .. _name))
-		kind "WindowedApp"
+	project (_name)
+		kind "StaticLib"
 
 	configuration {}
 	
-	debugdir (WORKING_DIR)
-	
-	includedirs {
-		path.join(UCRT_DIR,   "include"),
-		path.join(BX_DIR,   "include"),
-		path.join(BIMG_DIR, "include"),
-		path.join(BGFX_DIR, "include"),
-		path.join(BGFX_DIR, "3rdparty"),
-		path.join(BGFX_DIR, "examples/common"),
+	includedirs
+	{
+		UCRT_DIR
+		ANAX_DIR
+		IM3D_DIR
+		IMGUI_DIR
+		LUA_DIR
+		SOL2_DIR
 	}
 
 	files {
@@ -138,11 +61,10 @@ function engineLibrary(_name)
 	}
 	
 	links {
-		"example-common",
-		"bgfx",
-		"bimg_decode",
-		"bimg",
-		"bx",
+		"anax",
+		"imgui",
+		"gfx"
+		"core"
 	}
 	
 	libdirs
@@ -361,10 +283,6 @@ group "3rdparty"
 bgfxProject("", "StaticLib", {})
 
 dofile(path.join(GENIE_SCRIPTS_DIR,   "imgui.lua"))
-dofile(path.join(BIMG_DIR, "scripts/bimg.lua"))
-dofile(path.join(BIMG_DIR, "scripts/bimg_decode.lua"))
-dofile(path.join(BX_DIR,   "scripts/bx.lua"))
---dofile(path.join(GENIE_SCRIPTS_DIR,   "luajit.lua"))
 
 group "Engine"
 dofile(path.join(GENIE_SCRIPTS_DIR,   "core.lua"))

@@ -1,5 +1,5 @@
 #include "HeliosEditor.h"
-#include "Engine.h"
+#include "Engine/Engine.h"
 
 int main(int, char**)
 {

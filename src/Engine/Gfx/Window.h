@@ -1,11 +1,6 @@
 #pragma once
 
-#ifndef _WINDOW_
-#define _WINDOW_
-
-#include <windows.h>
-
-namespace render
+namespace gfx
 {
     class CWindow
     {
@@ -36,5 +31,3 @@ namespace render
         Float2  mPrevCursorPos;
     };
 }
-
-#endif // !_WINDOW_

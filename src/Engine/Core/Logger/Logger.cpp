@@ -2,7 +2,6 @@
 
 #include "Logger.h"
 #include "Name.h"
-#include "StringUtils.h"
 
 Begin_Enum_String(core::CLogger::ELogLevel)
 {
@@ -26,7 +25,6 @@ namespace core
         std::string output = lTag + buffer;
         free(buffer);
         va_end(args);
-
         OutputDebugString(output.c_str());
     }
 }

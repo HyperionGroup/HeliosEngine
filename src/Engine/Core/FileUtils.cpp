@@ -1,6 +1,6 @@
 #include "Core.h"
 
-#include "StringUtils.h"
+#include "Str.h"
 
 namespace core
 {

@@ -1,8 +1,11 @@
 #pragma once
-#include "Core.h"
+#include "Core/Core.h"
 
-namespace render
+namespace gfx
 {
+    class CStaticMesh;
+    typedef std::shared_ptr< CStaticMesh > CStaticMeshSptr;
+
     enum class BlendState
     {
         BlendDisabled = 0,
@@ -112,59 +115,59 @@ namespace render
 }
 
 //---------------------------------------------------------------------------------------------------------
-Begin_Enum_String(render::ShaderStageType)
+Begin_Enum_String(gfx::ShaderStageType)
 {
-    Enum_String_Id(render::ShaderStageType::VertexStage, "vs");
-    Enum_String_Id(render::ShaderStageType::PixelStage, "ps");
-    Enum_String_Id(render::ShaderStageType::GeometryStage, "gs");
+    Enum_String_Id(gfx::ShaderStageType::VertexStage, "vs");
+    Enum_String_Id(gfx::ShaderStageType::PixelStage, "ps");
+    Enum_String_Id(gfx::ShaderStageType::GeometryStage, "gs");
 }
 End_Enum_String;
 
-Begin_Enum_String(render::TextureType)
+Begin_Enum_String(gfx::TextureType)
 {
-    Enum_String_Id(render::TextureType::OneDimension, "1D");
-    Enum_String_Id(render::TextureType::TwoDimensions, "2D");
-    Enum_String_Id(render::TextureType::ThreeDimensions, "3D");
+    Enum_String_Id(gfx::TextureType::OneDimension, "1D");
+    Enum_String_Id(gfx::TextureType::TwoDimensions, "2D");
+    Enum_String_Id(gfx::TextureType::ThreeDimensions, "3D");
 }
 End_Enum_String;
 
-Begin_Enum_String(render::PixelDesc)
+Begin_Enum_String(gfx::PixelDesc)
 {
-    Enum_String_Id(render::PixelDesc::R32F, "r32f");
-    Enum_String_Id(render::PixelDesc::RG32F, "rg32f");
-    Enum_String_Id(render::PixelDesc::RGB32F, "rgb32f");
-    Enum_String_Id(render::PixelDesc::RGBA32F, "rgba32f");
-    Enum_String_Id(render::PixelDesc::R16F, "r16f");
-    Enum_String_Id(render::PixelDesc::RG16F, "rg16f");
-    Enum_String_Id(render::PixelDesc::RGB16F, "rgb16f");
-    Enum_String_Id(render::PixelDesc::RGBA16F, "rgba16f");
+    Enum_String_Id(gfx::PixelDesc::R32F, "r32f");
+    Enum_String_Id(gfx::PixelDesc::RG32F, "rg32f");
+    Enum_String_Id(gfx::PixelDesc::RGB32F, "rgb32f");
+    Enum_String_Id(gfx::PixelDesc::RGBA32F, "rgba32f");
+    Enum_String_Id(gfx::PixelDesc::R16F, "r16f");
+    Enum_String_Id(gfx::PixelDesc::RG16F, "rg16f");
+    Enum_String_Id(gfx::PixelDesc::RGB16F, "rgb16f");
+    Enum_String_Id(gfx::PixelDesc::RGBA16F, "rgba16f");
 }
 End_Enum_String;
 
-Begin_Enum_String(render::VertexFlags)
+Begin_Enum_String(gfx::VertexFlags)
 {
-    Enum_String_Id(render::VertexFlags::Position, "position");
-    Enum_String_Id(render::VertexFlags::Normal, "normal");
-    Enum_String_Id(render::VertexFlags::Tangent, "tangent");
-    Enum_String_Id(render::VertexFlags::Binormal, "binormal");
-    Enum_String_Id(render::VertexFlags::Uv, "uv");
-    Enum_String_Id(render::VertexFlags::Uv2, "uv2");
-    Enum_String_Id(render::VertexFlags::Color, "color");
-    Enum_String_Id(render::VertexFlags::Position4, "position4");
-    Enum_String_Id(render::VertexFlags::Bump, "bump");
-    Enum_String_Id(render::VertexFlags::Weight, "weight");
-    Enum_String_Id(render::VertexFlags::Indices, "indices");
+    Enum_String_Id(gfx::VertexFlags::Position, "position");
+    Enum_String_Id(gfx::VertexFlags::Normal, "normal");
+    Enum_String_Id(gfx::VertexFlags::Tangent, "tangent");
+    Enum_String_Id(gfx::VertexFlags::Binormal, "binormal");
+    Enum_String_Id(gfx::VertexFlags::Uv, "uv");
+    Enum_String_Id(gfx::VertexFlags::Uv2, "uv2");
+    Enum_String_Id(gfx::VertexFlags::Color, "color");
+    Enum_String_Id(gfx::VertexFlags::Position4, "position4");
+    Enum_String_Id(gfx::VertexFlags::Bump, "bump");
+    Enum_String_Id(gfx::VertexFlags::Weight, "weight");
+    Enum_String_Id(gfx::VertexFlags::Indices, "indices");
 }
 End_Enum_String;
 
-Begin_Enum_String(render::SamplerType)
+Begin_Enum_String(gfx::SamplerType)
 {
-    Enum_String_Id(render::SamplerType::Linear, "Linear");
-    Enum_String_Id(render::SamplerType::LinearClamp, "LinearClamp");
-    Enum_String_Id(render::SamplerType::LinearBorder, "LinearBorder");
-    Enum_String_Id(render::SamplerType::Anisotropic, "Anisotropic");
-    Enum_String_Id(render::SamplerType::Point, "Point");
-    Enum_String_Id(render::SamplerType::ShadowMap, "ShadowMap");
-    Enum_String_Id(render::SamplerType::ShadowMapPCF, "ShadowMapPCF");
+    Enum_String_Id(gfx::SamplerType::Linear, "Linear");
+    Enum_String_Id(gfx::SamplerType::LinearClamp, "LinearClamp");
+    Enum_String_Id(gfx::SamplerType::LinearBorder, "LinearBorder");
+    Enum_String_Id(gfx::SamplerType::Anisotropic, "Anisotropic");
+    Enum_String_Id(gfx::SamplerType::Point, "Point");
+    Enum_String_Id(gfx::SamplerType::ShadowMap, "ShadowMap");
+    Enum_String_Id(gfx::SamplerType::ShadowMapPCF, "ShadowMapPCF");
 }
 End_Enum_String;

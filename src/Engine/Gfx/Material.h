@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core.h"
-#include "Name.h"
+#include "Core/Core.h"
+#include "Core/Name.h"
 
 namespace gfx
 {

@@ -5,9 +5,10 @@ workspace "Helios"
    language "C++"
    
    targetdir "$(SolutionDir)bin/%{cfg.buildcfg}"
+   debugdir "../data"
    
    filter "configurations:Debug"
-      defines { "DEBUG", "DX_LOG_CALLS" }
+      defines { "DEBUG" }
 	  rtti ("off")
 	  characterset ("MBCS")
 	  symbols "on"
@@ -17,73 +18,87 @@ workspace "Helios"
 	  characterset ("MBCS")
 	  rtti ("off")
       optimize "On"
+
+PREMAKE_PATH = "../premake/"
+ENGINE_PATH = "../src/Engine/"
+THIRD_PARTY = "../src/3rdParty/"
+ANAX = path.join(THIRD_PARTY, "anax")
+IMGUI = path.join(THIRD_PARTY, "imgui")
+IM3D = path.join(THIRD_PARTY, "im3d")
+LUA = path.join(THIRD_PARTY, "luajit-2.0/src")
+SOL = path.join(THIRD_PARTY, "sol2")
+UCRT = path.join(THIRD_PARTY, "ucrt")
 	
 project "HeliosEditor"
 	kind "WindowedApp"
-	flags { "ExtraWarnings" }
+	
+	flags { "ExtraWarnings" , "FatalWarnings" }
+	
 	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
-	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/Graphics" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/sol2", "../src/3rdParty/luajit-2.0/src" }
-	libdirs { "$(SolutionDir)bin/%{cfg.buildcfg}/$(ConfigurationName)/" }
-	libdirs { "$(DXSDK_DIR)lib/x86/" }
-	libdirs { "../bin/luajit/" }
-	libdirs { "../bin/assimp/" }
-	links { "d3d11", "d3dcompiler", "Render", "Core", "imgui", "Engine", "lua51", "Logic", "Graphics", "assimp" }
+	
+	includedirs
+	{
+		UCRT,
+		ENGINE_PATH,
+		IMGUI,
+		ANAX,
+		IM3D,
+		SOL,
+		LUA,
+		IMGUI
+	}
+	
+	libdirs
+	{
+		"$(SolutionDir)lib/%{cfg.buildcfg}/$(ConfigurationName)/",
+		"$(DXSDK_DIR)lib/x86/",
+		"../bin/luajit/",
+		"../bin/assimp/",
+		"../bin/ucrt/",
+	}
+	
+	links
+	{
+		"d3d11",
+		"d3dcompiler",
+		"gfx",
+		"core",
+		"imgui",
+		"engine",
+		"lua51",
+		"logic",
+		"assimp"
+	}
+	
 	pchheader "HeliosEditor.h"
 	pchsource "../src/HeliosEditor/main.cpp"
-	postbuildcommands { 'echo F | xcopy "$(SolutionDir)..\\bin\\luajit\\lua51.dll" "$(TargetDir)lua51.dll" /Y' }
-	postbuildcommands { 'echo F | xcopy "$(SolutionDir)..\\bin\\assimp\\assimp.dll" "$(TargetDir)assimp.dll" /Y' }
 	
-group "Engine"
-project "Core"
-    kind "StaticLib"
-    files { "../src/Engine/Core/**.h", "../src/Engine/Core/**.cpp", "../src/Engine/Core/**.inl" }
-	includedirs { "../src/Engine/Core" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d" }
-	pchheader "Core.h"
-	pchsource "../src/Engine/Core/Core.cpp"
+	postbuildcommands
+	{
+		'echo F | xcopy "$(SolutionDir)..\\bin\\luajit\\lua51.dll" "$(TargetDir)lua51.dll" /Y',
+		'echo F | xcopy "$(SolutionDir)..\\bin\\assimp\\assimp.dll" "$(TargetDir)assimp.dll" /Y'
+	}
 
-project "Engine"
-    kind "StaticLib"
-    files { "../src/Engine/Engine/**.h", "../src/Engine/Engine/**.cpp", "../src/Engine/Engine/**.inl" }
-	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Logic", "../src/Engine/Render/d3d11/", "../src/Engine/Graphics" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d" }
-	includedirs { "../src/3rdParty/sol2", "../src/3rdParty/luajit-2.0/src" }
-	pchheader "Engine.h"
-	pchsource "../src/Engine/Engine/Engine.cpp"
-
-project "Graphics"
-    kind "StaticLib"
-    files { "../src/Engine/Graphics/**.h", "../src/Engine/Graphics/**.cpp", "../src/Engine/GraphicsGraphics/**.inl" }
-	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/Graphics" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d" }
-	pchheader "Graphics.h"
-	pchsource "../src/Engine/Graphics/Graphics.cpp"
+group "premake"	
+project "vs2017"
+	kind "ConsoleApp"
 	
-project "Logic"
-    kind "StaticLib"
-    files { "../src/Engine/Logic/**.h", "../src/Engine/Logic/**.cpp", "../src/Engine/GraphicsGraphics/**.inl" }
-	includedirs { "../src/Engine/Engine", "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11/", "../src/Engine/Graphics", "../src/Engine/Logic" }
-	includedirs { "../src/3rdParty/sol2", "../src/3rdParty/luajit-2.0/src" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d" }
-	pchheader "Logic.h"
-	pchsource "../src/Engine/Logic/Logic.cpp"
+	files
+	{
+		path.join(PREMAKE_PATH, "**.lua"),
+	}
 
-project "Render"
-    kind "StaticLib"
-    files { "../src/Engine/Render/**.h", "../src/Engine/Render/**.cpp", "../src/Engine/Render/**.inl" }
-	includedirs { "../src/Engine/Core", "../src/Engine/Render", "../src/Engine/Render/d3d11" , "../src/Engine/Engine", "../src/Engine/Graphics" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d", "../src/3rdParty/stb/", "../src/3rdParty/assimp"  }
-	pchheader "Render.h"
-	pchsource "../src/Engine/Render/Render.cpp"
-	buildoptions { "-Zm150" }
+	postbuildcommands
+	{
+		'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2017.bat'
+	}
+	
+group "engine"
+dofile("core.lua")
+dofile("gfx.lua")
+dofile("engine.lua")
+dofile("logic.lua")
 
-group "3rdParty"
-project "imgui"
-    kind "StaticLib"
-    files { "../src/3rdParty/imgui/**.h", "../src/3rdParty/imgui/**.cpp" }
-	files { "../src/3rdParty/im3d/**.h", "../src/3rdParty/im3d/**.cpp" }
-	includedirs { "../src/3rdParty/imgui", "../src/3rdParty/im3d"}
-	excludes {"../src/3rdParty/imgui/examples/**.cpp", "../src/3rdParty/imgui/examples/**.h"}
-	excludes {"../src/3rdParty/im3d/examples/**.cpp", "../src/3rdParty/im3d/examples/**.h"}
-	files { "../src/3rdParty/imgui/examples/directx11_example/imgui_impl_dx11.h", "../src/3rdParty/imgui/examples/directx11_example/imgui_impl_dx11.cpp" }
+group "thridparty"
+dofile ("imgui.lua")
+dofile ("anax.lua")

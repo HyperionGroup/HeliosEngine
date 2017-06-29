@@ -1,4 +1,4 @@
-#include "Logic/Logic.h"
+#include "Logic.h"
 
 #include "Core/Logger\Logger.h"
 
@@ -7,7 +7,7 @@
 #include <Gfx/Pipeline.h>
 #include <Gfx/RenderableWorld.h>
 
-#include "Containers.h"
+#include "Core/Containers.h"
 
 namespace logic
 {

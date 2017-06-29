@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Name.h"
-#include <bgfx/bgfx.h>
+#include "Core/Name.h"
 
 namespace gfx
 {
@@ -13,6 +12,5 @@ namespace gfx
         void Initialize(const char* _vs, const char* _fs);
         void Bind();
     protected:
-        bgfx::ProgramHandle m_program;
     };
 }

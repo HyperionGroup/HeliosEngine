@@ -1,10 +1,10 @@
-#include "Logic/Logic.h"
+#include "Logic.h"
 
 #include "Core/Logger\Logger.h"
-#include "Containers.h"
+#include "Core/Containers.h"
 
 #include <sol.hpp>
-#include "Name.h"
+#include "Core/Name.h"
 
 namespace logic
 {

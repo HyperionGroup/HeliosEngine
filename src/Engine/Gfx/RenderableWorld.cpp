@@ -15,7 +15,6 @@ namespace gfx
 
     void CRenderableMesh::Render()
     {
-        bgfx::setTransform(mtx);
         mMesh->Render();
         mMaterial->Render();
     }
