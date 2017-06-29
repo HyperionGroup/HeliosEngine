@@ -28,6 +28,3 @@
 [submodule "src/3rdParty/bx"]
 	path = src/3rdParty/bx
 	url = https://github.com/bkaradzic/bx.git
-[submodule "src/3rdParty/bgfx"]
-	path = src/3rdParty/bgfx
-	url = https://github.com/bkaradzic/bgfx.git

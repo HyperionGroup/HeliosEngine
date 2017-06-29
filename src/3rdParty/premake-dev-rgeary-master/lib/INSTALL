@@ -1,1 +1,0 @@
-make [-e INSTALL_LIB=<install dir>] [all / clean]
