@@ -9,6 +9,7 @@ project "core"
 	{
 		path.join(ENGINE_PATH, "Core/**.h"),
 		path.join(ENGINE_PATH, "Core/**.cpp"),
+		path.join(ENGINE_PATH, "Core/**.hpp"),
 	}
 	
 	includedirs

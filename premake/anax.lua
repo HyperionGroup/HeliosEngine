@@ -13,5 +13,6 @@ project "anax"
 		UCRT,
 		IMGUI,
 		IM3D,
-		path.join(ANAX, "include")
+		path.join(ANAX, "include"),
+		path.join(ENGINE_PATH, "Core"),
 	}

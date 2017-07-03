@@ -18,4 +18,5 @@ project "gfx"
 		ENGINE_PATH,
 		path.join(ANAX, "include"),
 		path.join(ENGINE_PATH, "gfx"),
+		path.join(ENGINE_PATH, "Core"),
 	}
