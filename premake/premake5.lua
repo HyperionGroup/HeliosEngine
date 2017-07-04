@@ -23,6 +23,9 @@ PREMAKE_PATH = "../premake/"
 ENGINE_PATH = "../src/Engine/"
 THIRD_PARTY = "../src/3rdParty/"
 ANAX = path.join(THIRD_PARTY, "anax")
+BX_DIR = path.join(THIRD_PARTY, "bx")
+BIMG_DIR = path.join(THIRD_PARTY, "bimg")
+BGFX_DIR = path.join(THIRD_PARTY, "bgfx")
 IMGUI = path.join(THIRD_PARTY, "imgui")
 IM3D = path.join(THIRD_PARTY, "im3d")
 LUA = path.join(THIRD_PARTY, "luajit-2.0/src")
@@ -32,9 +35,18 @@ UCRT = path.join(THIRD_PARTY, "ucrt")
 project "HeliosEditor"
 	kind "WindowedApp"
 	
-	flags { "ExtraWarnings" , "FatalWarnings" }
+	flags
+	{
+		"ExtraWarnings",
+		--"FatalWarnings",
+	}
 	
 	files { "../src/HeliosEditor/*.cpp", "../src/HeliosEditor/*.h" }
+
+	defines
+	{
+		"ENTRY_CONFIG_IMPLEMENT_MAIN=1",
+	}
 	
 	includedirs
 	{
@@ -45,7 +57,14 @@ project "HeliosEditor"
 		IM3D,
 		SOL,
 		LUA,
-		IMGUI
+		IMGUI,
+		path.join(BGFX_DIR, "examples/common/"),
+		path.join(BGFX_DIR, "include"),
+		path.join(BX_DIR, "include"),
+		path.join(BIMG_DIR, "include"),
+		path.join(BX_DIR, "include/compat/msvc"),
+		path.join(BGFX_DIR, "3rdparty"),
+		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/include"),
 	}
 	
 	libdirs
@@ -59,19 +78,17 @@ project "HeliosEditor"
 	
 	links
 	{
-		"d3d11",
-		"d3dcompiler",
 		"gfx",
 		"core",
 		"imgui",
 		"engine",
 		"lua51",
 		"logic",
-		"assimp"
+		"assimp",
+		"bx",
+		"bgfx",
+		"bimg",
 	}
-	
-	pchheader "HeliosEditor.h"
-	pchsource "../src/HeliosEditor/main.cpp"
 	
 	postbuildcommands
 	{
@@ -102,3 +119,6 @@ dofile("logic.lua")
 group "thridparty"
 dofile ("imgui.lua")
 dofile ("anax.lua")
+dofile ("bx.lua")
+dofile ("bimg.lua")
+dofile ("bgfx.lua")

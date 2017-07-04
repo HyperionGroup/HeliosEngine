@@ -20,4 +20,10 @@ project "logic"
 		path.join(ANAX, "include"),
 		ENGINE_PATH,
 		path.join(ENGINE_PATH, "Logic"),
+		path.join(ENGINE_PATH, "Core"),
+		path.join(BGFX_DIR, "examples/common/"),
+		path.join(BGFX_DIR, "include"),
+		path.join(BX_DIR, "include"),
+		path.join(BIMG_DIR, "include"),
+		path.join(BX_DIR, "include/compat/msvc"),
 	}

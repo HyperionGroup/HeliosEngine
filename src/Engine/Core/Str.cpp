@@ -6,17 +6,28 @@ namespace core
 {
     CStr::CStr(const std::string& _str)
     {
-        *this = _str;
+        mStr = _str;
     }
 
     CStr::CStr(const char* _str)
     {
-        *this = _str;
+        mStr = _str;
     }
 
     CStr& CStr::operator=(const std::string& other)
     {
+        mStr = other;
         return *this;
+    }
+
+    CStr CStr::operator+(const std::string& other) const
+    {
+        return mStr + other;
+    }
+
+    CStr CStr::operator+(const char* other) const
+    {
+        return mStr + other;
     }
 
     CStr& CStr::operator=(const char* other)
@@ -27,6 +38,11 @@ namespace core
     template<typename... Arguments> void CStr::Format(Arguments... params)
     {
 
+    }
+
+    bool CStr::IsEmpty() const
+    {
+        return mStr.empty();
     }
 
     CStrVector CStr::Split(char _split_char) const

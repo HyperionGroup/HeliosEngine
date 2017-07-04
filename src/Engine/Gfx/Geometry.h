@@ -39,10 +39,8 @@ namespace render
         {
         }
 
-        virtual void Render(ID3D11DeviceContextPtr _device)
+        virtual void Render()
         {
-            CGeometry::Render(_device);
-            
         }
 
     protected:
