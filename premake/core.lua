@@ -1,6 +1,6 @@
 project "core"
     kind "StaticLib"
-	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}/$(ConfigurationName)/"
+	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}"
 	
 	pchheader "Core.h"
 	pchsource "../src/Engine/Core/Core.cpp"

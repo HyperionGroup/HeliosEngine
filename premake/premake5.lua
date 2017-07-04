@@ -69,8 +69,7 @@ project "HeliosEditor"
 	
 	libdirs
 	{
-		"$(SolutionDir)lib/%{cfg.buildcfg}/$(ConfigurationName)/",
-		"$(DXSDK_DIR)lib/x86/",
+		"$(SolutionDir)lib/%{cfg.buildcfg}",
 		"../bin/luajit/",
 		"../bin/assimp/",
 		"../bin/ucrt/",
