@@ -17,6 +17,7 @@ project "logic"
 		IM3D,
 		SOL,
 		LUA,
+		TINYFORMAT,
 		path.join(ANAX, "include"),
 		ENGINE_PATH,
 		path.join(ENGINE_PATH, "Logic"),

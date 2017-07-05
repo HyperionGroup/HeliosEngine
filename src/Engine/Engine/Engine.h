@@ -5,6 +5,8 @@
 #include "Assets/AssetManager.h"
 #include "ImmediateGui/ImmediateGui.h"
 
+#include "Logic/ScriptManager.h"
+
 namespace helios
 {
     class CEngine : public core::CSingleton< CEngine >, public gui::CImmediateGui
@@ -25,9 +27,14 @@ namespace helios
         const io::CAssetManager& GetAssetManager() const { return mAssetManager; }
         io::CAssetManager& GetAssetManager() { return mAssetManager; }
 
+        const logic::CScriptManager& GetScriptManager() const { return mScriptManager; }
+        logic::CScriptManager& GetScriptManager() { return mScriptManager; }
+
     protected:
         io::CSerializableEntityConstructor mSerializableConstructor;
         io::CAssetManager                  mAssetManager;
+
+        logic::CScriptManager              mScriptManager;
 
         bool mInitialized;
 

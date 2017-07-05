@@ -31,6 +31,7 @@ IM3D = path.join(THIRD_PARTY, "im3d")
 LUA = path.join(THIRD_PARTY, "luajit-2.0/src")
 SOL = path.join(THIRD_PARTY, "sol2")
 UCRT = path.join(THIRD_PARTY, "ucrt")
+TINYFORMAT = path.join(THIRD_PARTY, "tinyformat")
 	
 project "HeliosEditor"
 	kind "WindowedApp"
@@ -58,6 +59,7 @@ project "HeliosEditor"
 		SOL,
 		LUA,
 		IMGUI,
+		TINYFORMAT,
 		path.join(BGFX_DIR, "examples/common/"),
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),

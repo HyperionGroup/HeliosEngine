@@ -35,11 +35,6 @@ namespace core
         return *this;
     }
 
-    template<typename... Arguments> void CStr::Format(Arguments... params)
-    {
-
-    }
-
     bool CStr::IsEmpty() const
     {
         return mStr.empty();

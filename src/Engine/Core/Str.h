@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "tinyformat.h"
+
 namespace core
 {
     class CStrVector;
@@ -17,7 +19,12 @@ namespace core
         CStr operator+(const char* other) const;
         CStr operator+(const std::string& other) const;
         bool IsEmpty() const;
-        template<typename... Arguments> void Format(Arguments... params);
+        template<typename... Arguments> CStr& Format(Arguments... params)
+        {
+          mStr = tfm::format(ToCStr(), params...);
+          return *this;
+        }
+
         CStrVector Split(char _split_char) const;
         void ToLower();
         CStr& ToUpper();

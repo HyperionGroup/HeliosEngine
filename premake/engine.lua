@@ -16,8 +16,11 @@ project "engine"
 		IMGUI,
 		IM3D,
 		ENGINE_PATH,
+		TINYFORMAT,
 		path.join(ENGINE_PATH, "Engine"),
 		path.join(ENGINE_PATH, "Core"),
 		path.join(BX_DIR, "include"),
 		path.join(BX_DIR, "include/compat/msvc"),
+		SOL,
+		LUA
 	}

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <sol.hpp>
+
+#include <string>
+
 namespace logic
 {
-  void sol_example();
 }
