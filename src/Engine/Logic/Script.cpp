@@ -11,14 +11,22 @@ namespace logic
 
   CScript::CScript( std::string aCode )
   {
-    sol::environment env(LUA_STATE, sol::create, LUA_STATE.globals() );
-    mEnv = env;
-    LUA_STATE.script( aCode, mEnv );
+    mEnv = new sol::environment(LUA_STATE, sol::create, LUA_STATE.globals() );
+    LUA_STATE.script( aCode, *mEnv );
+  }
+
+  CScript::~CScript()
+  {
+    CHECKED_DELETE(mEnv);
   }
 
   void CScript::operator[](std::string aName)
   {
-    mEnv[aName];
+    auto f = (*mEnv)[aName];
+    if (f.valid())
+      f();
+    else
+      LOG_WARNING_APPLICATION("Function %s dont exist in Script.", aName);
   }
 
 }

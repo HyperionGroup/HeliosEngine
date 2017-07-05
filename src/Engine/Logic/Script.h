@@ -8,12 +8,13 @@ namespace logic
 {
   class CScript
   {
+  public:
     CScript(std::string aCode);
     ~CScript();
 
     void operator [](std::string aName);
 
   private:
-    sol::environment mEnv;
+    sol::environment *mEnv;
   };
 }

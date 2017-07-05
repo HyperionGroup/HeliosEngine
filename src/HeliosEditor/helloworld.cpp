@@ -8,6 +8,7 @@
 #include "bgfx_utils.h"
 #include "logo.h"
 #include "imgui/imgui.h"
+#include "Logic/Script.h"
 
 namespace
 {
@@ -44,6 +45,14 @@ public:
 			);
 
 		imguiCreate();
+
+    //TODO: DELETE (Example of multiple lua scripts.
+    logic::CScript s1("local name = '1' function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
+    logic::CScript s2("local name = '2' function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
+    s1["Start"];
+    s1["Update"];
+    s2["Start"];
+    s2["Update"];
 	}
 
 	virtual int shutdown() BX_OVERRIDE

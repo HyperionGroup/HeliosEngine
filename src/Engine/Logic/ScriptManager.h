@@ -8,7 +8,7 @@ namespace logic
   {
   public:
     CScriptManager();
-    ~CScriptManager();
+    ~CScriptManager() {};
 
     sol::state mLuaState;
   };
