@@ -1,6 +1,6 @@
 project "imgui"
     kind "StaticLib"
-	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}/$(ConfigurationName)/"
+	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}"
 	
     files
 	{

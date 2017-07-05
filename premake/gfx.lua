@@ -1,6 +1,6 @@
 project "gfx"
     kind "StaticLib"
-	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}/$(ConfigurationName)/"
+	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}"
 	pchheader "Gfx.h"
 	pchsource "../src/Engine/gfx/Gfx.cpp"
 	

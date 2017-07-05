@@ -1,6 +1,6 @@
 project "logic"
     kind "StaticLib"
-	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}/$(ConfigurationName)/"
+	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}"
 	pchheader "Logic.h"
 	pchsource "../src/Engine/Logic/Logic.cpp"
 	

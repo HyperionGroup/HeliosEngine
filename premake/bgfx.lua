@@ -5,7 +5,7 @@
 
 project "bgfx"
 	kind "StaticLib"
-	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}/$(ConfigurationName)/"
+	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}"
 
 	includedirs {
 		UCRT,
@@ -25,11 +25,6 @@ project "bgfx"
 		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/src/mesa"),
 		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/src/getopt"),
 	}
-
-	configuration { "Debug" }
-		defines {
-			"BGFX_CONFIG_DEBUG=1",
-		}
 
 	files {
 		path.join(BGFX_DIR, "include/**.h"),
