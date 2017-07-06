@@ -68,7 +68,7 @@ public:
 		imguiCreate();
 
     //TODO: DELETE (Example of multiple lua scripts.
-    logic::CScript s("name = 'script_1' my_number = 1 my_version = 0.1 local private_number = 12 function Start() log_info(name .. ' v' .. my_version) end");
+    logic::CScript s("cstr_var = cstr.new('test_cstr') log_info(cstr_var:raw()) name = 'script_1' my_number = 1 my_version = 0.1 local private_number = 12 function Start() log_info(name .. ' v' .. my_version) end");
     s["Start"];
 	}
 
