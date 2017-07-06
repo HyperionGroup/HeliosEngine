@@ -1,11 +1,19 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <sol.hpp>
 
 namespace logic
 {
+  struct SLuaVar
+  {
+    std::string name;
+    sol::type type;
+    std::string value;
+  };
+
   class CScript
   {
   public:
@@ -16,5 +24,7 @@ namespace logic
 
   private:
     sol::environment *mEnv;
+
+    std::vector<SLuaVar> mVariables;
   };
 }

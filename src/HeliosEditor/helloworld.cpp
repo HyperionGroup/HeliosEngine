@@ -68,12 +68,8 @@ public:
 		imguiCreate();
 
     //TODO: DELETE (Example of multiple lua scripts.
-    logic::CScript s1("name = '1' name_num = 1 function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
-    logic::CScript s2("name = '2' name_num = 2 function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
-    s1["Start"];
-    s1["Update"];
-    s2["Start"];
-    s2["Update"];
+    logic::CScript s("name = 'script_1' my_number = 1 my_version = 0.1 local private_number = 12 function Start() script_print(name .. ' v' .. my_version) end");
+    s["Start"];
 	}
 
 	virtual int shutdown() BX_OVERRIDE
