@@ -34,3 +34,6 @@
 [submodule "src/3rdParty/tinyformat"]
 	path = src/3rdParty/tinyformat
 	url = https://github.com/c42f/tinyformat.git
+[submodule "src/3rdParty/rapidjson"]
+	path = src/3rdParty/rapidjson
+	url = https://github.com/miloyip/rapidjson.git
