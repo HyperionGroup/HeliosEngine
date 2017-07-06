@@ -68,8 +68,8 @@ public:
 		imguiCreate();
 
     //TODO: DELETE (Example of multiple lua scripts.
-    logic::CScript s1("local name = '1' function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
-    logic::CScript s2("local name = '2' function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
+    logic::CScript s1("name = '1' name_num = 1 function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
+    logic::CScript s2("name = '2' name_num = 2 function Start() script_print('Start ' .. name) end function Update() script_print('Update ' .. name) end");
     s1["Start"];
     s1["Update"];
     s2["Start"];

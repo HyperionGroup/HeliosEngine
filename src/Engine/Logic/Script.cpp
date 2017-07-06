@@ -13,6 +13,15 @@ namespace logic
   {
     mEnv = new sol::environment(LUA_STATE, sol::create, LUA_STATE.globals() );
     LUA_STATE.script( aCode, *mEnv );
+
+    //TODO: DELETE (reflection test)
+    sol::table metatable = (*mEnv);
+    for (const auto &pair : metatable)
+    {
+      const std::string key = pair.first.as<std::string>();
+      sol::type t = pair.second.get_type();
+      LOG_INFO_APPLICATION( (key + " (" + std::to_string((int)t) + ")").c_str() );
+    }
   }
 
   CScript::~CScript()
