@@ -17,6 +17,7 @@ project "core"
 		UCRT,
 		IMGUI,
 		IM3D,
+		JSON, 
 		path.join(ANAX, "include"),
 		ENGINE_PATH,
 		path.join(ENGINE_PATH, "Core"),

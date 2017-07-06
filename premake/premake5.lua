@@ -32,6 +32,7 @@ LUA = path.join(THIRD_PARTY, "luajit-2.0/src")
 SOL = path.join(THIRD_PARTY, "sol2")
 UCRT = path.join(THIRD_PARTY, "ucrt")
 TINYFORMAT = path.join(THIRD_PARTY, "tinyformat")
+JSON = path.join(THIRD_PARTY, "rapidjson/include")
 	
 project "HeliosEditor"
 	kind "WindowedApp"

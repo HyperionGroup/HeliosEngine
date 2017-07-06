@@ -20,6 +20,7 @@ project "gfx"
 		ENGINE_PATH,
 		BGFX_DIR,
 		TINYFORMAT,
+		JSON, 
 		path.join(THIRD_PARTY, "assimp"),
 		path.join(ANAX, "include"),
 		path.join(ENGINE_PATH, "gfx"),

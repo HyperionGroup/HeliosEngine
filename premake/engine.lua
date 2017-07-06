@@ -17,6 +17,7 @@ project "engine"
 		IM3D,
 		ENGINE_PATH,
 		TINYFORMAT,
+		JSON, 
 		path.join(ENGINE_PATH, "Engine"),
 		path.join(ENGINE_PATH, "Core"),
 		path.join(BX_DIR, "include"),
