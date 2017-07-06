@@ -10,6 +10,9 @@
 #include "imgui/imgui.h"
 #include "Logic/Script.h"
 
+#include "Core/Serialization.h"
+#include "Gfx/Pipeline.h"
+
 namespace
 {
 
@@ -23,6 +26,24 @@ public:
 
 	void init(int32_t _argc, const char* const* _argv, uint32_t _width, uint32_t _height) BX_OVERRIDE
 	{
+        //TODO: DELETE (Example of serialization)
+        gfx::CBeginFrame lBeginFrame;
+        lBeginFrame.SetName("BeginFrame");
+        gfx::CEndFrame lEndFrame;
+        lBeginFrame.SetName("EndFrame");
+        std::shared_ptr< gfx::CRenderDebugText > lRenderDebugText = std::make_shared< gfx::CRenderDebugText>();
+        lRenderDebugText->mText = "hola aljenci";
+
+        serialization::Serializer lSerializer;
+        lSerializer.Begin();
+            lSerializer.SerializeObject(lBeginFrame);
+            lSerializer.SerializeObject(lEndFrame);
+            lSerializer.SerializeObject(*lRenderDebugText.get());
+        lSerializer.End();
+        lSerializer.WriteIntoFile("pipeline.xml");
+
+        //TODO: DELETE (Example of multiple lua scripts.
+
 		Args args(_argc, _argv);
 
 		m_width  = _width;

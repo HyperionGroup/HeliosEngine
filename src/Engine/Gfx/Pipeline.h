@@ -1,8 +1,34 @@
 #pragma once
 #include "Gfx.h"
 
+#include "Core/Name.h"
+#include "Core/Enabled.h"
+
 namespace gfx
 {
+    struct CRenderTask : public core::CName, public core::CEnabled
+    {
+        virtual void Execute() = 0;
+    };
+
+    struct CBeginFrame : public CRenderTask
+    {
+        virtual void Execute();
+    };
+
+    struct CRenderDebugText : public CRenderTask
+    {
+        virtual void Execute();
+        const char* mText;
+        uint32_t mX;
+        uint32_t mY;
+    };
+    
+    struct CEndFrame : public CRenderTask
+    {
+        virtual void Execute();
+    };
+
     namespace pipeline
     {
         void BeginRender();

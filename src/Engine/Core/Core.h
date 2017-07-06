@@ -34,7 +34,7 @@ struct Float4 {
 };
 
 struct CColor {
-    float x, y, z, w;
+    float r, g, b, a;
 };
 
 // Compiler

@@ -24,7 +24,18 @@ namespace gfx
         }
     }
 
-    namespace pipeline
+    void CBeginFrame::Execute()
     {
+
+    }
+
+    void CEndFrame::Execute()
+    {
+
+    }
+
+    void CRenderDebugText::Execute()
+    {
+
     }
 }
