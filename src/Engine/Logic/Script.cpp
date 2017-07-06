@@ -37,7 +37,7 @@ namespace logic
     if (f.valid())
       f();
     else
-      LOG_WARNING_APPLICATION("Function %s dont exist in Script.", aName);
+      LOG_WARNING_APPLICATION("Function %s dont exist in Script.", aName.c_str());
   }
 
 }
