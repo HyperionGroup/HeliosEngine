@@ -61,6 +61,7 @@ project "HeliosEditor"
 		LUA,
 		IMGUI,
 		TINYFORMAT,
+		JSON,  
 		path.join(BGFX_DIR, "examples/common/"),
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),
