@@ -20,7 +20,7 @@ namespace logic
     mLuaState["log_error"] = [](std::string str) { LOG_ERROR_APPLICATION(str.c_str()); };
 
     sol::constructors<core::CStr(const std::string&), core::CStr(const char*)> ctor;
-    sol::usertype<core::CStr> CStrLuaType(ctor, "is_empty", &core::CStr::IsEmpty, "raw", &core::CStr::ToCStr );
+    sol::usertype<core::CStr> CStrLuaType(ctor, "cpp_type", []() { return typeid(core::CStr).name(); }, "is_empty", &core::CStr::IsEmpty, "raw", &core::CStr::ToCStr);
     mLuaState.set_usertype("cstr", CStrLuaType);
 
   }

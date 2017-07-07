@@ -10,14 +10,14 @@ namespace logic
   struct SLuaVar
   {
     std::string name;
-    sol::type type;
-    std::string value;
+    std::string type;
+    sol::object value;
   };
 
   class CScript
   {
   public:
-    CScript(std::string aCode);
+    CScript(std::string aCode, bool trace_variables = true);
     ~CScript();
 
     void operator [](std::string aName);

@@ -5,24 +5,39 @@
 #include "Engine/Engine.h"
 
 #include "ScriptManager.h"
+#include "Str.h"
 
 namespace logic
 {
 
-  CScript::CScript( std::string aCode )
+  CScript::CScript( std::string aCode, bool trace_variables )
   {
     mEnv = new sol::environment(LUA_STATE, sol::create, LUA_STATE.globals() );
     LUA_STATE.script( aCode, *mEnv );
 
-    sol::table env_table = (*mEnv);
-    for (const auto &pair : env_table)
+    if (trace_variables)
     {
-      SLuaVar var;
-      var.name = pair.first.as<std::string>();
-      var.type = pair.second.get_type();
-      var.value = pair.second.as<std::string>();
+      sol::table env_table = (*mEnv);
+      for (const auto &pair : env_table)
+      {
+        SLuaVar var;
+        var.name = pair.first.as<std::string>();
+        sol::type type = pair.second.get_type();
+        var.value = pair.second.as<sol::object>();
 
-      mVariables.push_back(var);
+        if (type == sol::type::userdata)
+        {
+          LUA_STATE.script("actual_check_usertype = " + var.name + ":cpp_type()", *mEnv);
+          std::string type = (*mEnv)["actual_check_usertype"];
+          var.type = type;
+        }
+        else
+        {
+          var.type = std::to_string((int)type);
+        }
+
+        mVariables.push_back(var);
+      }
     }
   }
 
