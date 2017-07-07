@@ -9,4 +9,9 @@ namespace serialization
     {
         _archive.Add("name", _object.GetName());
     }
+
+    template<> void Deserialize<::core::CName>(InputArchiveNode& _archive, ::core::CName& _object)
+    {
+        _object.SetName(Get<core::CStr>(_archive, "name"));
+    }
 }

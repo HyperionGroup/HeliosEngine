@@ -29,7 +29,25 @@ namespace serialization
         if (_value != _defValue)
         {
             Key(_name);
-            String(tfm::format("%u", _value).c_str());
+            Uint(_value);
         }
+    }
+
+    template<> core::CStr Get<core::CStr>(InputArchiveNode& _node, const char* _name, const core::CStr& _defValue)
+    {
+        InputArchiveNode::MemberIterator lIt = _node.FindMember(_name);
+        return (lIt != _node.MemberEnd()) ? lIt->value.GetString() : _defValue;
+    }
+
+    template<> uint32_t Get<uint32_t>(InputArchiveNode& _node, const char* _name, const uint32_t& _defValue)
+    {
+        InputArchiveNode::MemberIterator lIt = _node.FindMember(_name);
+        return (lIt != _node.MemberEnd()) ? lIt->value.GetUint() : _defValue;
+    }
+
+    template<> bool Get<bool>(InputArchiveNode& _node, const char* _name, const bool& _defValue)
+    {
+        InputArchiveNode::MemberIterator lIt = _node.FindMember(_name);
+        return (lIt != _node.MemberEnd()) ? lIt->value.GetBool() : _defValue;
     }
 }

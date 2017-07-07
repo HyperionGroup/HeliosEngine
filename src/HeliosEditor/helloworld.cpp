@@ -40,7 +40,27 @@ public:
             lSerializer.SerializeObject(lEndFrame);
             lSerializer.SerializeObject(*lRenderDebugText.get());
         lSerializer.End();
-        lSerializer.WriteIntoFile("pipeline.xml");
+        //lSerializer.WriteIntoFile("pipeline.xml");
+
+        serialization::InputArchive lInputArchive;
+        static const char* kTypeNames[] =
+        { "Null", "False", "True", "Object", "Array", "String", "Number" };
+
+        lInputArchive.ReadFromFile("pipeline.xml");
+        for (serialization::InputArchiveNode& a : lInputArchive.GetArray() )
+        {
+            if (a["task_type"].GetString() == "begin_frame")
+                serialization::Deserialize(a, lBeginFrame);
+            else if (a["task_type"].GetString() == "end_frame")
+            {
+                LOG_INFO_APPLICATION("-ds-fas-dfa-");
+                serialization::Deserialize(a, lEndFrame);
+            }
+            else if (a["task_type"].GetString() == "render_debug_text")
+                serialization::Deserialize(a, *lRenderDebugText.get());
+            LOG_INFO_APPLICATION("Type of member %s\n", a["task_type"].GetString());
+        }
+
 
         //TODO: DELETE (Example of multiple lua scripts.
 

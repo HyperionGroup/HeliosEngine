@@ -1,12 +1,14 @@
 [
     {
         "task_type": "begin_frame",
-        "name": "EndFrame"
+        "name": "fasdfasdfasdfasdasefasdfasdfas"
     },
     {
-        "task_type": "end_frame"
+        "task_type": "end_frame",
+		"name": "patata"
     },
     {
-        "task_type": "render_debug_text"
+        "task_type": "render_debug_text",
+		"name": "patatagrande"
     }
 ]

@@ -22,7 +22,7 @@ namespace core
         int len = _vscprintf(fmt, args) + 1;
         buffer = (char*)malloc(len * sizeof(char));
         vsprintf_s(buffer, len, fmt, args);
-        std::string output = lTag + buffer;
+        std::string output = lTag + buffer + "\n";
         free(buffer);
         va_end(args);
         OutputDebugString(output.c_str());

@@ -10,10 +10,34 @@
 #include <iostream>
 #include <memory>
 
+
+#include "Core/Logger/Logger.h"
+
 namespace serialization
 {
     typedef rapidjson::Document Archive;
     typedef rapidjson::Value Node;
+
+    class InputArchive : public rapidjson::Document
+    {
+    public:
+        InputArchive() = default;
+        virtual ~InputArchive() = default;
+        void ReadFromFile(const core::CStr& _filename)
+        {
+            std::ifstream t(_filename.ToCStr());
+            std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+            if (Parse(str.c_str()).HasParseError())
+            {
+                LOG_ERROR_APPLICATION("Error opening %s", _filename.ToCStr());
+            }
+            
+            assert(IsArray());
+        }
+    };
+
+    typedef public rapidjson::Value InputArchiveNode;
+    template< typename T > T Get(InputArchiveNode& _node, const char* _name, const T& _defValue = T());
 
     class OutputArchive : public rapidjson::PrettyWriter<rapidjson::StringBuffer>
     {
@@ -37,6 +61,20 @@ namespace serialization
         rapidjson::StringBuffer mBuffer;
     };
 
+    class Deserializer
+    {
+    public:
+        Deserializer( const core::CStr& _filename )
+        {
+
+        }
+        virtual ~Deserializer() = default;
+        template < class Object > void DerializeObject(const Object& _object) { Serialize(mArchive, _object); }
+
+    private:
+        OutputArchive mArchive;
+    };
+
     class Serializer
     {
     public:
@@ -52,4 +90,5 @@ namespace serialization
     };
 
     template< class Object > void Serialize(OutputArchive& _archive, const Object& _object);
+    template< class Object > void Deserialize(InputArchiveNode& _node, Object& _object);
 }
