@@ -35,6 +35,26 @@ namespace core
         return *this;
     }
 
+    bool CStr::operator!=(const core::CStr& other) const
+    {
+        return mStr != other.mStr;
+    }
+     
+    bool CStr::operator==(const core::CStr& other) const
+    {
+        return mStr == other.mStr;
+    }
+
+    bool CStr::operator!=(const std::string& other) const
+    {
+        return mStr != other;
+    }
+
+    bool CStr::operator==(const std::string& other) const
+    {
+        return mStr == other;
+    }
+
     bool CStr::IsEmpty() const
     {
         return mStr.empty();

@@ -14,35 +14,29 @@ namespace serialization
 
     template<> void Serialize<::gfx::CBeginFrame>(OutputArchive& _archive, const ::gfx::CBeginFrame& _object)
     {
-        _archive->StartObject();
-        _archive->Key("task_type");
-        _archive->String("begin_frame");
+        _archive.Begin();
+        _archive.Add( "task_type", core::CStr("begin_frame") );
         Serialize<::gfx::CRenderTask>(_archive, _object);
-        _archive->EndObject();
+        _archive.End();
     }
 
     template<> void Serialize<::gfx::CEndFrame>(OutputArchive& _archive, const ::gfx::CEndFrame& _object)
     {
-        _archive->StartObject();
-        _archive->Key("task_type");
-        _archive->String("end_frame");
+        _archive.Begin();
+        _archive.Add("task_type", core::CStr("end_frame"));
         Serialize<::gfx::CRenderTask>(_archive, _object);
-        _archive->EndObject();
+        _archive.End();
     }
 
     template<> void Serialize<::gfx::CRenderDebugText>(OutputArchive& _archive, const ::gfx::CRenderDebugText& _object)
     {
-        _archive->StartObject();
-        _archive->Key("task_type");
-        _archive->String("render_debug_text");
-        _archive->Key("text");
-        _archive->String(_object.mText);
-        _archive->Key("x");
-        _archive->Uint(_object.mX);
-        _archive->Key("y");
-        _archive->Uint(_object.mY);
+        _archive.Begin();
+        _archive.Add("task_type", core::CStr("render_debug_text"));
         Serialize<::gfx::CRenderTask>(_archive, _object);
-        _archive->EndObject();
+        _archive.Add("text", _object.mText);
+        _archive.Add("x", _object.mX, 0u);
+        _archive.Add("x", _object.mY, 0u);
+        _archive.End();
     }
 
     namespace gfx

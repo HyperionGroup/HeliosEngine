@@ -15,6 +15,10 @@ namespace core
         CStr(const std::string& _str);
         CStr(const char* _str);
         CStr& operator=(const std::string& other);
+        bool operator!=(const core::CStr& other) const;
+        bool operator==(const core::CStr& other) const;
+        bool operator!=(const std::string& other) const;
+        bool operator==(const std::string& other) const;
         CStr& operator=(const char* other);
         CStr operator+(const char* other) const;
         CStr operator+(const std::string& other) const;

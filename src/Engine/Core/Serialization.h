@@ -13,36 +13,19 @@
 namespace serialization
 {
     typedef rapidjson::Document Archive;
-    typedef std::shared_ptr< rapidjson::PrettyWriter<rapidjson::StringBuffer> > OutputArchive;
     typedef rapidjson::Value Node;
 
-    template< class Object > void Serialize(OutputArchive& _archive, const Object& _object);
-
-    class Serializer
+    class OutputArchive : public rapidjson::PrettyWriter<rapidjson::StringBuffer>
     {
     public:
-        Serializer()
-            : mArchive( std::make_shared< rapidjson::PrettyWriter<rapidjson::StringBuffer> >( mBuffer ) )
+        OutputArchive()
+           : rapidjson::PrettyWriter<rapidjson::StringBuffer>(mBuffer)
         {
         }
-
-        virtual ~Serializer() = default;
-
-        void Begin()
-        {
-            mArchive->StartArray();
-        }
-
-        void End()
-        {
-            mArchive->EndArray();
-        }
-        
-        template < class Object > void SerializeObject(const Object& _object)
-        {
-            Serialize(mArchive, _object);
-        }
-
+        void Begin() { StartObject(); }
+        void End()   { EndObject();   }
+        virtual ~OutputArchive() = default;
+        template< typename T > void Add(const char* _name, const T& _value, const T& _defValue = T() );
         void WriteIntoFile(const core::CStr& _filename) const
         {
             std::ofstream out(_filename.ToCStr());
@@ -52,6 +35,21 @@ namespace serialization
 
     private:
         rapidjson::StringBuffer mBuffer;
+    };
+
+    class Serializer
+    {
+    public:
+        Serializer() = default;
+        virtual ~Serializer() = default;
+        void Begin() { mArchive.StartArray(); }
+        void End() { mArchive.EndArray(); }
+        template < class Object > void SerializeObject(const Object& _object) { Serialize(mArchive, _object); }
+        void WriteIntoFile(const core::CStr& _filename) const { mArchive.WriteIntoFile(_filename); }
+
+    private:
         OutputArchive mArchive;
     };
+
+    template< class Object > void Serialize(OutputArchive& _archive, const Object& _object);
 }

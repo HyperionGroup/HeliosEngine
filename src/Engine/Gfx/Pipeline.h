@@ -19,7 +19,7 @@ namespace gfx
     struct CRenderDebugText : public CRenderTask
     {
         virtual void Execute();
-        const char* mText;
+        core::CStr mText;
         uint32_t mX;
         uint32_t mY;
     };
