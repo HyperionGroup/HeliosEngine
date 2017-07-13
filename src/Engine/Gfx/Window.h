@@ -1,33 +1,32 @@
 #pragma once
 
+#include <bx/uint32_t.h>
+#include "common.h"
+#include "bgfx_utils.h"
+
+#include "Core/Singleton.h"
+
 namespace gfx
 {
-    class CWindow
+    class CWindow : public core::CSingleton< CWindow >
     {
     public:
-        CWindow();
-        virtual ~CWindow();
-        virtual bool Create( int _height = -1, int _width = -1);
-        virtual bool Update();
-        virtual void ShutDown();
+      CWindow() = default;
+      virtual ~CWindow() = default;
+      void Init(int32_t _argc, const char* const* _argv, uint32_t _width, uint32_t _height);
 
-        HWND winID() const { return hwnd; }
-        int GetHeight() const { return mHeight; }
-        void SetHeight(int val) { mHeight = val; }
-        int GetWidth() const { return mWidth; }
-        void SetWidth(int val) { mWidth = val; }
-        
-        bool HasFocus() const;
-        Float2 GetWindowRelativeCursor() const;
-
-        HWND winId() const { return hwnd; }
+      bool Update();
+      const entry::MouseState& GetMouseState() const { return m_mouseState; }
+      const uint32_t GetWidth() const { return m_width; }
+      const uint32_t GetHeight() const { return m_height; }
+      const uint32_t GetDebug() const { return m_debug; }
+      const uint32_t GetReset() const { return m_reset; }
 
     protected:
-        WNDCLASSEX wc;
-        HWND hwnd;
-        MSG msg;
-        int mHeight;
-        int mWidth;
-        Float2  mPrevCursorPos;
+      entry::MouseState m_mouseState;
+      uint32_t m_width;
+      uint32_t m_height;
+      uint32_t m_debug;
+      uint32_t m_reset;
     };
 }

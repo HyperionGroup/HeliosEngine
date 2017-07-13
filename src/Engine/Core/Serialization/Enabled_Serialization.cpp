@@ -3,15 +3,15 @@
 
 #include "Serialization.h"
 
-namespace serialization
+namespace core
 {
-    template<> void Serialize<::core::CEnabled>(OutputArchive& _archive, const ::core::CEnabled& _object)
+    void CEnabled::Serialize(serialization::OutputArchive& _archive)
     {
-        _archive.Add("enabled", _object.IsEnabled(), true );
+        _archive.Add("enabled", IsEnabled(), true );
     }
 
-    template<> void Deserialize<::core::CEnabled>(InputArchiveNode& _archive, ::core::CEnabled& _object)
+    void CEnabled::Deserialize(serialization::InputArchiveNode& _archive)
     {
-        _object.SetEnabled(Get(_archive, "enabled", true));
+        SetEnabled(serialization::Get(_archive, "enabled", true));
     }
 }

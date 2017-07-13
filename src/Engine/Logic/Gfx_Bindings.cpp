@@ -91,16 +91,6 @@ namespace logic
         _state.set_function("CreateGfxLayer", create_layer);
     }
 
-    void bind_pipeline(sol::state& _state)
-    {
-        _state.set_function("clear_view", gfx::pipeline::ClearView);
-        _state.set_function("set_view_projection", gfx::pipeline::SetViewProjection);
-        _state.set_function("begin_render", gfx::pipeline::BeginRender);
-        _state.set_function("render_layer", gfx::pipeline::RenderWorldLayer);
-        _state.set_function("render_debug_text", gfx::pipeline::RenderDebugText);
-        _state.set_function("end_render", gfx::pipeline::EndRender);
-    }
-
     void bind_gfx_lib(sol::state& _state)
     {
         bind_shader(_state);

@@ -7,8 +7,12 @@
 
 namespace core
 {
-    class CStrVector;
-    class CStr
+    typedef std::string CStr;
+    typedef std::vector< std::string > CStrVector;
+    void Split(const CStr& _str, char _split_char, CStrVector& elems);
+    
+
+    /*
     {
     public:
         CStr() = default;
@@ -25,22 +29,16 @@ namespace core
         bool IsEmpty() const;
         template<typename... Arguments> CStr& Format(Arguments... params)
         {
-          mStr = tfm::format(ToCStr(), params...);
+          mStr = tfm::format(c_str(), params...);
           return *this;
         }
 
         CStrVector Split(char _split_char) const;
         void ToLower();
         CStr& ToUpper();
-        const char* ToCStr() const;
+        const char* c_str() const;
     protected:
         std::string mStr;
     };
-
-    class CStrVector : public std::vector< std::string >
-    {
-    public:
-        CStrVector() = default;
-        virtual ~CStrVector() = default;
-    };
+    */
 }

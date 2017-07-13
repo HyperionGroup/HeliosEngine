@@ -16,12 +16,12 @@ namespace gui
             if(_position.x > 0 && _position.y > 0 )
                 ImGui::SetNextWindowPos(ImVec2(_position.x, _position.y));
 
-            ImGui::Begin(_title.ToCStr());
+            ImGui::Begin(_title.c_str());
         }
         void EndWindow() { return ImGui::End(); }
         void Indent() { ImGui::Indent(); }
         void Unindent() { ImGui::Unindent(); }
-        bool CollapsingHeader(const core::CStr& _title) { return ImGui::CollapsingHeader(_title.ToCStr()); }
-        void LabelText(const core::CStr& _label, const core::CStr& _text) { ImGui::LabelText(_label.ToCStr(), _text.ToCStr()); }
+        bool CollapsingHeader(const core::CStr& _title) { return ImGui::CollapsingHeader(_title.c_str()); }
+        void LabelText(const core::CStr& _label, const core::CStr& _text) { ImGui::LabelText(_label.c_str(), _text.c_str()); }
     };
 }

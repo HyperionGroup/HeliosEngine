@@ -19,6 +19,7 @@ project "logic"
 		LUA,
 		TINYFORMAT,
 		path.join(ANAX, "include"),
+		JSON, 
 		ENGINE_PATH,
 		path.join(ENGINE_PATH, "Logic"),
 		path.join(ENGINE_PATH, "Core"),
@@ -27,4 +28,5 @@ project "logic"
 		path.join(BX_DIR, "include"),
 		path.join(BIMG_DIR, "include"),
 		path.join(BX_DIR, "include/compat/msvc"),
+		path.join(BGFX_DIR, "3rdparty"),
 	}

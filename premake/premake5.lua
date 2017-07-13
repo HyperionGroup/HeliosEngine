@@ -69,6 +69,7 @@ project "HeliosEditor"
 		path.join(BX_DIR, "include/compat/msvc"),
 		path.join(BGFX_DIR, "3rdparty"),
 		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/include"),
+		path.join(BGFX_DIR, "3rdparty"),
 	}
 	
 	libdirs
@@ -83,7 +84,6 @@ project "HeliosEditor"
 	{
 		"gfx",
 		"core",
-		"imgui",
 		"engine",
 		"lua51",
 		"logic",
@@ -120,7 +120,6 @@ dofile("engine.lua")
 dofile("logic.lua")
 
 group "thridparty"
-dofile ("imgui.lua")
 dofile ("anax.lua")
 dofile ("bx.lua")
 dofile ("bimg.lua")

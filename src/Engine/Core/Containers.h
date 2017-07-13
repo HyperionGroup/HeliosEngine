@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include "Core/Str.h"
 
 namespace core
 {
@@ -22,12 +23,12 @@ namespace core
             return mArray.size();
         }
 
-        inline bool Exist(const std::string &_name)
+        inline bool Exist(const char*_name)
         {
             return mMap.find(_name) != mMap.end;
         }
 
-        inline void Remove(const std::string &_name)
+        inline void Remove(const char*_name)
         {
             TMap::const_iterator _find = mMap.find(_name);
             if (_find != mMap.end())
@@ -48,13 +49,13 @@ namespace core
             return mArray[_idx];
         }
 
-        virtual std::shared_ptr<T> Get(const std::string &_name) const
+        virtual std::shared_ptr<T> Get(const char*_name) const
         {
             TMap::const_iterator _find = mMap.find(_name);
             return (_find != mMap.end()) ? mArray[_find->second] : nullptr;
         }
 
-        virtual bool Add( const std::string& _name, std::shared_ptr<T> _resource )
+        virtual bool Add( const char* _name, std::shared_ptr<T> _resource )
         {
             bool lOk = false;
             if (mMap.find(_name) == mMap.end())
@@ -79,7 +80,7 @@ namespace core
 
     protected:
         typedef std::vector< std::shared_ptr<T> > TArray;
-        typedef std::map< const std::string, size_t > TMap;
+        typedef std::map< const char*, size_t > TMap;
 
         TArray mArray;
         TMap   mMap;
@@ -95,22 +96,22 @@ namespace core
             Shutdown();
         }
 
-        inline bool Exist(const std::string &_name)
+        inline bool Exist(const char* _name)
         {
             return mMap.find(_name) != mMap.end;
         }
 
-        inline void Remove(const std::string &_name)
+        inline void Remove(const char*_name)
         {
             mMap.erase(_name);
         }
 
-        virtual inline T * Get(const std::string &_name)
+        virtual inline T * Get(const char*_name)
         {
             return mMap[_name];
         }
 
-        virtual inline bool Add(const std::string &_name, T *Resource)
+        virtual inline bool Add(const char*_name, T *Resource)
         {
             bool lOk = false;
             if (mMap.find(_name) == mMap.end())
@@ -121,7 +122,7 @@ namespace core
             return lOk;
         }
 
-        virtual inline void Update(const std::string &_name, T *aResource)
+        virtual inline void Update(const char*_name, T *aResource)
         {
             TStringMap::iterator lItFind = mMap.find(_name);
             if (lItFind != mMap.end())
@@ -149,7 +150,7 @@ namespace core
         }
 
     protected:
-        typedef std::map<std::string, T*> TStringMap;
+        typedef std::map<const char*, T*> TStringMap;
         TStringMap	 mMap;
     };
 }

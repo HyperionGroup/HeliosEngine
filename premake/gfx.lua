@@ -30,4 +30,5 @@ project "gfx"
 		path.join(BX_DIR, "include"),
 		path.join(BIMG_DIR, "include"),
 		path.join(BX_DIR, "include/compat/msvc"),
+		path.join(BGFX_DIR, "3rdparty"),
 	}

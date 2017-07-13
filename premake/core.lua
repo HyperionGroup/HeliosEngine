@@ -23,7 +23,8 @@ project "core"
 		path.join(ENGINE_PATH, "Core"),
 		path.join(BX_DIR, "include"),
 		path.join(BX_DIR, "include/compat/msvc"),
-		TINYFORMAT
+		TINYFORMAT,
+		path.join(BGFX_DIR, "3rdparty"),
 	}
 	
 	

@@ -1,41 +1,50 @@
 #include "Gfx.h"
 
 #include "Pipeline.h"
-
-#include "RenderableWorld.h"
+#include "imgui/imgui.h"
 
 namespace gfx
 {
-    namespace 
+    CRenderPipeline::CRenderPipeline()
     {
-        inline uint8_t FloatToByte(float fValue)
-        {
-            int i = static_cast<int>(0xff * fValue);
-            if (i < 0)
-                i = 0;
-            else if (i > 0xff)
-                i = 0xff;
-            return static_cast<uint8_t>(i);
-        }
-
-        inline uint32_t GetUint32Argb( float r, float g, float b, float a)
-        {
-            return  (uint32_t)(FloatToByte(r) << 24) + (FloatToByte(g) << 16) + (FloatToByte(b) << 8) + FloatToByte(a);
-        }
+      Register<CBeginFrame>();
+      Register<CEndFrame>();
+      Register<CRenderDebugText>();
+      Register<CClear>();
     }
 
-    void CBeginFrame::Execute()
+    void CRenderPipeline::Serialize() const
     {
-
+      serialization::OutputArchive lOutputArchive("pipeline.hcf");
+      for (auto& lTask : mArray)
+        lTask->Serialize(lOutputArchive);
     }
 
-    void CEndFrame::Execute()
+    void CRenderPipeline::Deserialize()
     {
-
+      Clear();
+      serialization::InputArchive lInputArchive("pipeline.hcf");
+      for (serialization::InputArchiveNode& lInputNode : lInputArchive.GetArray())
+      {
+        std::shared_ptr< CRenderTask > lTask = Create(lInputNode["type"].GetString());
+        lTask->Deserialize(lInputNode);
+        Add(lTask->GetName().c_str(), lTask);
+      }
     }
 
-    void CRenderDebugText::Execute()
+    void CRenderPipeline::Execute()
     {
+      for (auto& lTask : mArray)
+        lTask->Execute();
+    }
 
+    void CRenderPipeline::OnEditor()
+    {
+      if (ImGui::BeginDock("CRenderPipeline"))
+      {
+        for (auto& lTask : mArray)
+          lTask->OnEditor();
+      }
+      ImGui::EndDock();
     }
 }

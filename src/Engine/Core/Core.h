@@ -4,38 +4,8 @@
 #include "Logger/Logger.h"
 #include "Containers.h"
 #include "Str.h"
-
-struct Float2
-{
-    Float2() = default;
-    float x, y;
-    Float2( float _x, float _y)
-        : x(_x), y(_y)
-    {}
-
-};
-
-struct Float3{
-    float x, y, z;
-    Float3(float _x, float _y, float _z)
-        : x(_x), y(_y), z(_z)
-    {
-
-    }
-};
-
-struct Float4 {
-    float x, y, z, w;
-    Float4(float _x, float _y, float _z, float _w)
-        : x(_x), y(_y), z(_z), w(_w)
-    {
-
-    }
-};
-
-struct CColor {
-    float r, g, b, a;
-};
+#include "Serialization.h"
+#include "Mathematics.h"
 
 // Compiler
 #if defined(__GNUC__)

@@ -10,7 +10,6 @@
 #include <iostream>
 #include <memory>
 
-
 #include "Core/Logger/Logger.h"
 
 namespace serialization
@@ -21,19 +20,17 @@ namespace serialization
     class InputArchive : public rapidjson::Document
     {
     public:
-        InputArchive() = default;
-        virtual ~InputArchive() = default;
-        void ReadFromFile(const core::CStr& _filename)
+        InputArchive(const core::CStr& _filename)
         {
-            std::ifstream t(_filename.ToCStr());
-            std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-            if (Parse(str.c_str()).HasParseError())
-            {
-                LOG_ERROR_APPLICATION("Error opening %s", _filename.ToCStr());
-            }
-            
-            assert(IsArray());
+          std::ifstream t(_filename.c_str());
+          std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+          if (Parse(str.c_str()).HasParseError())
+          {
+            LOG_ERROR_APPLICATION("Error opening %s", _filename.c_str());
+          }
+          assert(IsArray());
         }
+        virtual ~InputArchive() = default;
     };
 
     typedef public rapidjson::Value InputArchiveNode;
@@ -42,53 +39,32 @@ namespace serialization
     class OutputArchive : public rapidjson::PrettyWriter<rapidjson::StringBuffer>
     {
     public:
-        OutputArchive()
+        OutputArchive( const core::CStr& _filename )
            : rapidjson::PrettyWriter<rapidjson::StringBuffer>(mBuffer)
+           , mFilename(_filename)
         {
+          StartArray();
         }
-        void Begin() { StartObject(); }
+        virtual ~OutputArchive()
+        {
+          EndArray();
+          std::ofstream out(mFilename.c_str());
+          out << mBuffer.GetString();
+          out.close();
+        }
+        template< class T >
+        void Begin() 
+        {
+          StartObject();
+          Key("type");
+          String(typeid(T).name());
+        }
         void End()   { EndObject();   }
-        virtual ~OutputArchive() = default;
         template< typename T > void Add(const char* _name, const T& _value, const T& _defValue = T() );
-        void WriteIntoFile(const core::CStr& _filename) const
-        {
-            std::ofstream out(_filename.ToCStr());
-            out << mBuffer.GetString();
-            out.close();
-        }
-
     private:
         rapidjson::StringBuffer mBuffer;
+        core::CStr mFilename;
     };
-
-    class Deserializer
-    {
-    public:
-        Deserializer( const core::CStr& _filename )
-        {
-
-        }
-        virtual ~Deserializer() = default;
-        template < class Object > void DerializeObject(const Object& _object) { Serialize(mArchive, _object); }
-
-    private:
-        OutputArchive mArchive;
-    };
-
-    class Serializer
-    {
-    public:
-        Serializer() = default;
-        virtual ~Serializer() = default;
-        void Begin() { mArchive.StartArray(); }
-        void End() { mArchive.EndArray(); }
-        template < class Object > void SerializeObject(const Object& _object) { Serialize(mArchive, _object); }
-        void WriteIntoFile(const core::CStr& _filename) const { mArchive.WriteIntoFile(_filename); }
-
-    private:
-        OutputArchive mArchive;
-    };
-
-    template< class Object > void Serialize(OutputArchive& _archive, const Object& _object);
-    template< class Object > void Deserialize(InputArchiveNode& _node, Object& _object);
 }
+
+#define SERIALIZABLE_OBJECT public: virtual void Serialize(serialization::OutputArchive& _archive); virtual void Deserialize(serialization::InputArchiveNode& _node);

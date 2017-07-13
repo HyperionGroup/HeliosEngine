@@ -3,15 +3,15 @@
 
 #include "Serialization.h"
 
-namespace serialization
+namespace core
 {
-    template<> void Serialize<::core::CName>(OutputArchive& _archive, const ::core::CName& _object)
+    void CName::Serialize(serialization::OutputArchive& _archive)
     {
-        _archive.Add("name", _object.GetName());
+        _archive.Add("name", mName);
     }
 
-    template<> void Deserialize<::core::CName>(InputArchiveNode& _archive, ::core::CName& _object)
+    void CName::Deserialize(serialization::InputArchiveNode& _archive)
     {
-        _object.SetName(Get<core::CStr>(_archive, "name"));
+        SetName(serialization::Get<core::CStr>(_archive, "name"));
     }
 }

@@ -4,33 +4,24 @@
 
 namespace gfx
 {
-    CWindow::CWindow()
+    void CWindow::Init(int32_t _argc, const char* const* _argv, uint32_t _width, uint32_t _height)
     {
-    }
+      Args args(_argc, _argv);
 
-    CWindow::~CWindow()
-    {
-    }
+      m_width = _width;
+      m_height = _height;
+      m_debug = BGFX_DEBUG_TEXT;
+      m_reset = BGFX_RESET_VSYNC;
 
-    bool CWindow::Create(int _height, int _width) 
-    {
-        return false;
+      bgfx::init(args.m_type, args.m_pciId);
+      bgfx::reset(m_width, m_height, m_reset);
+
+      // Enable debug text.
+      bgfx::setDebug(m_debug);
     }
 
     bool CWindow::Update()
     {
-        return false;
+      return entry::processEvents(m_width, m_height, m_debug, m_reset, &m_mouseState);
     }
-
-    void CWindow::ShutDown()
-    {
-    }
-
-    bool CWindow::HasFocus() const { return hwnd == GetFocus(); }
-
-    Float2 CWindow::GetWindowRelativeCursor() const
-    {
-        return Float2();
-    }
-
 }

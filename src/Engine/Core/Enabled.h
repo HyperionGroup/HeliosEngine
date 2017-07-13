@@ -6,6 +6,7 @@ namespace core
 {
     class CEnabled
     {
+      SERIALIZABLE_OBJECT
     public:
         CEnabled() : mEnabled(true) {}
         virtual ~CEnabled() {}

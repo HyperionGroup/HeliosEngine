@@ -1,41 +1,20 @@
 #pragma once
 #include "Gfx.h"
 
-#include "Core/Name.h"
-#include "Core/Enabled.h"
+#include "RenderTasks.h"
+#include "Core/Containers.h"
+#include "Core/Objectfactory.h"
 
 namespace gfx
 {
-    struct CRenderTask : public core::CName, public core::CEnabled
+    class CRenderPipeline : public core::CObjectFactory< CRenderTask >, public core::CStringArrayMap< CRenderTask >
     {
-        virtual void Execute() = 0;
+    public:
+        CRenderPipeline();
+        virtual ~CRenderPipeline() = default;
+        void Execute();
+        void OnEditor();
+        void Serialize() const;
+        void Deserialize();
     };
-
-    struct CBeginFrame : public CRenderTask
-    {
-        virtual void Execute();
-    };
-
-    struct CRenderDebugText : public CRenderTask
-    {
-        virtual void Execute();
-        core::CStr mText;
-        uint32_t mX;
-        uint32_t mY;
-    };
-    
-    struct CEndFrame : public CRenderTask
-    {
-        virtual void Execute();
-    };
-
-    namespace pipeline
-    {
-        void BeginRender();
-        void RenderWorldLayer( const char* _layer );
-        void RenderDebugText(uint16_t _x, uint16_t _y, uint8_t _attr, const char* _format);
-        void EndRender();
-        void ClearView(uint8_t _id, uint16_t _flags, float r, float g, float b, float a, float _depth, uint8_t _stencil);
-        void SetViewProjection();
-    }
 }
