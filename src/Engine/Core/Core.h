@@ -7,6 +7,9 @@
 #include "Serialization.h"
 #include "Mathematics.h"
 
+#include <Delegate.h>
+#include <Signal.h>
+
 // Compiler
 #if defined(__GNUC__)
 #define HELIOSCOMPILER_GNU

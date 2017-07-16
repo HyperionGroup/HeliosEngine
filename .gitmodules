@@ -37,3 +37,6 @@
 [submodule "src/3rdParty/rapidjson"]
 	path = src/3rdParty/rapidjson
 	url = https://github.com/miloyip/rapidjson.git
+[submodule "src/3rdParty/signals"]
+	path = src/3rdParty/signals
+	url = https://github.com/HyperionGroup/Signals.git

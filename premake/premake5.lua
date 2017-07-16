@@ -1,3 +1,7 @@
+dofile "premake-qt/qt.lua"
+
+local qt = premake.extensions.qt
+
 workspace "Helios"
    configurations { "Debug", "Release" }
    platforms { "x64" }
@@ -23,6 +27,8 @@ PREMAKE_PATH = "../premake/"
 ENGINE_PATH = "../src/Engine/"
 THIRD_PARTY = "../src/3rdParty/"
 ANAX = path.join(THIRD_PARTY, "anax")
+SIGNALS = path.join(THIRD_PARTY, "signals")
+QT_DIR = path.join(THIRD_PARTY, "qt/include")
 BX_DIR = path.join(THIRD_PARTY, "bx")
 BIMG_DIR = path.join(THIRD_PARTY, "bimg")
 BGFX_DIR = path.join(THIRD_PARTY, "bgfx")
@@ -36,6 +42,10 @@ JSON = path.join(THIRD_PARTY, "rapidjson/include")
 	
 project "HeliosEditor"
 	kind "WindowedApp"
+	qt.enable()
+	qtmodules { "core", "gui", "widgets" }
+	qtpath "../src/3rdParty/qt"
+	qtprefix "Qt5"
 	
 	flags
 	{
@@ -61,7 +71,8 @@ project "HeliosEditor"
 		LUA,
 		IMGUI,
 		TINYFORMAT,
-		JSON,  
+		JSON,
+		SIGNALS,
 		path.join(BGFX_DIR, "examples/common/"),
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),
@@ -91,16 +102,20 @@ project "HeliosEditor"
 		"bx",
 		"bgfx",
 		"bimg",
+		"editor"
 	}
 	
 	postbuildcommands
 	{
 		'echo F | xcopy "$(SolutionDir)..\\bin\\luajit\\lua51.dll" "$(TargetDir)lua51.dll" /Y',
-		'echo F | xcopy "$(SolutionDir)..\\bin\\assimp\\assimp.dll" "$(TargetDir)assimp.dll" /Y'
+		'echo F | xcopy "$(SolutionDir)..\\bin\\assimp\\assimp.dll" "$(TargetDir)assimp.dll" /Y',
+		'echo F | xcopy "$(SolutionDir)..\\bin\\qt\\Qt5Core.dll" "$(TargetDir)Qt5Core.dll" /Y',
+		'echo F | xcopy "$(SolutionDir)..\\bin\\qt\\Qt5Widgets.dll" "$(TargetDir)Qt5Widgets.dll" /Y',
+		'echo F | xcopy "$(SolutionDir)..\\bin\\qt\\Qt5Gui.dll" "$(TargetDir)Qt5Gui.dll" /Y',
 	}
 
 group "premake"	
-project "vs2017"
+project "vs2015"
 	kind "ConsoleApp"
 	
 	files
@@ -110,14 +125,17 @@ project "vs2017"
 
 	postbuildcommands
 	{
-		'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2017.bat'
+		'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2015.bat'
 	}
+
+
 	
 group "engine"
 dofile("core.lua")
 dofile("gfx.lua")
 dofile("engine.lua")
 dofile("logic.lua")
+dofile("editor.lua")
 
 group "thridparty"
 dofile ("anax.lua")

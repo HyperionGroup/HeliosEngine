@@ -934,4 +934,4 @@ public:
 
 } // namespace
 
-//ENTRY_IMPLEMENT_MAIN(ExampleIbl, "18-ibl", "Image-based lighting.");
+ENTRY_IMPLEMENT_MAIN(ExampleIbl, "18-ibl", "Image-based lighting.");

@@ -2,10 +2,15 @@
 -- Copyright 2010-2017 Branimir Karadzic. All rights reserved.
 -- License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
 --
+local qt = premake.extensions.qt
 
 project "bgfx"
 	kind "StaticLib"
 	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}"
+	qt.enable()
+	qtmodules { "core", "gui", "widgets" }
+	qtpath "../src/3rdParty/qt"
+	qtprefix "Qt5"
 
 	includedirs {
 		UCRT,
@@ -38,6 +43,7 @@ project "bgfx"
 
 	removefiles {
 		path.join(BGFX_DIR, "src/**.bin.h"),
+		path.join(BGFX_DIR, "examples/common/entry/**_windows.**"),
 	}
 
 	excludes

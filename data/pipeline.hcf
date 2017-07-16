@@ -6,10 +6,7 @@
         "type": "struct gfx::CClear",
         "color": false,
         "depth": false,
-        "rgba": "1.000000 0.000000 0.000000 1.000000"
-    },
-    {
-        "type": "struct gfx::CRenderDebugText"
+        "rgba": "1.000000 1.000000 1.000000 1.000000"
     },
     {
         "type": "struct gfx::CEndFrame"

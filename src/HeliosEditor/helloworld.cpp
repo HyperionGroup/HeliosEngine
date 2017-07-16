@@ -10,6 +10,11 @@
 #include "Core/Serialization.h"
 #include "Gfx/Pipeline.h"
 #include "Gfx/Window.h"
+#include "Core/Editor/EditorManager.h"
+#include <QApplication>
+#include <QTextEdit>
+
+#include <bgfx\platform.h>
 
 namespace
 {
@@ -77,11 +82,20 @@ namespace
     style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.20f, 0.22f, 0.27f, 0.73f);
   }
 
+  inline void winSetHwnd(::HWND _window)
+  {
+    bgfx::PlatformData pd;
+    bx::memSet(&pd, 0, sizeof(pd));
+    pd.nwh = _window;
+    bgfx::setPlatformData(pd);
+  }
+}
+
 class ExampleHelloWorld : public entry::AppI
 {
 public:
-	ExampleHelloWorld(const char* _name, const char* _description)
-		: entry::AppI(_name, _description)
+  ExampleHelloWorld(const char* _name, const char* _description)
+    : entry::AppI(_name, _description)
 	{
 	}
 
@@ -90,7 +104,15 @@ public:
     gfx::CWindow::GetInstance().Init(_argc, _argv, _width, _height);
     m_RenderPipeline.Deserialize();
 		imguiCreate();
-    darkTheme();
+
+    bgfx::setViewClear(0
+      , BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH
+      , 0xff3030ff
+      , 1.0f
+      , 0
+    );
+
+    //darkTheme();
 	}
 
 	virtual int shutdown() BX_OVERRIDE
@@ -105,77 +127,11 @@ public:
 
 	bool update() BX_OVERRIDE
 	{
-    gfx::CWindow& lWindow = gfx::CWindow::GetInstance();
-		if (!lWindow.Update() )
+		if (!gfx::CWindow::GetInstance().Update() )
 		{
-      const uint8_t* chars = inputGetChar();
-      if (chars)
-      {
-        imguiBeginFrame(lWindow.GetMouseState().m_mx
-          , lWindow.GetMouseState().m_my
-          , (lWindow.GetMouseState().m_buttons[entry::MouseButton::Left] ? IMGUI_MBUT_LEFT : 0)
-          | (lWindow.GetMouseState().m_buttons[entry::MouseButton::Right] ? IMGUI_MBUT_RIGHT : 0)
-          | (lWindow.GetMouseState().m_buttons[entry::MouseButton::Middle] ? IMGUI_MBUT_MIDDLE : 0)
-          , lWindow.GetMouseState().m_mz
-          , uint16_t(lWindow.GetWidth())
-          , uint16_t(lWindow.GetHeight())
-          , *chars
-        );
-      }
-      else
-      {
-        imguiBeginFrame(lWindow.GetMouseState().m_mx
-          , lWindow.GetMouseState().m_my
-          , (lWindow.GetMouseState().m_buttons[entry::MouseButton::Left] ? IMGUI_MBUT_LEFT : 0)
-          | (lWindow.GetMouseState().m_buttons[entry::MouseButton::Right] ? IMGUI_MBUT_RIGHT : 0)
-          | (lWindow.GetMouseState().m_buttons[entry::MouseButton::Middle] ? IMGUI_MBUT_MIDDLE : 0)
-          , lWindow.GetMouseState().m_mz
-          , uint16_t(lWindow.GetWidth())
-          , uint16_t(lWindow.GetHeight())
-        );
-      }
-      
-			//showExampleDialog(this);
-      //m_RenderPipeline.OnEditor();
-
-			imguiEndFrame();
-
+      editor::CEditorManager::GetInstance().Update();
       m_RenderPipeline.Execute();
-      /*
-
-			// Set view 0 default viewport.
-			bgfx::setViewRect(0, 0, 0, uint16_t(m_width), uint16_t(m_height) );
-
-			// This dummy draw call is here to make sure that view 0 is cleared
-			// if no other draw calls are submitted to view 0.
-			bgfx::touch(0);
-
-			// Use debug font to print information about this example.
-			bgfx::dbgTextClear();
-			bgfx::dbgTextImage(
-				  bx::uint16_max(uint16_t(m_width /2/8 ), 20)-20
-				, bx::uint16_max(uint16_t(m_height/2/16),  6)-6
-				, 40
-				, 12
-				, s_logo
-				, 160
-				);
-      bgfx::dbgTextPrintf(0, 1, 0x0f, "Color can be changed with ANSI \x1b[9;me\x1b[10;ms\x1b[11;mc\x1b[12;ma\x1b[13;mp\x1b[14;me\x1b[0m code too.");
-
-      const bgfx::Stats* stats = bgfx::getStats();
-      bgfx::dbgTextPrintf(0, 2, 0x0f, "Backbuffer %dW x %dH in pixels, debug text %dW x %dH in characters."
-        , stats->width
-        , stats->height
-        , stats->textWidth
-        , stats->textHeight
-      );
-
-			// Advance to next frame. Rendering thread will be kicked to
-			// process submitted rendering primitives.
-			bgfx::frame();
-      */
-
-
+     
 			return true;
 		}
 
@@ -183,8 +139,25 @@ public:
 	}
 
   gfx::CRenderPipeline m_RenderPipeline;
+  std::shared_ptr< QApplication > mQtApplication;
 };
 
-} // namespace
+//ENTRY_IMPLEMENT_MAIN(ExampleHelloWorld, "00-helloworld", "Initialization and debug text.");
 
-ENTRY_IMPLEMENT_MAIN(ExampleHelloWorld, "00-helloworld", "Initialization and debug text.");
+
+/*
+int main(int argv, char **args)
+{
+  QApplication app(argv, args);
+
+  QWidget myWIdget;
+
+  //bgfx::setPlatformData(data);
+  bgfx::init();
+  bgfx::PlatformData data;
+  data.nwh = (void*)myWIdget.winId();
+
+  myWIdget.show();
+
+  return app.exec();
+}*/
