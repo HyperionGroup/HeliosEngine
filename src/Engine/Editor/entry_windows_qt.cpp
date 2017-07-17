@@ -451,6 +451,7 @@ namespace entry
 
 			s_xinput.init();
 
+      QCoreApplication::addLibraryPath(".");
       QApplication app(_argc, _argv);
 
       QMainWindow mainWindow;

@@ -89,6 +89,7 @@ project "HeliosEditor"
 		"../bin/luajit/",
 		"../bin/assimp/",
 		"../bin/ucrt/",
+		"../bin/qt/",
 	}
 	
 	links
@@ -112,12 +113,13 @@ project "HeliosEditor"
 		'echo F | xcopy "$(SolutionDir)..\\bin\\qt\\Qt5Core.dll" "$(TargetDir)Qt5Core.dll" /Y',
 		'echo F | xcopy "$(SolutionDir)..\\bin\\qt\\Qt5Widgets.dll" "$(TargetDir)Qt5Widgets.dll" /Y',
 		'echo F | xcopy "$(SolutionDir)..\\bin\\qt\\Qt5Gui.dll" "$(TargetDir)Qt5Gui.dll" /Y',
+		'echo D | xcopy "$(SolutionDir)..\\bin\\qt\\platforms" "$(TargetDir)platforms" /Y',
 	}
 
 group "premake"
 
 local vs_version = os.getenv("VS_VERSION")
-print(vs_version)
+print("Visual Studio " .. vs_version)
 if vs_version == "15" then
 	project "vs2015"
 		kind "ConsoleApp"
