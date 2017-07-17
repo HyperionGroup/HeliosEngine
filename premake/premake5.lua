@@ -119,21 +119,8 @@ project "HeliosEditor"
 group "premake"
 
 local vs_version = os.getenv("VS_VERSION")
-print("Visual Studio " .. vs_version)
-if vs_version == "15" then
-	project "vs2015"
-		kind "ConsoleApp"
-	
-		files
-		{
-			path.join(PREMAKE_PATH, "**.lua"),
-		}
 
-		postbuildcommands
-		{
-			'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2015.bat'
-		}
-elseif vs_version == "17" then
+if vs_version == nil then
 	project "vs2017"
 		kind "ConsoleApp"
 	
@@ -146,6 +133,34 @@ elseif vs_version == "17" then
 		{
 			'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2017.bat'
 		}
+else
+	print("Visual Studio " .. vs_version)
+	if vs_version == "15" then
+		project "vs2015"
+			kind "ConsoleApp"
+		
+			files
+			{
+				path.join(PREMAKE_PATH, "**.lua"),
+			}
+
+			postbuildcommands
+			{
+				'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2015.bat'
+			}
+	elseif vs_version == "17" then
+		project "vs2017"
+			kind "ConsoleApp"
+		
+			files
+			{
+				path.join(PREMAKE_PATH, "**.lua"),
+			}
+
+			postbuildcommands
+			{
+				'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2017.bat'
+			}
 end
 
 
