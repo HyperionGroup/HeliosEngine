@@ -114,19 +114,37 @@ project "HeliosEditor"
 		'echo F | xcopy "$(SolutionDir)..\\bin\\qt\\Qt5Gui.dll" "$(TargetDir)Qt5Gui.dll" /Y',
 	}
 
-group "premake"	
-project "vs2015"
-	kind "ConsoleApp"
-	
-	files
-	{
-		path.join(PREMAKE_PATH, "**.lua"),
-	}
+group "premake"
 
-	postbuildcommands
-	{
-		'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2015.bat'
-	}
+local vs_version = os.getenv("VS_VERSION")
+print(vs_version)
+if vs_version == "15" then
+	project "vs2015"
+		kind "ConsoleApp"
+	
+		files
+		{
+			path.join(PREMAKE_PATH, "**.lua"),
+		}
+
+		postbuildcommands
+		{
+			'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2015.bat'
+		}
+elseif vs_version == "17" then
+	project "vs2017"
+		kind "ConsoleApp"
+	
+		files
+		{
+			path.join(PREMAKE_PATH, "**.lua"),
+		}
+
+		postbuildcommands
+		{
+			'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2017.bat'
+		}
+end
 
 
 	
