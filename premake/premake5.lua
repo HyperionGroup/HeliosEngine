@@ -161,6 +161,7 @@ else
 			{
 				'echo F | $(SolutionDir)..\\sln\\BuildSolutionVS2017.bat'
 			}
+	end
 end
 
 
