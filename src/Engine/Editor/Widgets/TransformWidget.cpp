@@ -2,39 +2,36 @@
 #include "TransformWidget.h"
 #include "FloatWidget.h"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
+
+namespace
+{
+  void AddTransformWidget(QGridLayout* _layout, const char* _label, float*_x, float*_y, float*_z, int _row)
+  {
+    _layout->addWidget(new QLabel(QObject::tr(_label)), _row, 0, Qt::AlignLeft);
+    editor::CFloatWidget* lX = new editor::CFloatWidget("X", _x );
+    lX->SetStylesheet("QDoubleSpinBox { background-color: #990000; }");
+    editor::CFloatWidget* lY = new editor::CFloatWidget("Y", _z);
+    lY->SetStylesheet("QDoubleSpinBox { background-color: #009900; }");
+    editor::CFloatWidget* lZ = new editor::CFloatWidget("Z", _y );
+    lZ->SetStylesheet("QDoubleSpinBox { background-color: #000099; }");
+    _layout->addWidget(lX, _row, 1, Qt::AlignLeft);
+    _layout->addWidget(lY, _row, 2, Qt::AlignLeft);
+    _layout->addWidget(lZ, _row, 3, Qt::AlignLeft);
+  }
+}
 
 namespace editor
 {
   CTransformWidget::CTransformWidget(core::TransformComponent * _transform)
   {
-    QVBoxLayout* lLayout = new QVBoxLayout(this);
-
-    QHBoxLayout* lPositionLayout = new QHBoxLayout(this);
-    lPositionLayout->addWidget(new QLabel( tr("Position"), this));
-    lPositionLayout->addWidget(new CFloatWidget("X", &(_transform->position.x)));
-    lPositionLayout->addWidget(new CFloatWidget("Y", &(_transform->position.y)));
-    lPositionLayout->addWidget(new CFloatWidget("Z", &(_transform->position.z)));
-    lLayout->addLayout(lPositionLayout);
-
-    QHBoxLayout* lRotationLayout = new QHBoxLayout(this);
-    lRotationLayout->addWidget(new QLabel(tr("Rotation"), this));
-    lRotationLayout->addWidget(new CFloatWidget("X", &(_transform->rotation.x)));
-    lRotationLayout->addWidget(new CFloatWidget("Y", &(_transform->rotation.y)));
-    lRotationLayout->addWidget(new CFloatWidget("Z", &(_transform->rotation.z)));
-    lLayout->addLayout(lRotationLayout);
-
-    QHBoxLayout* lScaleLayout = new QHBoxLayout(this);
-    lScaleLayout->addWidget(new QLabel(tr("Scale"), this));
-    lScaleLayout->addWidget(new CFloatWidget("X", &(_transform->scale.x)));
-    lScaleLayout->addWidget(new CFloatWidget("Y", &(_transform->scale.y)));
-    lScaleLayout->addWidget(new CFloatWidget("Z", &(_transform->scale.z)));
-    lLayout->addLayout(lScaleLayout);
-
-    lLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
-
+    QGridLayout* lLayout = new QGridLayout(this);
+    lLayout->setMargin(0);
+    AddTransformWidget(lLayout, "Position", &(_transform->position.x), &(_transform->position.y), &(_transform->position.z), 0);
+    AddTransformWidget(lLayout, "Rotation", &(_transform->rotation.x), &(_transform->rotation.y), &(_transform->rotation.z), 1);
+    AddTransformWidget(lLayout, "Scale", &(_transform->scale.x), &(_transform->scale.y), &(_transform->scale.z), 2);
+    lLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum),0,3);
     setLayout(lLayout);
   }
 }

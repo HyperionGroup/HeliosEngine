@@ -542,7 +542,7 @@ namespace entry
       }
 
       mainLayoutInpsector->addWidget(new QPushButton("Add Component"));
-      mainLayoutInpsector->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+      mainLayoutInpsector->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
       QWidget* w = new QWidget();
       w->setLayout(mainLayoutInpsector);
       inspectorDock->setWidget(w);

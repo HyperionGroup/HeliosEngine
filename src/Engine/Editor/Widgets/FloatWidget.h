@@ -10,7 +10,10 @@ namespace editor
   public:
     CFloatWidget( const char* _label, float* _float);
     virtual ~CFloatWidget() = default;
+
+    void SetStylesheet(const char* _style);
   private:
     QDoubleSpinBox* mSpinBox;
+    float* mValue;
   };
 }

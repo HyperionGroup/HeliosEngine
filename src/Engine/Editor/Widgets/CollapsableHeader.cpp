@@ -42,6 +42,8 @@ namespace editor
       toggleAnimation.setDirection(checked ? QAbstractAnimation::Forward : QAbstractAnimation::Backward);
       toggleAnimation.start();
     });
+
+    setMinimumSize(200, 200);
   }
 
   void CCollapsableHeader::setContentLayout(QLayout & contentLayout)
