@@ -40,3 +40,6 @@
 [submodule "src/3rdParty/signals"]
 	path = src/3rdParty/signals
 	url = https://github.com/HyperionGroup/Signals.git
+[submodule "src/3rdParty/any"]
+	path = src/3rdParty/any
+	url = https://github.com/thelink2012/any.git
