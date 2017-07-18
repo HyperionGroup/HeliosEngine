@@ -15,6 +15,7 @@ struct Float2
 
 struct Float3 {
   float x, y, z;
+  Float3() = default;
   Float3(float _x, float _y, float _z)
     : x(_x), y(_y), z(_z)
   {
@@ -23,6 +24,20 @@ struct Float3 {
   bool operator!=(const Float3& _other)const
   {
     return !(x == _other.x && y == _other.y && z == _other.z);
+  }
+};
+
+struct Quaternion
+{
+  float x, y, z, w;
+  Quaternion() = default;
+  Quaternion(float _x, float _y, float _z, float _w)
+    : x(_x), y(_y), z(_z), w(_w)
+  {
+  }
+  bool operator!=(const Quaternion& _other) const
+  {
+    return !(x == _other.x && y == _other.y && z == _other.z && w == _other.w);
   }
 };
 
@@ -64,4 +79,9 @@ struct CColor {
   {
     return  (uint32_t)(FloatToByte(r) << 24) + (FloatToByte(g) << 16) + (FloatToByte(b) << 8) + FloatToByte(a);
   }
+};
+
+struct Transform
+{
+
 };

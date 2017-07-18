@@ -5,6 +5,20 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QStyleFactory>
+#include <QToolBox>
+#include <QWidget>
+
+#include "Widgets\TransformWidget.h"
+#include "Widgets\CollapsableHeader.h"
+
+#include <QPushButton> //for the expand/collapse button
+#include <QtDesigner/QDesignerExportWidget>
+#include <QLayout>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QDebug>
+
 
 #if BX_PLATFORM_WINDOWS
 
@@ -454,6 +468,24 @@ namespace entry
       QCoreApplication::addLibraryPath(".");
       QApplication app(_argc, _argv);
 
+      qApp->setStyle(QStyleFactory::create("fusion"));
+
+      QPalette palette;
+      palette.setColor(QPalette::Window, QColor(53, 53, 53));
+      palette.setColor(QPalette::WindowText, Qt::white);
+      palette.setColor(QPalette::Base, QColor(15, 15, 15));
+      palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+      palette.setColor(QPalette::ToolTipBase, Qt::white);
+      palette.setColor(QPalette::ToolTipText, Qt::white);
+      palette.setColor(QPalette::Text, Qt::white);
+      palette.setColor(QPalette::Button, QColor(53, 53, 53));
+      palette.setColor(QPalette::ButtonText, Qt::white);
+      palette.setColor(QPalette::BrightText, Qt::red);
+
+      palette.setColor(QPalette::Highlight, QColor(142, 45, 197).lighter());
+      palette.setColor(QPalette::HighlightedText, Qt::black);
+      qApp->setPalette(palette);
+
       QMainWindow mainWindow;
       mainWindow.showMaximized();
 
@@ -463,8 +495,48 @@ namespace entry
       QDockWidget *inspectorDock = new QDockWidget("Inspector");
       inspectorDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
+      core::TransformComponent lTrsf;
+      QVBoxLayout* mainLayoutInpsector = new QVBoxLayout();
+      {
+        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
+        QVBoxLayout* lLayout = new QVBoxLayout();
+        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
+        lHeader->setContentLayout(*lLayout);
+        mainLayoutInpsector->addWidget(lHeader);
+      }
+
+      {
+        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
+        QVBoxLayout* lLayout = new QVBoxLayout();
+        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
+        lHeader->setContentLayout(*lLayout);
+        mainLayoutInpsector->addWidget(lHeader);
+      }
+
+      {
+        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
+        QVBoxLayout* lLayout = new QVBoxLayout();
+        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
+        lHeader->setContentLayout(*lLayout);
+        mainLayoutInpsector->addWidget(lHeader);
+      }
+
+      {
+        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
+        QVBoxLayout* lLayout = new QVBoxLayout();
+        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
+        lHeader->setContentLayout(*lLayout);
+        mainLayoutInpsector->addWidget(lHeader);
+      }
+
+      mainLayoutInpsector->addWidget(new QPushButton("Add Component"));
+      mainLayoutInpsector->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+      QWidget* w = new QWidget();
+      w->setLayout(mainLayoutInpsector);
+      inspectorDock->setWidget(w);
+
       QDockWidget *workingDirectoryDock = new QDockWidget("Working Directory");
-      workingDirectoryDock->setAllowedAreas(Qt::BottomDockWidgetArea );
+      workingDirectoryDock->setAllowedAreas(Qt::BottomDockWidgetArea);
 
       QWidget* sceneView = new QWidget();
       mainWindow.setCentralWidget(sceneView);

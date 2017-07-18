@@ -1,7 +1,5 @@
 dofile "premake-qt/qt.lua"
 
-local qt = premake.extensions.qt
-
 workspace "Helios"
    configurations { "Debug", "Release" }
    platforms { "x64" }
@@ -42,10 +40,6 @@ JSON = path.join(THIRD_PARTY, "rapidjson/include")
 	
 project "HeliosEditor"
 	kind "WindowedApp"
-	qt.enable()
-	qtmodules { "core", "gui", "widgets" }
-	qtpath "../src/3rdParty/qt"
-	qtprefix "Qt5"
 	
 	flags
 	{
@@ -105,7 +99,7 @@ project "HeliosEditor"
 		"bimg",
 		"editor"
 	}
-	
+
 	postbuildcommands
 	{
 		'echo F | xcopy "$(SolutionDir)..\\bin\\luajit\\lua51.dll" "$(TargetDir)lua51.dll" /Y',

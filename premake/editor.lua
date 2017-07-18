@@ -7,6 +7,7 @@ project "editor"
 	qtmodules { "core", "gui", "widgets" }
 	qtpath "../src/3rdParty/qt"
 	qtprefix "Qt5"
+	qtgenerateddir "$(SolutionDir)lib/mocs"
 	pchheader "Editor.h"
 	pchsource "../src/Engine/Editor/Editor.cpp"
 	
@@ -28,7 +29,7 @@ project "editor"
 		JSON,
 		SIGNALS,
 		ENGINE_PATH,
-		path.join(ENGINE_PATH, "Logic"),
+		path.join(ENGINE_PATH, "Editor"),
 		path.join(ENGINE_PATH, "Core"),
 		path.join(BGFX_DIR, "examples/common/"),
 		path.join(BGFX_DIR, "examples/common/entry"),

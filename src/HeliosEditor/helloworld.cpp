@@ -11,8 +11,6 @@
 #include "Gfx/Pipeline.h"
 #include "Gfx/Window.h"
 #include "Core/Editor/EditorManager.h"
-#include <QApplication>
-#include <QTextEdit>
 
 #include <bgfx\platform.h>
 
@@ -139,7 +137,6 @@ public:
 	}
 
   gfx::CRenderPipeline m_RenderPipeline;
-  std::shared_ptr< QApplication > mQtApplication;
 };
 
 //ENTRY_IMPLEMENT_MAIN(ExampleHelloWorld, "00-helloworld", "Initialization and debug text.");

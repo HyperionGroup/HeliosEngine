@@ -7,8 +7,8 @@
 #include "Serialization.h"
 #include "Mathematics.h"
 
-#include <Delegate.h>
-#include <Signal.h>
+//#include <Delegate.h>
+//#include <Signal.h>
 
 // Compiler
 #if defined(__GNUC__)
