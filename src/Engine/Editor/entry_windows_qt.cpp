@@ -11,6 +11,9 @@
 
 #include "Widgets\TransformWidget.h"
 #include "Widgets\CollapsableHeader.h"
+#include "Widgets\ScriptWidget.h"
+
+#include "Logic/Script.h"
 
 #include <QPushButton> //for the expand/collapse button
 #include <QtDesigner/QDesignerExportWidget>
@@ -525,6 +528,15 @@ namespace entry
         editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
         QVBoxLayout* lLayout = new QVBoxLayout();
         lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
+        lHeader->setContentLayout(*lLayout);
+        mainLayoutInpsector->addWidget(lHeader);
+      }
+
+      {
+        logic::CScript script("number1 = 1 number2 = 2 numberfloat = 3.1 name = 'Name'");
+        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Script");
+        QVBoxLayout* lLayout = new QVBoxLayout();
+        lLayout->addWidget(new editor::CScriptWidget(&script));
         lHeader->setContentLayout(*lLayout);
         mainLayoutInpsector->addWidget(lHeader);
       }
