@@ -1,10 +1,10 @@
 #pragma once
 
-#include "EnumToString.h"
+#include "Utils/EnumToString.h"
 #include "Logger/Logger.h"
-#include "Containers.h"
+#include "Utils/Containers.h"
 #include "Str.h"
-#include "Serialization.h"
+#include "Serialization/Serialization.h"
 #include "Mathematics.h"
 
 //#include <Delegate.h>

@@ -1,7 +1,7 @@
 #include "Logic.h"
 
-#include "Core/Logger\Logger.h"
-#include "Core/Containers.h"
+#include "Core/Logger/Logger.h"
+#include "Core/Utils/Containers.h"
 
 #include <sol.hpp>
 #include "Core/Name.h"

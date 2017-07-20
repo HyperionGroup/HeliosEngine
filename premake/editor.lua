@@ -3,11 +3,13 @@ local qt = premake.extensions.qt
 project "editor"
 	kind "StaticLib"
 	targetdir "$(SolutionDir)lib/%{cfg.buildcfg}"
+
 	qt.enable()
-	qtmodules { "core", "gui", "widgets" }
 	qtpath "../src/3rdParty/qt"
 	qtprefix "Qt5"
 	qtgenerateddir "$(SolutionDir)lib/mocs"
+	qtmodules { "core", "gui", "widgets" }
+
 	pchheader "Editor.h"
 	pchsource "../src/Engine/Editor/Editor.cpp"
 	
@@ -24,6 +26,7 @@ project "editor"
 		IM3D,
 		SOL,
 		LUA,
+		ANY,
 		TINYFORMAT,
 		path.join(ANAX, "include"),
 		JSON,

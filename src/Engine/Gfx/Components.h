@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Components.h"
+#include "Core/Entities/Components.h"
 
 namespace gfx
 {

@@ -21,6 +21,7 @@ project "core"
 		SOL,
 		LUA,
 		SIGNALS,
+		ANY,
 		path.join(ANAX, "include"),
 		ENGINE_PATH,
 		path.join(ENGINE_PATH, "Core"),

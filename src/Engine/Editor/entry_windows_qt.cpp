@@ -12,11 +12,11 @@
 #include "Widgets\TransformWidget.h"
 #include "Widgets\CollapsableHeader.h"
 #include "Widgets\ScriptWidget.h"
+#include "Docks/InspectorDock.h"
 
 #include "Logic/Script.h"
 
 #include <QPushButton> //for the expand/collapse button
-#include <QtDesigner/QDesignerExportWidget>
 #include <QLayout>
 #include <QPainter>
 #include <QPaintEvent>
@@ -499,7 +499,14 @@ namespace entry
       inspectorDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
       core::TransformComponent lTrsf;
+      lTrsf.position = Float3(1, 0, 0);
+      lTrsf.id = "holacarapene";
+
+      editor::CInspectorDock::GetInstance().Inspect(lTrsf);
+
+      /*
       QVBoxLayout* mainLayoutInpsector = new QVBoxLayout();
+      mainLayoutInpsector->setMargin(0);
       {
         editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
         QVBoxLayout* lLayout = new QVBoxLayout();
@@ -545,14 +552,14 @@ namespace entry
       mainLayoutInpsector->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
       QWidget* w = new QWidget();
       w->setLayout(mainLayoutInpsector);
-      inspectorDock->setWidget(w);
+      inspectorDock->setWidget(w);*/
 
       QDockWidget *workingDirectoryDock = new QDockWidget("Working Directory");
       workingDirectoryDock->setAllowedAreas(Qt::BottomDockWidgetArea);
 
       QWidget* sceneView = new QWidget();
       mainWindow.setCentralWidget(sceneView);
-      mainWindow.addDockWidget(Qt::LeftDockWidgetArea, inspectorDock);
+      mainWindow.addDockWidget(Qt::LeftDockWidgetArea, editor::CInspectorDock::GetInstance().GetDock());
       mainWindow.addDockWidget(Qt::RightDockWidgetArea, hierarchyDock);
       mainWindow.addDockWidget(Qt::BottomDockWidgetArea, workingDirectoryDock);
 

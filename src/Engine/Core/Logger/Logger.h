@@ -2,7 +2,7 @@
 #ifndef __H_LOGGER__
 #define __H_LOGGER__
 
-#include "Core/Singleton.h"
+#include "Core/Utils/Singleton.h"
 
 #include <vector>
 #include <string>

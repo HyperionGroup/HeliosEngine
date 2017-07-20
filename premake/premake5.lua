@@ -37,6 +37,7 @@ SOL = path.join(THIRD_PARTY, "sol2")
 UCRT = path.join(THIRD_PARTY, "ucrt")
 TINYFORMAT = path.join(THIRD_PARTY, "tinyformat")
 JSON = path.join(THIRD_PARTY, "rapidjson/include")
+ANY = path.join(THIRD_PARTY, "any")
 	
 project "HeliosEditor"
 	kind "WindowedApp"
@@ -67,6 +68,7 @@ project "HeliosEditor"
 		TINYFORMAT,
 		JSON,
 		SIGNALS,
+		ANY,
 		path.join(BGFX_DIR, "examples/common/"),
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),

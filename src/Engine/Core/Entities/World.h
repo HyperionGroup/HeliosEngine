@@ -2,7 +2,7 @@
 
 #include <anax\anax.hpp>
 
-#include <Singleton.h>
+#include "Utils/Singleton.h"
 #include "GameObject.h"
 
 namespace core

@@ -2,7 +2,6 @@
 
 #include <QWidget>
 
-#include "Core/Components.h"
 #include "Logic/Script.h"
 
 namespace editor

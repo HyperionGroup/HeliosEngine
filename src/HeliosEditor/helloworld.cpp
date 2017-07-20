@@ -7,10 +7,9 @@
 #include "imgui/imgui.h"
 #include "Logic/Script.h"
 
-#include "Core/Serialization.h"
+#include "Core/Serialization/Serialization.h"
 #include "Gfx/Pipeline.h"
 #include "Gfx/Window.h"
-#include "Core/Editor/EditorManager.h"
 
 #include <bgfx\platform.h>
 
@@ -127,7 +126,6 @@ public:
 	{
 		if (!gfx::CWindow::GetInstance().Update() )
 		{
-      editor::CEditorManager::GetInstance().Update();
       m_RenderPipeline.Execute();
      
 			return true;

@@ -17,6 +17,7 @@ project "logic"
 		IM3D,
 		SOL,
 		LUA,
+		ANY,
 		TINYFORMAT,
 		path.join(ANAX, "include"),
 		JSON,

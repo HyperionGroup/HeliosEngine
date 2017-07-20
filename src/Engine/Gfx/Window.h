@@ -4,7 +4,7 @@
 #include "common.h"
 #include "bgfx_utils.h"
 
-#include "Core/Singleton.h"
+#include "Core/Utils/Singleton.h"
 
 namespace gfx
 {

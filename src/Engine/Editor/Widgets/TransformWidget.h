@@ -2,7 +2,7 @@
 
 #include <QWidget>
 
-#include "Core/Components.h"
+#include "Core/Entities/Components.h"
 
 namespace editor
 {
@@ -10,7 +10,7 @@ namespace editor
   {
     Q_OBJECT
   public:
-    CTransformWidget(core::TransformComponent* _transform);
+    CTransformWidget(const char* _label, core::TransformComponent* _transform, bool _editable);
     virtual ~CTransformWidget() = default;
   };
 }

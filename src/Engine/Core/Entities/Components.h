@@ -6,6 +6,7 @@ namespace core
 {
   struct TransformComponent : anax::Component
   {
+    core::CStr id;
     Float3 position;
     Quaternion rotation;
     Float3 scale;

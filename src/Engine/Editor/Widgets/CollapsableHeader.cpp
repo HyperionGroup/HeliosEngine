@@ -1,6 +1,5 @@
 #include "Editor.h"
 #include "CollapsableHeader.h"
-#include "FloatWidget.h"
 
 #include <QPropertyAnimation>
 

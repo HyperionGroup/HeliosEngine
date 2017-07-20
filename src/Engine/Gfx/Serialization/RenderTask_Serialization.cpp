@@ -2,7 +2,7 @@
 
 #include "Pipeline.h"
 
-#include "Serialization.h"
+#include "Serialization/Serialization.h"
 
 namespace gfx
 {

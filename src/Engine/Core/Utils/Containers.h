@@ -18,7 +18,7 @@ namespace core
             Shutdown();
         }
 
-        inline size_t Length()
+        inline size_t Length() const
         {
             return mArray.size();
         }

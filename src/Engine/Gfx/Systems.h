@@ -2,7 +2,7 @@
 
 #include <anax/anax.hpp>
 
-#include "Core/Components.h"
+#include "Core/Entities/Components.h"
 #include "Components.h"
 
 namespace gfx

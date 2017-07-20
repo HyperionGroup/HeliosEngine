@@ -2,8 +2,8 @@
 #include "Gfx.h"
 
 #include "RenderTasks.h"
-#include "Core/Containers.h"
-#include "Core/Objectfactory.h"
+#include "Core/Utils/Containers.h"
+#include "Core/Utils/Objectfactory.h"
 
 namespace gfx
 {
