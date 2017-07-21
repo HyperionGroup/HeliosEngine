@@ -22,7 +22,7 @@ namespace logic
 
     void operator [](std::string aName);
 
-    std::vector<SLuaVar> GetVarsVector() { return mVariables; }
+    std::vector<SLuaVar> GetVarsVector() const { return mVariables; }
 
   private:
     sol::environment *mEnv;

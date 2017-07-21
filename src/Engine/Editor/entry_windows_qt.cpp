@@ -503,6 +503,7 @@ namespace entry
       lTrsf.id = "holacarapene";
 
       editor::CInspectorDock::GetInstance().Inspect(lTrsf);
+      //editor::CInspectorDock::GetInstance().Inspect(logic::CScript("name = 'name1' number = 1 oher_number = 2.1"));
 
       /*
       QVBoxLayout* mainLayoutInpsector = new QVBoxLayout();

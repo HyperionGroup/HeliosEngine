@@ -55,7 +55,7 @@ namespace core
             return (_find != mMap.end()) ? mArray[_find->second] : nullptr;
         }
 
-        virtual bool Add( const char* _name, std::shared_ptr<T> _resource )
+        virtual bool Add(const core::CStr& _name, std::shared_ptr<T> _resource )
         {
             bool lOk = false;
             if (mMap.find(_name) == mMap.end())
@@ -80,7 +80,7 @@ namespace core
 
     protected:
         typedef std::vector< std::shared_ptr<T> > TArray;
-        typedef std::map< const char*, size_t > TMap;
+        typedef std::map< core::CStr, size_t > TMap;
 
         TArray mArray;
         TMap   mMap;
