@@ -49,9 +49,7 @@ project "bgfx"
 	excludes
 	{
 		path.join(BGFX_DIR, "src/amalgamated.**"),
-		path.join(BGFX_DIR, "3rdparty/glslang/gtests/**.**"),
 		path.join(BGFX_DIR, "3rdparty/scintilla/**.**"),
-		path.join(BGFX_DIR, "3rdparty/glslang/glslang/OSDependent/Unix/**.**"),
-		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/src/node/**.**"),
-		path.join(BGFX_DIR, "3rdparty/glslang/glslang/OSDependent/Windows/main.cpp"),
+		path.join(BGFX_DIR, "3rdparty/glslang/**.**"),
+		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/**.**"),
 	}
