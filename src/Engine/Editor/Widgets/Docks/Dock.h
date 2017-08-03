@@ -13,6 +13,7 @@ namespace editor
     CDock() = default;
     virtual ~CDock() = default;
     QDockWidget* GetDock() const { return mDock; }
+
   protected:
     QDockWidget* mDock;
   };

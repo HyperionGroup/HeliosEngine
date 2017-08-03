@@ -2,6 +2,8 @@
 
 #include "entry_p.h"
 
+#include "HeliosApp.h"
+
 #include <QApplication>
 #include <QMainWindow>
 #include <QDockWidget>
@@ -12,7 +14,7 @@
 #include "Widgets\TransformWidget.h"
 #include "Widgets\CollapsableHeader.h"
 #include "Widgets\ScriptWidget.h"
-#include "Docks/InspectorDock.h"
+#include "Widgets/Docks/InspectorDock.h"
 
 #include "Logic/Script.h"
 
@@ -22,6 +24,24 @@
 #include <QPaintEvent>
 #include <QDebug>
 
+#include <bgfx/platform.h>
+#include <bx/handlealloc.h>
+
+#include <bgfx/platform.h>
+
+#include <bx/mutex.h>
+#include <bx/handlealloc.h>
+#include <bx/os.h>
+#include <bx/thread.h>
+#include <bx/timer.h>
+#include <bx/uint32_t.h>
+
+#include <tinystl/allocator.h>
+#include <tinystl/string.h>
+
+#include <windows.h>
+#include <windowsx.h>
+#include <xinput.h>
 
 #if BX_PLATFORM_WINDOWS
 
@@ -48,6 +68,9 @@
 #ifndef XINPUT_DLL_A
 #	define XINPUT_DLL_A "xinput.dll"
 #endif // XINPUT_DLL_A
+
+
+static editor::CHeliosApp s_App;
 
 namespace entry
 {
@@ -464,145 +487,19 @@ namespace entry
 		}
 		int32_t run(int _argc, char** _argv)
 		{
-			SetDllDirectoryA(".");
-
-			s_xinput.init();
-
-      QCoreApplication::addLibraryPath(".");
-      QApplication app(_argc, _argv);
-
-      qApp->setStyle(QStyleFactory::create("fusion"));
-
-      QPalette palette;
-      palette.setColor(QPalette::Window, QColor(53, 53, 53));
-      palette.setColor(QPalette::WindowText, Qt::white);
-      palette.setColor(QPalette::Base, QColor(15, 15, 15));
-      palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
-      palette.setColor(QPalette::ToolTipBase, Qt::white);
-      palette.setColor(QPalette::ToolTipText, Qt::white);
-      palette.setColor(QPalette::Text, Qt::white);
-      palette.setColor(QPalette::Button, QColor(53, 53, 53));
-      palette.setColor(QPalette::ButtonText, Qt::white);
-      palette.setColor(QPalette::BrightText, Qt::red);
-
-      palette.setColor(QPalette::Highlight, QColor(142, 45, 197).lighter());
-      palette.setColor(QPalette::HighlightedText, Qt::black);
-      qApp->setPalette(palette);
-
-      QMainWindow mainWindow;
-      mainWindow.showMaximized();
-
-      QDockWidget *hierarchyDock = new QDockWidget("Hierarchy" );
-      hierarchyDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
-      QDockWidget *inspectorDock = new QDockWidget("Inspector");
-      inspectorDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
-      core::TransformComponent lTrsf;
-      lTrsf.position = Float3(1, 0, 0);
-      lTrsf.id = "holacarapene";
-
-      editor::CInspectorDock::GetInstance().Inspect(lTrsf);
-
-      /*
-      QVBoxLayout* mainLayoutInpsector = new QVBoxLayout();
-      mainLayoutInpsector->setMargin(0);
-      {
-        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
-        QVBoxLayout* lLayout = new QVBoxLayout();
-        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
-        lHeader->setContentLayout(*lLayout);
-        mainLayoutInpsector->addWidget(lHeader);
-      }
-
-      {
-        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
-        QVBoxLayout* lLayout = new QVBoxLayout();
-        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
-        lHeader->setContentLayout(*lLayout);
-        mainLayoutInpsector->addWidget(lHeader);
-      }
-
-      {
-        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
-        QVBoxLayout* lLayout = new QVBoxLayout();
-        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
-        lHeader->setContentLayout(*lLayout);
-        mainLayoutInpsector->addWidget(lHeader);
-      }
-
-      {
-        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Transform");
-        QVBoxLayout* lLayout = new QVBoxLayout();
-        lLayout->addWidget(new editor::CTransformWidget(&lTrsf));
-        lHeader->setContentLayout(*lLayout);
-        mainLayoutInpsector->addWidget(lHeader);
-      }
-
-      {
-        logic::CScript script("number1 = 1 number2 = 2 numberfloat = 3.1 name = 'Name'");
-        editor::CCollapsableHeader *lHeader = new editor::CCollapsableHeader("Script");
-        QVBoxLayout* lLayout = new QVBoxLayout();
-        lLayout->addWidget(new editor::CScriptWidget(&script));
-        lHeader->setContentLayout(*lLayout);
-        mainLayoutInpsector->addWidget(lHeader);
-      }
-
-      mainLayoutInpsector->addWidget(new QPushButton("Add Component"));
-      mainLayoutInpsector->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-      QWidget* w = new QWidget();
-      w->setLayout(mainLayoutInpsector);
-      inspectorDock->setWidget(w);*/
-
-      QDockWidget *workingDirectoryDock = new QDockWidget("Working Directory");
-      workingDirectoryDock->setAllowedAreas(Qt::BottomDockWidgetArea);
-
-      QWidget* sceneView = new QWidget();
-      mainWindow.setCentralWidget(sceneView);
-      mainWindow.addDockWidget(Qt::LeftDockWidgetArea, editor::CInspectorDock::GetInstance().GetDock());
-      mainWindow.addDockWidget(Qt::RightDockWidgetArea, hierarchyDock);
-      mainWindow.addDockWidget(Qt::BottomDockWidgetArea, workingDirectoryDock);
-
-			HINSTANCE instance = (HINSTANCE)GetModuleHandle(NULL);
-
-			WNDCLASSEXA wnd;
-			bx::memSet(&wnd, 0, sizeof(wnd) );
-			wnd.cbSize = sizeof(wnd);
-			wnd.style = CS_HREDRAW | CS_VREDRAW;
-			wnd.lpfnWndProc = wndProc;
-			wnd.hInstance = instance;
-			wnd.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-			wnd.hCursor = LoadCursor(NULL, IDC_ARROW);
-			wnd.lpszClassName = "bgfx";
-			wnd.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-			RegisterClassExA(&wnd);
-
-			m_windowAlloc.alloc();
-      m_hwnd[0] = (HWND)sceneView->winId();/*CreateWindowA("bgfx"
-				, "BGFX"
-				, WS_OVERLAPPEDWINDOW|WS_VISIBLE
-				, 0
-				, 0
-				, ENTRY_DEFAULT_WIDTH
-				, ENTRY_DEFAULT_HEIGHT
-				, NULL
-				, NULL
-				, instance
-				, 0
-				);*/
-
 			m_flags[0] = 0
 				| ENTRY_WINDOW_FLAG_ASPECT_RATIO
 				| ENTRY_WINDOW_FLAG_FRAME
 				;
 
-			winSetHwnd(m_hwnd[0]);
+      s_App.Init(_argc, _argv);
+			//winSetHwnd(m_hwnd[0]);
 
-			adjust(m_hwnd[0], ENTRY_DEFAULT_WIDTH, ENTRY_DEFAULT_HEIGHT, true);
-			clear(m_hwnd[0]);
+			//adjust(m_hwnd[0], ENTRY_DEFAULT_WIDTH, ENTRY_DEFAULT_HEIGHT, true);
+			//clear(m_hwnd[0]);
 
-			m_width     = ENTRY_DEFAULT_WIDTH;
-			m_height    = ENTRY_DEFAULT_HEIGHT;
+			m_width     = 300;
+			m_height    = 300;
 			m_oldWidth  = ENTRY_DEFAULT_WIDTH;
 			m_oldHeight = ENTRY_DEFAULT_HEIGHT;
 
@@ -614,32 +511,22 @@ namespace entry
 			thread.init(mte.threadFunc, &mte);
 			m_init = true;
 
-			m_eventQueue.postSizeEvent(findHandle(m_hwnd[0]), m_width, m_height);
+			//m_eventQueue.postSizeEvent(findHandle(m_hwnd[0]), ENTRY_DEFAULT_WIDTH, ENTRY_DEFAULT_HEIGHT);
 
 			MSG msg;
 			msg.message = WM_NULL;
 
-      app.exec();
-
-			/*while (!m_exit)
-			{
-				s_xinput.update(m_eventQueue);
-				WaitForInputIdle(GetCurrentProcess(), 16);
-
-				while (0 != PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE) )
-				{
-					TranslateMessage(&msg);
-					DispatchMessage(&msg);
-				}
-			}*/
+      s_App.Run();
 
 			thread.shutdown();
 
-			DestroyWindow(m_hwnd[0]);
+			//DestroyWindow(m_hwnd[0]);
 
-			s_xinput.shutdown();
+			//s_xinput.shutdown();
 
-			return thread.getExitCode();
+			//return thread.getExitCode();
+
+      return 0;
 		}
 
 		LRESULT process(HWND _hwnd, UINT _id, WPARAM _wparam, LPARAM _lparam)
@@ -1113,6 +1000,7 @@ namespace entry
 
 	static Context s_ctx;
 
+
 	LRESULT CALLBACK Context::wndProc(HWND _hwnd, UINT _id, WPARAM _wparam, LPARAM _lparam)
 	{
 		return s_ctx.process(_hwnd, _id, _wparam, _lparam);
@@ -1120,7 +1008,7 @@ namespace entry
 
 	const Event* poll()
 	{
-		return s_ctx.m_eventQueue.poll();
+		return s_App.poll();
 	}
 
 	const Event* poll(WindowHandle _handle)

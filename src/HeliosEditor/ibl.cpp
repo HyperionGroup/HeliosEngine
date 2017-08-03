@@ -14,6 +14,8 @@
 #include <bx/readerwriter.h>
 #include <bx/string.h>
 
+#include "Editor\HeliosApp.h"
+
 namespace
 {
 
@@ -575,7 +577,7 @@ public:
 	}
 
 	bool update() BX_OVERRIDE
-	{
+	{ 
 		if (!entry::processEvents(m_width, m_height, m_debug, m_reset, &m_mouseState) )
 		{
 			imguiBeginFrame(m_mouseState.m_mx
@@ -602,6 +604,15 @@ public:
 			ImGui::PushItemWidth(180.0f);
 
 			ImGui::Text("Environment light:");
+      ImGui::Text("(%d,%d)", m_mouseState.m_mx, m_mouseState.m_my);
+
+      bool middle = m_mouseState.m_buttons[entry::MouseButton::Middle];
+      bool right = m_mouseState.m_buttons[entry::MouseButton::Right];
+      bool left = m_mouseState.m_buttons[entry::MouseButton::Left];
+
+      ImGui::Checkbox("middle", &middle);
+      ImGui::Checkbox("right", &right);
+      ImGui::Checkbox("left", &left);
 			ImGui::Indent();
 			ImGui::Checkbox("IBL Diffuse",  &m_settings.m_doDiffuseIbl);
 			ImGui::Checkbox("IBL Specular", &m_settings.m_doSpecularIbl);

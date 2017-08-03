@@ -1,4 +1,5 @@
 dofile "premake-qt/qt.lua"
+local qt = premake.extensions.qt
 
 workspace "Helios"
    configurations { "Debug", "Release" }
@@ -54,6 +55,12 @@ project "HeliosEditor"
 	{
 		"ENTRY_CONFIG_IMPLEMENT_MAIN=1",
 	}
+
+	qt.enable()
+	qtpath "../src/3rdParty/qt"
+	qtprefix "Qt5"
+	qtgenerateddir "$(SolutionDir)lib/mocs"
+	qtmodules { "core", "gui", "widgets" }
 	
 	includedirs
 	{
@@ -77,6 +84,7 @@ project "HeliosEditor"
 		path.join(BGFX_DIR, "3rdparty"),
 		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/include"),
 		path.join(BGFX_DIR, "3rdparty"),
+		path.join(BGFX_DIR, "examples/common/entry"),
 	}
 	
 	libdirs
