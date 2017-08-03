@@ -5,6 +5,7 @@
 #include <bx/mutex.h>
 
 #include "entry_p.h"
+#include <bx/thread.h>
 
 namespace editor
 {
@@ -16,10 +17,12 @@ namespace editor
     CHeliosApp() = default;
     virtual ~CHeliosApp();
 
-    void Init(int &argc, char **argv);
-    void Run();
+    void Run(int &argc, char **argv);
+    int GetExitCode();
 
     const entry::Event* poll();
+    void release(const entry::Event* _event) const;
+
     bool ProcessEvents(uint32_t& _width, uint32_t& _height);
     CMainWindow* GetMainWindow() const { return mMainWindow; }
     CSceneView* GetSceneView() const { return mSceneView; }
@@ -28,6 +31,15 @@ namespace editor
     HWND mHwnd[8];
     bx::HandleAllocT<8> mWindowAlloc;
     bx::Mutex mLock;
+    bx::Thread thread;
+
+    struct MainThreadEntry
+    {
+      int m_argc;
+      const char* const* m_argv;
+
+      static int32_t threadFunc(void* _userData);
+    };
 
     CMainWindow* mMainWindow;
     CSceneView*  mSceneView;

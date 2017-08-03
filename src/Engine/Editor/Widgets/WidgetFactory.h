@@ -19,5 +19,14 @@ namespace editor
     }
   private:
     std::map < const size_t , std::function<QWidget*(std::shared_ptr<core::CAttribute>)>> mCreators;
+
+    template < typename type, typename widget >
+    void NEW_WIDGET()
+    {
+      mCreators[typeid(type).hash_code()] = [](std::shared_ptr<core::CAttribute> _att)
+      {
+        return new widget(_att->GetName().c_str(), _att->As<type>(), _att->IsEditable());
+      };
+    }
   };
 }
