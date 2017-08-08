@@ -2,6 +2,8 @@
 #include <functional>
 
 #include "Core/Core.h"
+#include "Editor/Editor.h"
+#include "AttributesTable.h"
 
 #include "Core/Utils/Singleton.h"
 #include "Dock.h"
@@ -10,17 +12,22 @@ class QVBoxLayout;
 
 namespace editor
 {
-  class CInspectorDock : public CDock, public core::CSingleton< CInspectorDock > 
+  class CInspectorDock : public CDock
   {
   public:
-    CInspectorDock();
+    CInspectorDock() = default;
     virtual ~CInspectorDock() = default;
+    virtual QDockWidget* CreateDock();
     template< typename T > void Inspect(T& _object)
     {
-      core::CAttributesTable lTable;
+      lTable.Clear();
       GetAttributes<T>(lTable, _object);
-      Fill(lTable);
+      mUpdate = true;
     }
     void Fill( const core::CAttributesTable& _table);
+
+  private:
+    bool mUpdate;
+    core::CAttributesTable lTable;
   };
 }

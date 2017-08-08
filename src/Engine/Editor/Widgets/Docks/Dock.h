@@ -12,9 +12,10 @@ namespace editor
   public:
     CDock() = default;
     virtual ~CDock() = default;
-    QDockWidget* GetDock() const { return mDock; }
+    QDockWidget* GetDock() { if (!mDock) { mDock = CreateDock(); } return mDock; }
 
   protected:
+    virtual QDockWidget* CreateDock() = 0;
     QDockWidget* mDock;
   };
 }

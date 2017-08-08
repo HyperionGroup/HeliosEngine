@@ -11,6 +11,7 @@ namespace editor
 {
   class CMainWindow;
   class CSceneView;
+  class CInspectorDock;
   class CHeliosApp
   {
   public:
@@ -23,9 +24,10 @@ namespace editor
     const entry::Event* poll();
     void release(const entry::Event* _event) const;
 
-    bool ProcessEvents(uint32_t& _width, uint32_t& _height);
     CMainWindow* GetMainWindow() const { return mMainWindow; }
     CSceneView* GetSceneView() const { return mSceneView; }
+
+    static CInspectorDock& GetInspectorDock();
 
   private:
     HWND mHwnd[8];
@@ -37,6 +39,7 @@ namespace editor
     {
       int m_argc;
       const char* const* m_argv;
+      CHeliosApp* m_App;
 
       static int32_t threadFunc(void* _userData);
     };
@@ -47,6 +50,7 @@ namespace editor
     entry::WindowHandle FindHandle(HWND _hwnd);
     entry::WindowHandle AddHandle(HWND _hwnd);
     QApplication* mQtApp;
+    
     bool mFinish;
   };
 }

@@ -11,9 +11,9 @@ namespace
     _layout->addWidget(new QLabel(QObject::tr(_label)), _row, 0);
     editor::CFloatWidget* lX = new editor::CFloatWidget("X", _x );
     lX->SetCSS("QDoubleSpinBox { background-color: #990000; }");
-    editor::CFloatWidget* lY = new editor::CFloatWidget("Y", _z);
+    editor::CFloatWidget* lY = new editor::CFloatWidget("Y", _y);
     lY->SetCSS("QDoubleSpinBox { background-color: #009900; }");
-    editor::CFloatWidget* lZ = new editor::CFloatWidget("Z", _y );
+    editor::CFloatWidget* lZ = new editor::CFloatWidget("Z", _z );
     lZ->SetCSS("QDoubleSpinBox { background-color: #000099; }");
     _layout->addWidget(lX, _row, 1);
     _layout->addWidget(lY, _row, 2);

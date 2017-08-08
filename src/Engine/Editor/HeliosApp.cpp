@@ -8,13 +8,19 @@
 #include <QStyleFactory>
 #include <QPalette>
 
-#include "Core/Entities/Components.h"
-
 #include <bgfx/bgfx.h>
 #include "entry_p.h"
+#include <bgfx_utils.h>
+
+#include "imgui/imgui.h"
+
+#include "Editor\HeliosApp.h"
 
 namespace editor
 {
+
+  static CInspectorDock s_InspectorDock;
+
   CHeliosApp::~CHeliosApp()
   {
     CHECKED_DELETE(mMainWindow);
@@ -49,28 +55,30 @@ namespace editor
     palette.setColor(QPalette::HighlightedText, Qt::black);
     mQtApp->setPalette(palette);
 
-    mMainWindow->AddDock(editor::CInspectorDock::GetInstance());
+    mMainWindow->AddDock( s_InspectorDock );
+
+    s_InspectorDock.SetName("asdhfasdfasdfa");
 
     // Configure the main scene view
     entry::WindowHandle lSceneViewHandle = AddHandle((HWND)mSceneView->winId());
     mSceneView->SetWindowHandle(lSceneViewHandle);
     mMainWindow->setCentralWidget(mSceneView);
 
-    core::TransformComponent lTrsf;
-    lTrsf.position = Float3(1, 0, 0);
-    lTrsf.id = "holaaaa";
-
-    editor::CInspectorDock::GetInstance().Inspect(lTrsf);
-
     mMainWindow->Show();
 
     MainThreadEntry mte;
     mte.m_argc = argc;
     mte.m_argv = argv;
+    mte.m_App = this;
 
     thread.init(mte.threadFunc, &mte);
     mQtApp->exec();
     mFinish = true;
+  }
+
+  CInspectorDock& CHeliosApp::GetInspectorDock()
+  {
+    return s_InspectorDock;
   }
 
   int CHeliosApp::GetExitCode()
@@ -124,46 +132,6 @@ namespace editor
 
     entry::WindowHandle invalid = { UINT16_MAX };
     return invalid;
-  }
-
-  bool CHeliosApp::ProcessEvents(uint32_t& _width, uint32_t& _height)
-  {
-    entry::WindowHandle handle = { UINT16_MAX };
-
-    bool reset = false;
-
-    const entry::Event* ev = nullptr;
-    do
-    {
-      ev = mSceneView->poll();
-      if (ev)
-      {
-        switch (ev->m_type)
-        {
-        case entry::Event::Size:
-        {
-          const entry::SizeEvent* size = static_cast<const entry::SizeEvent*>(ev);
-          handle = size->m_handle;
-          _width = size->m_width;
-          _height = size->m_height;
-          reset = true;
-        }
-        break;
-
-        default:
-          break;
-        }
-      }
-
-    } while (NULL != ev);
-
-    if (handle.idx == 0 && reset )
-    {
-      bgfx::reset(_width, _height, reset);
-      //inputSetMouseResolution(uint16_t(_width), uint16_t(_height));
-    }
-
-    return false;
   }
 
   int32_t CHeliosApp::MainThreadEntry::threadFunc(void* _userData)

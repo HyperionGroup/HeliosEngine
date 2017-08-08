@@ -5,8 +5,7 @@
     {
         "type": "struct gfx::CClear",
         "color": false,
-        "depth": false,
-        "rgba": "1.000000 1.000000 1.000000 1.000000"
+        "depth": false
     },
     {
         "type": "struct gfx::CEndFrame"

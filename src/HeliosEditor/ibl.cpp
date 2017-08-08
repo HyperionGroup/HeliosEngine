@@ -14,11 +14,6 @@
 #include <bx/readerwriter.h>
 #include <bx/string.h>
 
-#include "Editor\HeliosApp.h"
-
-namespace
-{
-
 static float s_texelHalf = 0.0f;
 
 struct Uniforms
@@ -483,6 +478,13 @@ struct Settings
 	int32_t m_meshSelection;
 };
 
+#include "Editor/Widgets/Docks/InspectorDock.h"
+
+#include "Editor\HeliosApp.h"
+#include "Core/Entities/Components.h"
+#include "Editor/Widgets/Docks/InspectorDock.h"
+
+
 class ExampleIbl : public entry::AppI
 {
 public:
@@ -542,6 +544,11 @@ public:
 
 		m_meshBunny = meshLoad("meshes/bunny.bin");
 		m_meshOrb = meshLoad("meshes/orb.bin");
+
+    core::TransformComponent lTrsf;
+    lTrsf.position = Float3(1, 0, 0);
+
+    editor::CHeliosApp::GetInspectorDock().Inspect(lTrsf);
 	}
 
 	virtual int shutdown() BX_OVERRIDE
@@ -613,6 +620,15 @@ public:
       ImGui::Checkbox("middle", &middle);
       ImGui::Checkbox("right", &right);
       ImGui::Checkbox("left", &left);
+
+      if (ImGui::Button("change"))
+      {
+        core::TransformComponent lTrsf;
+        lTrsf.position = Float3(0.6, 0.8, 19);
+        lTrsf.scale= Float3(2, 4, 4);
+
+        editor::CHeliosApp::GetInspectorDock().Inspect(lTrsf);
+      }
 			ImGui::Indent();
 			ImGui::Checkbox("IBL Diffuse",  &m_settings.m_doDiffuseIbl);
 			ImGui::Checkbox("IBL Specular", &m_settings.m_doSpecularIbl);
@@ -942,7 +958,5 @@ public:
 
 	Settings m_settings;
 };
-
-} // namespace
 
 ENTRY_IMPLEMENT_MAIN(ExampleIbl, "18-ibl", "Image-based lighting.");

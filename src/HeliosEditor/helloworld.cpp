@@ -99,6 +99,10 @@ public:
 	void init(int32_t _argc, const char* const* _argv, uint32_t _width, uint32_t _height) BX_OVERRIDE
 	{
     gfx::CWindow::GetInstance().Init(_argc, _argv, _width, _height);
+    m_RenderPipeline.Add("begin", std::make_shared<gfx::CBeginFrame>());
+    m_RenderPipeline.Add("clear", std::make_shared<gfx::CClear>());
+    m_RenderPipeline.Add("end", std::make_shared<gfx::CEndFrame>());
+    m_RenderPipeline.Serialize();
     m_RenderPipeline.Deserialize();
 		imguiCreate();
 

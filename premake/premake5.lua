@@ -64,27 +64,28 @@ project "HeliosEditor"
 	
 	includedirs
 	{
-		UCRT,
-		ENGINE_PATH,
+				UCRT,
 		IMGUI,
-		ANAX,
 		IM3D,
 		SOL,
 		LUA,
-		IMGUI,
+		ENGINE_PATH,
+		BGFX_DIR,
 		TINYFORMAT,
 		JSON,
 		SIGNALS,
 		ANY,
+		path.join(THIRD_PARTY, "assimp"),
+		path.join(ANAX, "include"),
+		path.join(ENGINE_PATH, "gfx"),
+		path.join(ENGINE_PATH, "Core"),
 		path.join(BGFX_DIR, "examples/common/"),
+		path.join(BGFX_DIR, "examples/common/entry"),
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),
 		path.join(BIMG_DIR, "include"),
 		path.join(BX_DIR, "include/compat/msvc"),
 		path.join(BGFX_DIR, "3rdparty"),
-		path.join(BGFX_DIR, "3rdparty/glsl-optimizer/include"),
-		path.join(BGFX_DIR, "3rdparty"),
-		path.join(BGFX_DIR, "examples/common/entry"),
 	}
 	
 	libdirs
